@@ -24,8 +24,8 @@
 * SOFTWARE.
 --------------------------------------------------------------------------------------------------*/
 
-#ifndef FileIOHeader
-#define FileIOHeader
+#ifndef _FILE_IO_HEADER_
+#define _FILE_IO_HEADER_
 
 #include <iostream>
 #include <unordered_map>

@@ -23,26 +23,28 @@ BOOST_AUTO_TEST_CASE(DirectoriesTest)
   FileIO fileIO;
 
   BOOST_REQUIRE_MESSAGE(
-    fileIO.getWorkingDir() == std::string(std::filesystem::current_path()), 
-    "ERROR: getWorkingDir() - EXPECTED: " 
+    fileIO.getBaseDirectory() == std::string(std::filesystem::current_path()), 
+    "ERROR: getBaseDirectory() - EXPECTED: " 
     + std::string(std::filesystem::current_path())
-    + " RECEIVED: " + fileIO.getWorkingDir());
-  
-  BOOST_REQUIRE_MESSAGE(
-    fileIO.getDataDir() == std::string(std::filesystem::current_path()) +
-    "/data", 
-    "ERROR: getDataDir() - EXPECTED: " 
-    + std::string(std::filesystem::current_path()) +
-    "/data"
-    + " RECEIVED: " + fileIO.getDataDir());
+    + " RECEIVED: " + fileIO.getBaseDirectory());
+
+    fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
+
+    BOOST_REQUIRE_MESSAGE(
+    fileIO.getDirectoryPath("data") == 
+      std::string(std::filesystem::current_path()) + "/data", 
+    "ERROR: getDirectoryPath() - EXPECTED: " 
+    + std::string(std::filesystem::current_path()) + "/data"
+    + " RECEIVED: " + fileIO.getDirectoryPath("data"));
 }
 
 //Check FileIO can find files recursively
 BOOST_AUTO_TEST_CASE(FileSearchTest)
 {
   FileIO fileIO;
+  fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
 
-  auto filePaths = fileIO.findAllFiles( fileIO.getDataDir(), 
+  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), 
   ".txt", RECURSIVE_SEARCH_TRUE);
 
   for(auto & file : filePaths)
@@ -52,44 +54,46 @@ BOOST_AUTO_TEST_CASE(FileSearchTest)
 
   BOOST_REQUIRE_MESSAGE(
     std::find(filePaths.begin(), filePaths.end(), 
-    fileIO.getDataDir() + "/" + "fileIOTestData.txt") != filePaths.end(), 
+    fileIO.getDirectoryPath("data") + "/" + "fileIOTestData.txt") != filePaths.end(), 
     "ERROR: findAllFiles() - EXPECTED: " 
-    + fileIO.getDataDir() + "/" + "fileIOTestData.txt");
+    + fileIO.getDirectoryPath("data") + "/" + "fileIOTestData.txt");
   
   BOOST_REQUIRE_MESSAGE(
     std::find(filePaths.begin(), filePaths.end(), 
-    fileIO.getDataDir() + "/testSubFolder/fileIOSubTestData.txt") != filePaths.end(), 
+    fileIO.getDirectoryPath("data") + "/testSubFolder/fileIOSubTestData.txt") != filePaths.end(), 
     "ERROR: findAllFiles() - EXPECTED: " 
-    + fileIO.getDataDir() + "/testSubFolder/fileIOSubTestData.txt");
+    + fileIO.getDirectoryPath("data") + "/testSubFolder/fileIOSubTestData.txt");
   
   BOOST_REQUIRE_MESSAGE(
     std::find(filePaths.begin(), filePaths.end(), 
-    fileIO.getDataDir() + "/anotherTestSubFolder/fileIOAnotherSubTestData.txt") != filePaths.end(), 
+    fileIO.getDirectoryPath("data") + "/anotherTestSubFolder/fileIOAnotherSubTestData.txt") != filePaths.end(), 
     "ERROR: findAllFiles() - EXPECTED: " 
-    + fileIO.getDataDir() + "/anotherTestSubFolder/fileIOAnotherSubTestData.txt");
+    + fileIO.getDirectoryPath("data") + "/anotherTestSubFolder/fileIOAnotherSubTestData.txt");
   
   BOOST_REQUIRE_MESSAGE(
     std::find(filePaths.begin(), filePaths.end(), 
-    fileIO.getDataDir() + "/testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt") != filePaths.end(), 
+    fileIO.getDirectoryPath("data") + "/testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt") != filePaths.end(), 
     "ERROR: findAllFiles() - EXPECTED: " 
-    + fileIO.getDataDir() + "/testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt");
+    + fileIO.getDirectoryPath("data") + "/testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt");
 }
 
 //Check FileIO can read a file
 BOOST_AUTO_TEST_CASE(FileReadTest)
 {
   FileIO fileIO;
+  fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
+
   SyntaxHandler syntax;
 
-  auto filePaths = fileIO.findAllFiles( fileIO.getDataDir(), 
+  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), 
   ".txt", RECURSIVE_SEARCH_TRUE);
 
   std::string const fileToRead = *std::find(filePaths.begin(), filePaths.end(), 
-    fileIO.getDataDir() + "/" + "fileIOTestData.txt");
+    fileIO.getDirectoryPath("data") + "/" + "fileIOTestData.txt");
 
   std::string line;
   std::string line2;
-  auto & fileStream = fileIO.openInputStream("testFile", fileIO.getDataDir() + "\\fileIOTestData.txt");
+  auto & fileStream = fileIO.openInputStream("testFile", fileIO.getDirectoryPath("data") + "/fileIOTestData.txt");
 
   getline(fileStream, line);
   syntax.stripChar(line, '\n');

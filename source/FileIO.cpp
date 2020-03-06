@@ -28,7 +28,7 @@
 
 FileIO::FileIO()
 {
-    setbaseDirectory( findBaseDirectory() );
+    setBaseDirectory( findBaseDirectory() );
 }
 
 FileIO::~FileIO()
@@ -153,10 +153,10 @@ FileIO & FileIO::resetInputStreamToFileStart( std::string const & streamIDIn )
 
 FileIO & FileIO::readLine( std::string const & streamIDIn, std::string & lineToWriteTo )
 {
-    if( !inputStreamIsValid(streamIDIn))
+    if( !inputStreamIsValid(streamIDIn) )
     { giveStreamNotOpenError(streamIDIn); }
 
-    getline( *(inputFileStreams.find( streamIDIn )->second), lineToWriteTo );
+    getline( *(inputFileStreams.find( streamIDIn )->second ), lineToWriteTo );
 
     return *this;
 }
@@ -172,7 +172,7 @@ std::string const FileIO::readLine( std::string const & streamIDIn)
 
 FileIO & FileIO::writeLine( std::string const & streamIDIn, std::string const & lineToWrite )
 {
-    if( !outputStreamIsValid(streamIDIn))
+    if( !outputStreamIsValid(streamIDIn) )
     { giveStreamNotOpenError(streamIDIn); }
 
     *( outputFileStreams.find( streamIDIn )->second ) << lineToWrite;
@@ -184,8 +184,7 @@ FileIO & FileIO::setBaseDirectory( std::string const & baseDirectoryIn )
 {
     struct stat directoryCheck;
 
-    if( stat( baseDirectoryIn.c_str(), &directoryCheck ) == 0
-        && directoryCheck.st_mode & S_IFDIR )
+    if( stat( baseDirectoryIn.c_str(), &directoryCheck ) == 0 && directoryCheck.st_mode & S_IFDIR )
     { baseDirectory = baseDirectoryIn; }
     else
     { perror( "ERROR: " ); }
@@ -292,17 +291,11 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
 
                 if( fileExtension != ".*"
                     && filePath.length() > fileExtension.length()
-                    && filePath.substr( filePath.length() - fileExtension.length() )
-                    == fileExtension )
-                {
-                    directoriesOfFiles.push_back( startingDirectory + "\\" +
-                        filePath );
-                }
+                    && filePath.substr( filePath.length() - fileExtension.length() ) == fileExtension )
+                { directoriesOfFiles.push_back( startingDirectory + "\\" + filePath ); }
+
                 else if( fileExtension == ".*" )
-                {
-                    directoriesOfFiles.push_back( startingDirectory + "\\" +
-                        filePath );
-                }
+                { directoriesOfFiles.push_back( startingDirectory + "\\" + filePath ); }
             }
             else if( ( recursiveSearch == RECURSIVE_SEARCH_TRUE )
                 && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
@@ -325,28 +318,24 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
     return directoriesOfFiles;
 
 #else
+
     struct dirent * fileInDirectory;
 
-    DIR * currentDirectory =
-        static_cast< DIR * > ( opendir( startingDirectory.c_str() ) );
+    DIR * currentDirectory = static_cast< DIR * > ( opendir( startingDirectory.c_str() ) );
 
     if( !currentDirectory )
-    {
-        return std::vector<std::string>();
-    }
+    { return std::vector<std::string>(); }
+
     while( ( fileInDirectory = readdir( currentDirectory ) ) != NULL )
     {
         struct stat directoryCheck;
 
         if( std::string( fileInDirectory->d_name ) == "." || std::string( fileInDirectory->d_name ) == ".." )
-        {
-            continue;
-        }
-        if( stat( ( startingDirectory + "/" + fileInDirectory->d_name ).c_str(),
-            &directoryCheck ) < 0 )
-        {
-            throw std::runtime_error("ERROR: Invalid File.");
-        }
+        { continue; }
+
+        if( stat( ( startingDirectory + "/" + fileInDirectory->d_name ).c_str(), &directoryCheck ) < 0 )
+        { throw std::runtime_error("ERROR: Invalid File."); }
+
         else if( S_ISREG( directoryCheck.st_mode ) )
         {
             std::string const filePath = std::string( fileInDirectory->d_name );
@@ -355,27 +344,19 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
                 && filePath.length() > fileExtension.length()
                 && filePath.substr( filePath.length() - fileExtension.length() )
                 == fileExtension )
-            {
-                directoriesOfFiles.push_back( startingDirectory + "/" +
-                    filePath );
-            }
+            { directoriesOfFiles.push_back( startingDirectory + "/" + filePath ); }
+
             else if( fileExtension == ".*" )
-            {
-                directoriesOfFiles.push_back( startingDirectory + "/" +
-                    filePath );
-            }
+            { directoriesOfFiles.push_back( startingDirectory + "/" + filePath ); }
         }
         else if( recursiveSearch == true
             && S_ISDIR( directoryCheck.st_mode ) )
         {
-            std::vector<std::string> subDirectoryFiles =
-                findAllFiles( ( startingDirectory + "/" + std::string( fileInDirectory->d_name ) ),
-                    fileExtension, true );
+            std::vector<std::string> subDirectoryFiles = findAllFiles( ( startingDirectory + "/" + 
+                std::string( fileInDirectory->d_name ) ), fileExtension, true );
 
             for( auto & s : subDirectoryFiles )
-            {
-                directoriesOfFiles.push_back( s );
-            }
+            { directoriesOfFiles.push_back( s ); }
         }
     }
 
