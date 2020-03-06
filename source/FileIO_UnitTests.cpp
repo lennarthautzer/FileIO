@@ -88,6 +88,7 @@ BOOST_AUTO_TEST_CASE(FileReadTest)
     fileIO.getDataDir() + "/" + "fileIOTestData.txt");
 
   std::string line;
+  std::string line2;
   auto & fileStream = fileIO.openInputStream("testFile", fileIO.getDataDir() + "\\fileIOTestData.txt");
 
   getline(fileStream, line);
@@ -97,7 +98,32 @@ BOOST_AUTO_TEST_CASE(FileReadTest)
   BOOST_REQUIRE_MESSAGE(line == "This is a test file.", 
     "ERROR: openInputStream() - EXPECTED: This is a test file - RECEIVED: " + line);
   
+  fileIO.resetInputStreamToFileStart("testFile");
+
+  getline(fileStream, line2);
+  syntax.stripChar(line2, '\n');
+  syntax.stripChar(line2, '\r');
   
+  BOOST_REQUIRE_MESSAGE(line == line2, 
+    "ERROR: resetInputStreamToFileStart() - EXPECTED: This is a test file - RECEIVED: " + line2);
+
+  fileIO.resetInputStreamToFileStart("testFile");
+
+  fileIO.readLine("testFile", line2);
+  syntax.stripChar(line2, '\n');
+  syntax.stripChar(line2, '\r');
+  
+  BOOST_REQUIRE_MESSAGE(line == line2, 
+    "ERROR: readLine(streamIDIn, lineToWriteTo) - EXPECTED: This is a test file - RECEIVED: " + line2);
+
+  fileIO.resetInputStreamToFileStart("testFile");
+
+  line2 = fileIO.readLine("testFile");
+  syntax.stripChar(line2, '\n');
+  syntax.stripChar(line2, '\r');
+  
+  BOOST_REQUIRE_MESSAGE(line == line2, 
+    "ERROR: readLine(streamIDIn) - EXPECTED: This is a test file - RECEIVED: " + line2);
 }
 
 //*/
