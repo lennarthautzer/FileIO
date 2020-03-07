@@ -36,10 +36,35 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <stdexcept>
-#include "ConditionalIncludes.h"
 
-#define RECURSIVE_SEARCH_TRUE 1
-#define RECURSIVE_SEARCH_FALSE 0
+#if defined WIN32 || defined _WIN32 || defined __WIN32 && !defined __CYGWIN__
+
+#ifndef WINDOWS
+
+#define WINDOWS
+
+#endif
+
+#endif
+
+#ifdef WINDOWS
+
+#include <windows.h>
+#include <direct.h>
+
+#define getCurrentDirectory _getcwd
+
+#else
+
+#include <unistd.h>
+#include <dirent.h>
+
+#define getCurrentDirectory getcwd
+
+#endif
+
+int constexpr recursiveSearchTrue = 1;
+int constexpr recursiveSearchFalse = 0;
 
 /*--------------------------------------------------------------------------------------------------
 * This class is a collection of different functions to manage file system
@@ -88,7 +113,7 @@ public:
     std::ostream & openOutputStream( std::string const & pathIDIn, std::string const & filePath );
     
     /* Overload of openOutputStream(std::string const & pathIDIn, std::string const & filePathIn) */
-    std::ostream & openOutputStream( char const * pathIDIn, char const * filePath );
+    std::ostream & openOutputStream( char const * & pathIDIn, char const * filePath );
 
     /*--------------------------------------------------------------------------------------------------
     * Close/Reset input filestreams and close output filestreams.
@@ -104,7 +129,7 @@ public:
     FileIO & resetInputStreamToFileStart( std::string const & streamIDIn );
 
     /*--------------------------------------------------------------------------------------------------
-    * Wrapper for reading and writing std::strings
+    * Wrapper for reading and writing strings
     --------------------------------------------------------------------------------------------------*/
 
     /* Retrieves and reads one RAW line from the filestream at the streamID provided
@@ -115,8 +140,8 @@ public:
     * Both the stream and streamID must exist. */
     std::string const readLine( std::string const & streamIDIn);
 
-    /* Retrieves the std::ofstream at the streamID provided
-    * and writes the string provided. Both the stream and streamID must exist. */
+    /* Retrieves the output filestream at the streamID provided
+    * and writes the RAW string provided. Both the stream and streamID must exist. */
     FileIO & writeLine( std::string const & streamIDIn, std::string const & lineToWrite );
 
     /* Returns a string containing all lines from the filestream at the streamID provided. 
@@ -209,6 +234,41 @@ public:
     bool const directoryPathExists(std::string const & pathIDIn) const;
 
 private:
+
+    /*--------------------------------------------------------------------------------------------------
+    * Internal functions to check for errors. These handle direct access to data structures for better
+    * efficiency than public accessors.
+    --------------------------------------------------------------------------------------------------*/
+
+    std::unordered_map< std::string, std::unique_ptr<std::ifstream> >::const_iterator 
+        getInputStreamIterator(std::string const & streamIDIn) const;
+    
+    bool const inputStreamExists(std::unordered_map< std::string, 
+        std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const;
+    
+    bool const inputStreamIsValid(std::unordered_map< std::string, 
+        std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const;
+
+    std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
+        getOutputStreamIterator(std::string const & streamIDIn) const;
+    
+    bool const outputStreamExists(std::unordered_map< std::string, 
+        std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const;
+
+    bool const outputStreamIsValid(std::unordered_map< std::string, 
+        std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const;
+    
+    std::unordered_map<std::string, std::string>::const_iterator 
+        getFilePathIterator(std::string const & pathIDIn) const;
+    
+    bool const filePathExists(std::unordered_map< std::string, 
+        std::string>::const_iterator & pathIteratorIn) const;
+    
+    std::unordered_map<std::string, std::string>::const_iterator 
+        getDirectoryPathIterator(std::string const & pathIDIn) const;
+    
+    bool const directoryPathExists(std::unordered_map< std::string, 
+        std::string>::const_iterator & pathIteratorIn) const;
 
     /*--------------------------------------------------------------------------------------------------
     * Internal functions to find working directory.

@@ -11,6 +11,9 @@
 #include "FileIO.h"
 #include "SyntaxHandler.h"
 
+int constexpr numberOfFilesToTest = 10;
+int constexpr numberOfLinesToTest = 10;
+
 //Check FileIO constructs
 BOOST_AUTO_TEST_CASE(ConstructionAndDestruction)
 {
@@ -44,8 +47,7 @@ BOOST_AUTO_TEST_CASE(FileSearchTest)
   FileIO fileIO;
   fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
 
-  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), 
-  ".txt", RECURSIVE_SEARCH_TRUE);
+  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), ".txt", recursiveSearchTrue);
 
   for(auto & file : filePaths)
   {
@@ -85,8 +87,7 @@ BOOST_AUTO_TEST_CASE(FileReadTest)
 
   SyntaxHandler syntax;
 
-  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), 
-  ".txt", RECURSIVE_SEARCH_TRUE);
+  auto filePaths = fileIO.findAllFiles( fileIO.getDirectoryPath("data"), ".txt", recursiveSearchTrue);
 
   std::string const fileToRead = *std::find(filePaths.begin(), filePaths.end(), 
     fileIO.getDirectoryPath("data") + "/" + "fileIOTestData.txt");
@@ -98,7 +99,7 @@ BOOST_AUTO_TEST_CASE(FileReadTest)
   getline(fileStream, line);
   syntax.stripChar(line, '\n');
   syntax.stripChar(line, '\r');
-  
+
   BOOST_REQUIRE_MESSAGE(line == "This is a test file.", 
     "ERROR: openInputStream() - EXPECTED: This is a test file - RECEIVED: " + line);
   
@@ -128,6 +129,51 @@ BOOST_AUTO_TEST_CASE(FileReadTest)
   
   BOOST_REQUIRE_MESSAGE(line == line2, 
     "ERROR: readLine(streamIDIn) - EXPECTED: This is a test file - RECEIVED: " + line2);
+}
+
+//Check FileIO can write a file
+BOOST_AUTO_TEST_CASE(FileWriteTest)
+{
+  FileIO fileIO;
+  fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
+  SyntaxHandler syntax;
+
+  for(int i = 0; i < numberOfFilesToTest / 2; ++i)
+  {
+    std::string const fileToWriteTo = fileIO.getDirectoryPath("data") + "/" + "fileIOTest" + std::to_string(i) + ".txt";
+
+    auto & fileStream = fileIO.openOutputStream("testWriteFile" + std::to_string(i), fileToWriteTo);
+
+    for(int j = 0; j < numberOfLinesToTest; ++j)
+    { fileStream << j << std::endl; }
+  }
+
+  for(int i = numberOfFilesToTest / 2; i < numberOfFilesToTest; ++i)
+  {
+    std::string const fileToWriteTo = fileIO.getDirectoryPath("data") + "/" + "fileIOTest" + std::to_string(i) + ".txt";
+
+    fileIO.openOutputStream("testWriteFile" + std::to_string(i), fileToWriteTo);
+
+    for(int j = 0; j < numberOfLinesToTest; ++j)
+    { fileIO.writeLine("testWriteFile" + std::to_string(i), std::to_string(j) + "\n"); }
+  }
+
+  for(int i = 0; i < numberOfFilesToTest; ++i)
+  {
+    std::string const fileToRead = fileIO.getDirectoryPath("data") + "/" + "fileIOTest" + std::to_string(i) + ".txt";
+
+    fileIO.openInputStream( "testWriteFile" + std::to_string(i) );
+    std::string line = fileIO.readLine("testWriteFile" + std::to_string(i) );
+
+    for(int j = 0; line != ""; ++j, fileIO.readLine("testWriteFile" + std::to_string(i), line))
+    {
+      syntax.stripChar(line, '\n');
+      syntax.stripChar(line, '\r');
+    
+      BOOST_REQUIRE_MESSAGE(line == std::to_string(j), "ERROR: openInputStream() - EXPECTED:" + std::to_string(j) + 
+        " - RECEIVED: " + line);
+    }
+  }
 }
 
 //*/

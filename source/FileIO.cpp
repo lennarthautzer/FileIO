@@ -56,16 +56,20 @@ FileIO::~FileIO()
 
 std::istream & FileIO::openInputStream( std::string const & pathIDIn )
 {
-    if( inputStreamExists(pathIDIn) )
+    auto it = getInputStreamIterator(pathIDIn);
+
+    if( inputStreamExists(it) )
     { giveStreamAlreadyOpenError(pathIDIn); }
 
     inputFileStreams[ pathIDIn ] = std::unique_ptr<std::ifstream>
         ( new std::ifstream( getFilePath( pathIDIn ), std::ifstream::in ) );
 
-    if( !inputStreamIsValid(pathIDIn) )
-    { giveStreamCouldNotOpenError(pathIDIn); }
+    it = getInputStreamIterator(pathIDIn);
 
-    return *inputFileStreams.find( pathIDIn )->second;
+    if( !inputStreamExists(it) || !inputStreamIsValid(it) )
+    { giveStreamCouldNotOpenError(pathIDIn); }
+    
+    return *it->second;
 }
 
 std::istream & FileIO::openInputStream( char const * const pathIDIn )
@@ -87,16 +91,20 @@ std::istream & FileIO::openInputStream( char const * const streamIDIn, char cons
 
 std::ostream & FileIO::openOutputStream( std::string const & pathIDIn )
 {
-    if( outputStreamExists(pathIDIn) )
+    auto it = getOutputStreamIterator(pathIDIn);
+
+    if( outputStreamExists(it) )
     { giveStreamAlreadyOpenError(pathIDIn); }
 
     outputFileStreams[ pathIDIn ] = std::unique_ptr<std::ofstream>
         ( new std::ofstream( getFilePath( pathIDIn ), std::ofstream::out ) );
+    
+    it = getOutputStreamIterator(pathIDIn);
 
-    if( !outputStreamIsValid(pathIDIn))
+    if( !outputStreamExists(it) || !outputStreamIsValid(it) )
     { giveStreamCouldNotOpenError(pathIDIn); }
 
-    return *outputFileStreams.find( pathIDIn )->second;
+    return *it->second;
 }
 
 std::ostream & FileIO::openOutputStream( char const * streamIDIn )
@@ -108,7 +116,7 @@ std::ostream & FileIO::openOutputStream( std::string const & streamIDIn, std::st
     return openOutputStream( streamIDIn );
 }
 
-std::ostream & FileIO::openOutputStream( char const * streamIDIn, char const * filePathIn )
+std::ostream & FileIO::openOutputStream( char const * & streamIDIn, char const * filePathIn )
 {
     std::string const tmp = std::string( streamIDIn );
 
@@ -118,10 +126,12 @@ std::ostream & FileIO::openOutputStream( char const * streamIDIn, char const * f
 
 FileIO & FileIO::closeInputStream( std::string const & streamIDIn )
 {
-    if( !inputStreamExists(streamIDIn))
+    auto it = getInputStreamIterator(streamIDIn);
+
+    if( !inputStreamExists(it) )
     { giveStreamNotOpenError(streamIDIn); }
 
-    inputFileStreams.find(streamIDIn)->second->close();
+    it->second->close();
     inputFileStreams.erase( streamIDIn );
 
     return *this;
@@ -129,10 +139,12 @@ FileIO & FileIO::closeInputStream( std::string const & streamIDIn )
 
 FileIO & FileIO::closeOutputStream( std::string const & streamIDIn )
 {
-    if( !outputStreamExists(streamIDIn))
+    auto it = getOutputStreamIterator(streamIDIn);
+
+    if( !outputStreamExists(it) )
     { giveStreamNotOpenError(streamIDIn); }
 
-    outputFileStreams.find(streamIDIn)->second->close();
+    it->second->close();
     outputFileStreams.erase( streamIDIn );
 
     return *this;
@@ -140,23 +152,25 @@ FileIO & FileIO::closeOutputStream( std::string const & streamIDIn )
 
 FileIO & FileIO::resetInputStreamToFileStart( std::string const & streamIDIn )
 {
-     auto inputFileStreamIterator = inputFileStreams.find( streamIDIn );
+     auto it = getInputStreamIterator(streamIDIn);
 
-    if( !inputStreamIsValid(streamIDIn))
+    if( !inputStreamExists(it) || !inputStreamIsValid(it))
     { giveStreamNotOpenError(streamIDIn); }
 
-    inputFileStreamIterator->second->clear();
-    inputFileStreamIterator->second->seekg( 0, std::ios::beg );
+    it->second->clear();
+    it->second->seekg( 0, std::ios::beg );
 
     return *this;
 }
 
 FileIO & FileIO::readLine( std::string const & streamIDIn, std::string & lineToWriteTo )
 {
-    if( !inputStreamIsValid(streamIDIn) )
+    auto it = getInputStreamIterator(streamIDIn);
+
+    if( !inputStreamExists(it) || !inputStreamIsValid(it))
     { giveStreamNotOpenError(streamIDIn); }
 
-    getline( *(inputFileStreams.find( streamIDIn )->second ), lineToWriteTo );
+    getline( *(it->second ), lineToWriteTo );
 
     return *this;
 }
@@ -172,10 +186,12 @@ std::string const FileIO::readLine( std::string const & streamIDIn)
 
 FileIO & FileIO::writeLine( std::string const & streamIDIn, std::string const & lineToWrite )
 {
-    if( !outputStreamIsValid(streamIDIn) )
+    auto it = getOutputStreamIterator(streamIDIn);
+
+    if( !outputStreamExists(it) || !outputStreamIsValid(it))
     { giveStreamNotOpenError(streamIDIn); }
 
-    *( outputFileStreams.find( streamIDIn )->second ) << lineToWrite;
+    *it->second << lineToWrite;
 
     return *this;
 }
@@ -208,28 +224,34 @@ FileIO & FileIO::setDirectoryPath( std::string const & pathIDIn, std::string con
 
 std::istream & FileIO::getInputStream( std::string const & streamIDIn ) const
 {
-    if( !inputStreamExists(streamIDIn))
+    auto it = getInputStreamIterator(streamIDIn);
+
+    if( !inputStreamExists(it) || !inputStreamIsValid(it))
     { giveStreamNotOpenError(streamIDIn); }
 
-    return *inputFileStreams.find(streamIDIn)->second;
+    return *( static_cast<std::istream *>( &(*it->second) ) );
 }
 
 std::ostream & FileIO::getOutputStream( std::string const & streamIDIn ) const
 {
-    if( !outputStreamExists(streamIDIn))
+    auto it = getOutputStreamIterator(streamIDIn);
+
+    if( !outputStreamExists(it) || !outputStreamIsValid(it))
     { giveStreamNotOpenError(streamIDIn); }
 
-    return *outputFileStreams.find(streamIDIn)->second;
+    return *( static_cast<std::ostream *>( &(*it->second) ) );
 }
 
 std::string const FileIO::getBaseDirectory() const { return baseDirectory; }
 
 std::string const FileIO::getFilePath( std::string const & pathIDIn ) const
 {
-    if( !filePathExists(pathIDIn) )
+    auto it = getFilePathIterator(pathIDIn);
+
+    if( !filePathExists(it) )
     { givePathNotFoundError(pathIDIn); }
 
-    return filePaths.find(pathIDIn)->second;
+    return it->second;
 }
 
 std::unordered_map<std::string, std::string> const & FileIO::getAllFilePaths() const
@@ -237,20 +259,24 @@ std::unordered_map<std::string, std::string> const & FileIO::getAllFilePaths() c
 
 FileIO & FileIO::removeFilePath( std::string const & pathIDIn )
 {
-    if( !filePathExists(pathIDIn) )
+    auto it = getFilePathIterator(pathIDIn);
+
+    if( !filePathExists(it) )
     { givePathNotFoundError(pathIDIn); }
 
-    filePaths.erase( filePaths.find( pathIDIn ) );
+    filePaths.erase( it );
 
     return *this;
 }
 
 std::string const FileIO::getDirectoryPath( std::string const & pathIDIn ) const
 {
-    if( !directoryPathExists(pathIDIn) )
-    { givePathNotFoundError(pathIDIn); }
+    auto it = getDirectoryPathIterator(pathIDIn);
 
-    return directoryPaths.find(pathIDIn)->second;
+    if( !directoryPathExists(it) )
+    { givePathNotFoundError(pathIDIn); }
+    
+    return it->second;
 }
 
 std::unordered_map<std::string, std::string> const & FileIO::getAllDirectoryPaths() const
@@ -258,10 +284,12 @@ std::unordered_map<std::string, std::string> const & FileIO::getAllDirectoryPath
 
 FileIO & FileIO::removeDirectoryPath( std::string const & pathIDIn )
 {
-    if( !directoryPathExists(pathIDIn) )
+    auto it = getDirectoryPathIterator(pathIDIn);
+
+    if( !directoryPathExists(it) )
     { givePathNotFoundError(pathIDIn); }
 
-    directoryPaths.erase( directoryPaths.find( pathIDIn ) );
+    directoryPaths.erase( it );
 
     return *this;
 }
@@ -297,7 +325,7 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
                 else if( fileExtension == ".*" )
                 { directoriesOfFiles.push_back( startingDirectory + "\\" + filePath ); }
             }
-            else if( ( recursiveSearch == RECURSIVE_SEARCH_TRUE )
+            else if( ( recursiveSearch == recursiveSearchTrue )
                 && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
                 && ( std::string( windowsFindData.cFileName ) != ".." )
                 && ( std::string( windowsFindData.cFileName ) != "." ) )
@@ -306,9 +334,9 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
                     findAllFiles( ( startingDirectory + "\\" + std::string( windowsFindData.cFileName ) ),
                         fileExtension, true );
 
-                for( auto & s : subDirectoryFiles )
+                for( auto & file : subDirectoryFiles )
                 {
-                    directoriesOfFiles.push_back( s );
+                    directoriesOfFiles.push_back( file );
                 }
             }
         }
@@ -355,8 +383,8 @@ std::vector<std::string> const FileIO::findAllFiles( std::string const & startin
             std::vector<std::string> subDirectoryFiles = findAllFiles( ( startingDirectory + "/" + 
                 std::string( fileInDirectory->d_name ) ), fileExtension, true );
 
-            for( auto & s : subDirectoryFiles )
-            { directoriesOfFiles.push_back( s ); }
+            for( auto & file : subDirectoryFiles )
+            { directoriesOfFiles.push_back( file ); }
         }
     }
 
@@ -404,11 +432,51 @@ bool const FileIO::filePathExists(std::string const & pathIDIn) const
 bool const FileIO::directoryPathExists(std::string const & pathIDIn) const
 { return directoryPaths.find( pathIDIn ) != directoryPaths.end(); }
 
+std::unordered_map< std::string, std::unique_ptr<std::ifstream> >::const_iterator 
+    FileIO::getInputStreamIterator(std::string const & streamIDIn) const
+{ return inputFileStreams.find( streamIDIn ); }
+
+bool const FileIO::inputStreamExists(std::unordered_map< std::string, 
+    std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
+{ return streamIteratorIn != inputFileStreams.end(); }
+
+bool const FileIO::inputStreamIsValid(std::unordered_map< std::string, 
+    std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
+{ return streamIteratorIn->second->good(); }
+
+std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
+    FileIO::getOutputStreamIterator(std::string const & streamIDIn) const
+{ return outputFileStreams.find( streamIDIn ); }
+
+bool const FileIO::outputStreamExists(std::unordered_map< std::string, 
+    std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
+{ return streamIteratorIn != outputFileStreams.end(); }
+
+bool const FileIO::outputStreamIsValid(std::unordered_map< std::string, 
+    std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
+{ return streamIteratorIn->second->good(); }
+
+std::unordered_map<std::string, std::string>::const_iterator 
+        FileIO::getFilePathIterator(std::string const & pathIDIn) const
+{ return filePaths.find(pathIDIn); }
+    
+bool const FileIO::filePathExists(std::unordered_map< std::string, 
+    std::string>::const_iterator & pathIteratorIn) const
+{ return pathIteratorIn != filePaths.end(); }
+
+std::unordered_map<std::string, std::string>::const_iterator 
+    FileIO::getDirectoryPathIterator(std::string const & pathIDIn) const
+{ return directoryPaths.find(pathIDIn); }
+
+bool const FileIO::directoryPathExists(std::unordered_map< std::string, 
+    std::string>::const_iterator & pathIteratorIn) const
+    { return pathIteratorIn != directoryPaths.end(); }
+
 std::string const FileIO::findBaseDirectory() const
 {
     char tmpBuffer[ FILENAME_MAX ];
 
-    getCurrentDir( tmpBuffer, FILENAME_MAX );
+    getCurrentDirectory( tmpBuffer, FILENAME_MAX );
 
     return std::string( tmpBuffer );
 }
