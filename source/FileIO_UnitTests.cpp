@@ -176,4 +176,31 @@ BOOST_AUTO_TEST_CASE(FileWriteTest)
   }
 }
 
+//Check FileIO function overloads
+BOOST_AUTO_TEST_CASE(OverloadTest)
+{
+  FileIO fileIO;
+  fileIO.setDirectoryPath("data", fileIO.getBaseDirectory() + "/data");
+  SyntaxHandler syntax;
+
+  char const * const testingFileChar = "testFile";
+  char const * const testingFilePathChar = (fileIO.getDirectoryPath("data") + "/fileIOTestData").c_str();
+  std::string const testingFileString = "testFile";
+  std::string const testingFilePathString = fileIO.getDirectoryPath("data") + "/fileIOTestData";
+
+  auto & fileStreamOut = fileIO.openOutputStream(testingFileChar, testingFilePathChar);
+
+  fileStreamOut << "1" << std::endl;
+
+  fileIO.closeOutputStream("testFile");
+
+  fileIO.openInputStream(testingFileChar, testingFilePathChar);
+  auto line = fileIO.readLine("testFile");
+
+  BOOST_REQUIRE_MESSAGE( line == "1", "ERROR: openInputStream() - EXPECTED: 1" << 
+    " - RECEIVED: " + line);
+  
+  fileIO.closeInputStream("testFile");
+}
+
 //*/

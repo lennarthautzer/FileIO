@@ -56,6 +56,9 @@ FileIO::~FileIO()
 
 std::istream & FileIO::openInputStream( std::string const & pathIDIn )
 {
+    if( !filePathIsValid(pathIDIn) )
+    { givePathNotValidError(pathIDIn); }
+
     auto it = getInputStreamIterator(pathIDIn);
 
     if( inputStreamExists(it) )
@@ -72,7 +75,7 @@ std::istream & FileIO::openInputStream( std::string const & pathIDIn )
     return *it->second;
 }
 
-std::istream & FileIO::openInputStream( char const * const pathIDIn )
+std::istream & FileIO::openInputStream( char const * const & pathIDIn )
 { return openInputStream( std::string( pathIDIn ) ); }
 
 std::istream & FileIO::openInputStream( std::string const & pathIDIn, std::string const & filePathIn )
@@ -81,9 +84,23 @@ std::istream & FileIO::openInputStream( std::string const & pathIDIn, std::strin
     return openInputStream( pathIDIn );
 }
 
-std::istream & FileIO::openInputStream( char const * const streamIDIn, char const * const filePathIn )
+std::istream & FileIO::openInputStream( std::string const & pathIDIn, char const * const & filePathIn )
 {
-    std::string const tmp = std::string( streamIDIn );
+    setFilePath( pathIDIn, std::string( filePathIn ) );
+    return openInputStream( pathIDIn );
+}
+
+std::istream & FileIO::openInputStream( char const * const & pathIDIn, std::string const & filePathIn )
+{
+    std::string const tmp = std::string( pathIDIn );
+
+    setFilePath( tmp, filePathIn );    
+    return openInputStream( tmp );
+}
+
+std::istream & FileIO::openInputStream( char const * const & pathIDIn, char const * const & filePathIn )
+{
+    std::string const tmp = std::string( pathIDIn );
 
     setFilePath( tmp, std::string( filePathIn ) );
     return openInputStream( tmp );
@@ -107,55 +124,69 @@ std::ostream & FileIO::openOutputStream( std::string const & pathIDIn )
     return *it->second;
 }
 
-std::ostream & FileIO::openOutputStream( char const * streamIDIn )
-{ return openOutputStream( std::string( streamIDIn ) ); }
+std::ostream & FileIO::openOutputStream( char const * const & pathIDIn )
+{ return openOutputStream( std::string( pathIDIn ) ); }
 
-std::ostream & FileIO::openOutputStream( std::string const & streamIDIn, std::string const & filePathIn )
+std::ostream & FileIO::openOutputStream( std::string const & pathIDIn, std::string const & filePathIn )
 {
-    setFilePath( streamIDIn, filePathIn );
-    return openOutputStream( streamIDIn );
+    setFilePath( pathIDIn, filePathIn );
+    return openOutputStream( pathIDIn );
 }
 
-std::ostream & FileIO::openOutputStream( char const * & streamIDIn, char const * filePathIn )
+std::ostream & FileIO::openOutputStream( std::string const & pathIDIn, char const * const & filePathIn )
 {
-    std::string const tmp = std::string( streamIDIn );
+    setFilePath( pathIDIn, std::string(filePathIn) );
+    return openOutputStream( pathIDIn );
+}
+
+std::ostream & FileIO::openOutputStream( char const * const & pathIDIn, std::string const & filePathIn )
+{
+    std::string const tmp = std::string( pathIDIn );
+
+    setFilePath( tmp, filePathIn );
+    return openOutputStream( tmp );
+}
+
+std::ostream & FileIO::openOutputStream( char const * const & pathIDIn, char const * const & filePathIn )
+{
+    std::string const tmp = std::string( pathIDIn );
 
     setFilePath( tmp, std::string( filePathIn ) );
     return openOutputStream( tmp );
 }
 
-FileIO & FileIO::closeInputStream( std::string const & streamIDIn )
+FileIO & FileIO::closeInputStream( std::string const & pathIDIn )
 {
-    auto it = getInputStreamIterator(streamIDIn);
+    auto it = getInputStreamIterator(pathIDIn);
 
     if( !inputStreamExists(it) )
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     it->second->close();
-    inputFileStreams.erase( streamIDIn );
+    inputFileStreams.erase( pathIDIn );
 
     return *this;
 }
 
-FileIO & FileIO::closeOutputStream( std::string const & streamIDIn )
+FileIO & FileIO::closeOutputStream( std::string const & pathIDIn )
 {
-    auto it = getOutputStreamIterator(streamIDIn);
+    auto it = getOutputStreamIterator(pathIDIn);
 
     if( !outputStreamExists(it) )
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     it->second->close();
-    outputFileStreams.erase( streamIDIn );
+    outputFileStreams.erase( pathIDIn );
 
     return *this;
 }
 
-FileIO & FileIO::resetInputStreamToFileStart( std::string const & streamIDIn )
+FileIO & FileIO::resetInputStreamToFileStart( std::string const & pathIDIn )
 {
-     auto it = getInputStreamIterator(streamIDIn);
+     auto it = getInputStreamIterator(pathIDIn);
 
     if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     it->second->clear();
     it->second->seekg( 0, std::ios::beg );
@@ -163,33 +194,33 @@ FileIO & FileIO::resetInputStreamToFileStart( std::string const & streamIDIn )
     return *this;
 }
 
-FileIO & FileIO::readLine( std::string const & streamIDIn, std::string & lineToWriteTo )
+FileIO & FileIO::readLine( std::string const & pathIDIn, std::string & lineToWriteTo )
 {
-    auto it = getInputStreamIterator(streamIDIn);
+    auto it = getInputStreamIterator(pathIDIn);
 
     if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     getline( *(it->second ), lineToWriteTo );
 
     return *this;
 }
 
-std::string const FileIO::readLine( std::string const & streamIDIn)
+std::string const FileIO::readLine( std::string const & pathIDIn)
 {
     std::string lineToReturn;
 
-    readLine(streamIDIn, lineToReturn);
+    readLine(pathIDIn, lineToReturn);
 
     return lineToReturn;
 }
 
-FileIO & FileIO::writeLine( std::string const & streamIDIn, std::string const & lineToWrite )
+FileIO & FileIO::writeLine( std::string const & pathIDIn, std::string const & lineToWrite )
 {
-    auto it = getOutputStreamIterator(streamIDIn);
+    auto it = getOutputStreamIterator(pathIDIn);
 
     if( !outputStreamExists(it) || !outputStreamIsValid(it))
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     *it->second << lineToWrite;
 
@@ -222,22 +253,22 @@ FileIO & FileIO::setDirectoryPath( std::string const & pathIDIn, std::string con
     return *this;
 }
 
-std::istream & FileIO::getInputStream( std::string const & streamIDIn ) const
+std::istream & FileIO::getInputStream( std::string const & pathIDIn ) const
 {
-    auto it = getInputStreamIterator(streamIDIn);
+    auto it = getInputStreamIterator(pathIDIn);
 
     if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     return *( static_cast<std::istream *>( &(*it->second) ) );
 }
 
-std::ostream & FileIO::getOutputStream( std::string const & streamIDIn ) const
+std::ostream & FileIO::getOutputStream( std::string const & pathIDIn ) const
 {
-    auto it = getOutputStreamIterator(streamIDIn);
+    auto it = getOutputStreamIterator(pathIDIn);
 
     if( !outputStreamExists(it) || !outputStreamIsValid(it))
-    { giveStreamNotOpenError(streamIDIn); }
+    { giveStreamNotOpenError(pathIDIn); }
 
     return *( static_cast<std::ostream *>( &(*it->second) ) );
 }
@@ -400,6 +431,7 @@ std::string const FileIO::getBaseFileName( std::string const & fileNameIn ) cons
 #ifdef WINDOWS
 
     auto tmp = fileNameIn.substr( fileNameIn.find_last_of( "\\" ) + 1 );
+
     tmp = tmp.substr( 0, tmp.length() - ( tmp.length() - tmp.find_last_of( "." ) ) );
 
     return tmp;
@@ -407,6 +439,7 @@ std::string const FileIO::getBaseFileName( std::string const & fileNameIn ) cons
 #else
 
     auto tmp = fileNameIn.substr( fileNameIn.find_last_of( "/" ) + 1 );
+
     tmp = tmp.substr( 0, tmp.length() - ( tmp.length() - tmp.find_last_of( "." ) ) );
 
     return tmp;
@@ -414,27 +447,58 @@ std::string const FileIO::getBaseFileName( std::string const & fileNameIn ) cons
 #endif
 }
 
-bool const FileIO::inputStreamExists(std::string const & streamIDIn) const
-{ return inputFileStreams.find( streamIDIn ) != inputFileStreams.end(); }
+bool const FileIO::inputStreamExists(std::string const & pathIDIn) const
+{ return inputFileStreams.find( pathIDIn ) != inputFileStreams.end(); }
 
-bool const FileIO::inputStreamIsValid(std::string const & streamIDIn) const
-{ return inputStreamExists(streamIDIn) & inputFileStreams.find( streamIDIn )->second->good(); }
+bool const FileIO::inputStreamIsValid(std::string const & pathIDIn) const
+{ 
+    auto it = getInputStreamIterator(pathIDIn);
 
-bool const FileIO::outputStreamExists(std::string const & streamIDIn) const
-{ return outputFileStreams.find( streamIDIn ) != outputFileStreams.end(); }
+    return inputStreamExists(it) & it->second->good(); }
 
-bool const FileIO::outputStreamIsValid(std::string const & streamIDIn) const
-{ return outputStreamExists(streamIDIn) & outputFileStreams.find( streamIDIn )->second->good(); }
+bool const FileIO::outputStreamExists(std::string const & pathIDIn) const
+{ return outputFileStreams.find( pathIDIn ) != outputFileStreams.end(); }
+
+bool const FileIO::outputStreamIsValid(std::string const & pathIDIn) const
+{ 
+    auto it = getOutputStreamIterator(pathIDIn);
+
+    return outputStreamExists(it) & it->second->good(); 
+}
 
 bool const FileIO::filePathExists(std::string const & pathIDIn) const
 { return filePaths.find( pathIDIn ) != filePaths.end(); }
 
+bool const FileIO::filePathIsValid(std::string const & pathIDIn) const
+{
+    struct stat fileCheck;
+
+    if( filePathExists(pathIDIn) 
+        && stat( getFilePath(pathIDIn).c_str(), &fileCheck ) == 0 
+        && fileCheck.st_mode & S_IFREG )
+    { return true; }
+
+    return false;
+}
+
 bool const FileIO::directoryPathExists(std::string const & pathIDIn) const
 { return directoryPaths.find( pathIDIn ) != directoryPaths.end(); }
 
+bool const FileIO::directoryPathIsValid(std::string const & pathIDIn) const
+{
+    struct stat directoryCheck;
+
+    if( directoryPathExists(pathIDIn) 
+        && stat( getDirectoryPath(pathIDIn).c_str(), &directoryCheck ) == 0 
+        && directoryCheck.st_mode & S_IFDIR )
+    { return true; }
+
+    return false;
+}
+
 std::unordered_map< std::string, std::unique_ptr<std::ifstream> >::const_iterator 
-    FileIO::getInputStreamIterator(std::string const & streamIDIn) const
-{ return inputFileStreams.find( streamIDIn ); }
+    FileIO::getInputStreamIterator(std::string const & pathIDIn) const
+{ return inputFileStreams.find( pathIDIn ); }
 
 bool const FileIO::inputStreamExists(std::unordered_map< std::string, 
     std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
@@ -445,8 +509,8 @@ bool const FileIO::inputStreamIsValid(std::unordered_map< std::string,
 { return streamIteratorIn->second->good(); }
 
 std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
-    FileIO::getOutputStreamIterator(std::string const & streamIDIn) const
-{ return outputFileStreams.find( streamIDIn ); }
+    FileIO::getOutputStreamIterator(std::string const & pathIDIn) const
+{ return outputFileStreams.find( pathIDIn ); }
 
 bool const FileIO::outputStreamExists(std::unordered_map< std::string, 
     std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
@@ -481,14 +545,20 @@ std::string const FileIO::findBaseDirectory() const
     return std::string( tmpBuffer );
 }
 
-void FileIO::giveStreamAlreadyOpenError(std::string const & streamIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + streamIDIn + "\" is already open!"); }
+void FileIO::giveStreamAlreadyOpenError(std::string const & pathIDIn) const
+{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" is already open!"); }
 
-void FileIO::giveStreamNotOpenError(std::string const & streamIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + streamIDIn + "\" is not open!"); }
+void FileIO::giveStreamNotOpenError(std::string const & pathIDIn) const
+{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" is not open!"); }
 
-void FileIO::giveStreamCouldNotOpenError(std::string const & streamIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + streamIDIn + "\" could not be opened!"); }
+void FileIO::giveStreamCouldNotOpenError(std::string const & pathIDIn) const
+{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" could not be opened!"); }
 
 void FileIO::givePathNotFoundError(std::string const & pathIDIn) const
 { throw std::runtime_error("ERROR: Path \"" + pathIDIn + "\" could not be found!");}
+
+void FileIO::givePathNotValidError(std::string const & pathIDIn) const
+{ 
+    throw std::runtime_error("ERROR: Path \"" + pathIDIn + "\" (" + 
+        getFilePath(pathIDIn) + ") could be found but is an invalid format!");
+}

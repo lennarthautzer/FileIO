@@ -24,8 +24,8 @@
 * SOFTWARE.
 --------------------------------------------------------------------------------------------------*/
 
-#ifndef _FILE_IO_HEADER_
-#define _FILE_IO_HEADER_
+#ifndef FILE_IO_H_
+#define FILE_IO_H_
 
 #include <iostream>
 #include <unordered_map>
@@ -39,36 +39,43 @@
 
 #if defined WIN32 || defined _WIN32 || defined __WIN32 && !defined __CYGWIN__
 
-#ifndef WINDOWS
+    #ifndef WINDOWS
 
-#define WINDOWS
+        #define WINDOWS
 
-#endif
+    #endif
 
 #endif
 
 #ifdef WINDOWS
 
-#include <windows.h>
-#include <direct.h>
+    #include <windows.h>
+    #include <direct.h>
 
-#define getCurrentDirectory _getcwd
+    #define getCurrentDirectory _getcwd
 
 #else
 
-#include <unistd.h>
-#include <dirent.h>
+    #include <unistd.h>
+    #include <dirent.h>
 
-#define getCurrentDirectory getcwd
+    #define getCurrentDirectory getcwd
 
 #endif
 
-int constexpr recursiveSearchTrue = 1;
-int constexpr recursiveSearchFalse = 0;
+bool constexpr recursiveSearchTrue = 1;
+bool constexpr recursiveSearchFalse = 0;
 
 /*--------------------------------------------------------------------------------------------------
-* This class is a collection of different functions to manage file system
-* interaction between both Windows and *nix operating systems.
+* This class tracks two basic pieces of data:
+* Streams - used to perform data input and output on files in the filesystem.
+* Path IDs - used to associate an unpronouncable path in the filesystem to one of the following:
+
+**  A filePath is used to track and validate paths to files provided by the user
+**  A directoryPath is used to track and validate paths to directories provided by the user 
+
+* Use this class to safely open and close streams while associating them with string pathIDs, 
+* instead of long, difficult-to-pronounce filesystem paths.
 --------------------------------------------------------------------------------------------------*/
 
 class FileIO
@@ -90,13 +97,19 @@ public:
     std::istream & openInputStream( std::string const & pathIDIn );
     
     /* Overload of openInputStream(std::string const & pathIDIn) */
-    std::istream & openInputStream( char const * const pathIDIn );
+    std::istream & openInputStream( char const * const & pathIDIn );
 
     /* Open a filestream on the filepath provided, and associate it with the pathID provided. */
     std::istream & openInputStream( std::string const & pathIDIn, std::string const & filePathIn );
 
     /* Overload of openInputStream(std::string const & pathIDIn, std::string const & filePathIn) */
-    std::istream & openInputStream( char const * const pathIDIn, char const * const filePath );
+    std::istream & openInputStream( std::string const & pathIDIn, char const * const & filePathIn );
+
+    /* Overload of openInputStream(std::string const & pathIDIn, std::string const & filePathIn) */
+    std::istream & openInputStream( char const * const & pathIDIn, std::string const & filePathIn );
+
+    /* Overload of openInputStream(std::string const & pathIDIn, std::string const & filePathIn) */
+    std::istream & openInputStream( char const * const & pathIDIn, char const * const & filePathIn );
 
     /*--------------------------------------------------------------------------------------------------
     * Overloaded functions to open a std::ofstream on an absolute filepath.
@@ -107,50 +120,56 @@ public:
     std::ostream & openOutputStream( std::string const & pathIDIn );
     
     /* Overload of openOutputStream(std::string const & pathIDIn) */
-    std::ostream & openOutputStream( char const * pathIDIn );
+    std::ostream & openOutputStream( char const * const & pathIDIn );
     
     /* Open an output filestream on the filepath provided, and associate it with the pathID provided. */
-    std::ostream & openOutputStream( std::string const & pathIDIn, std::string const & filePath );
+    std::ostream & openOutputStream( std::string const & pathIDIn, std::string const & filePathIn );
     
     /* Overload of openOutputStream(std::string const & pathIDIn, std::string const & filePathIn) */
-    std::ostream & openOutputStream( char const * & pathIDIn, char const * filePath );
+    std::ostream & openOutputStream( std::string const & pathIDIn, char const * const & filePathIn );
+
+    /* Overload of openOutputStream(std::string const & pathIDIn, std::string const & filePathIn) */
+    std::ostream & openOutputStream( char const * const & pathIDIn, std::string const & filePathIn );
+
+    /* Overload of openOutputStream(std::string const & pathIDIn, std::string const & filePathIn) */
+    std::ostream & openOutputStream( char const * const & pathIDIn, char const * const & filePathIn );
 
     /*--------------------------------------------------------------------------------------------------
     * Close/Reset input filestreams and close output filestreams.
     --------------------------------------------------------------------------------------------------*/
 
-    /* Retrieves and closes the filestream at the streamID provided. Both must exist. */
-    FileIO & closeInputStream( std::string const & streamIDIn );
+    /* Retrieves and closes the filestream at the pathID provided. Both must exist. */
+    FileIO & closeInputStream( std::string const & pathIDIn );
 
-    /* Retrieves and closes the output filestream at the streamID provided. Both must exist. */
-    FileIO & closeOutputStream( std::string const & streamIDIn );
+    /* Retrieves and closes the output filestream at the pathID provided. Both must exist. */
+    FileIO & closeOutputStream( std::string const & pathIDIn );
 
-    /* Retrieves and resets the filestream at the streamID provided. Both must exist. */
-    FileIO & resetInputStreamToFileStart( std::string const & streamIDIn );
+    /* Retrieves and resets the filestream at the pathID provided. Both must exist. */
+    FileIO & resetInputStreamToFileStart( std::string const & pathIDIn );
 
     /*--------------------------------------------------------------------------------------------------
     * Wrapper for reading and writing strings
     --------------------------------------------------------------------------------------------------*/
 
-    /* Retrieves and reads one RAW line from the filestream at the streamID provided
-    * to the string provided. Both the stream and streamID must exist. */
-    FileIO & readLine( std::string const & streamIDIn, std::string & lineToWriteTo );
+    /* Retrieves and reads one RAW line from the filestream at the pathID provided
+    * to the string provided. Both the stream and pathID must exist. */
+    FileIO & readLine( std::string const & pathIDIn, std::string & lineToWriteTo );
 
-    /* Retrieves and returns one RAW line from the filestream at the streamID provided. 
-    * Both the stream and streamID must exist. */
-    std::string const readLine( std::string const & streamIDIn);
+    /* Retrieves and returns one RAW line from the filestream at the pathID provided. 
+    * Both the stream and pathID must exist. */
+    std::string const readLine( std::string const & pathIDIn);
 
-    /* Retrieves the output filestream at the streamID provided
-    * and writes the RAW string provided. Both the stream and streamID must exist. */
-    FileIO & writeLine( std::string const & streamIDIn, std::string const & lineToWrite );
+    /* Retrieves the output filestream at the pathID provided
+    * and writes the RAW string provided. Both the stream and pathID must exist. */
+    FileIO & writeLine( std::string const & pathIDIn, std::string const & lineToWrite );
 
-    /* Returns a string containing all lines from the filestream at the streamID provided. 
-    * Both the stream and streamID must exist. Will reset filestream to file start. */
-    std::string const readFileAsString(std::string const & streamIDIn);
+    /* Returns a string containing all lines from the filestream at the pathID provided. 
+    * Both the stream and pathID must exist. Will reset filestream to file start. */
+    std::string const readFileAsString(std::string const & pathIDIn);
 
-    /* Returns a vector containing all lines from the filestream at the streamID provided. 
-    * Both the stream and streamID must exist. Will reset filestream to file start. */
-    std::vector<std::string> const readFileAsVector(std::string const & streamIDIn, 
+    /* Returns a vector containing all lines from the filestream at the pathID provided. 
+    * Both the stream and pathID must exist. Will reset filestream to file start. */
+    std::vector<std::string> const readFileAsVector(std::string const & pathIDIn, 
         std::string const & delimitingCharacters);
 
     /*--------------------------------------------------------------------------------------------------
@@ -170,8 +189,8 @@ public:
     * Retrieve addresses of raw ifstreams/ofstreams.
     --------------------------------------------------------------------------------------------------*/
 
-    std::istream & getInputStream( std::string const & streamIDIn ) const;
-    std::ostream & getOutputStream( std::string const & streamIDIn ) const;
+    std::istream & getInputStream( std::string const & pathIDIn ) const;
+    std::ostream & getOutputStream( std::string const & pathIDIn ) const;
 
     /*--------------------------------------------------------------------------------------------------
     * Retrieve path to working directory or data sub-directory.
@@ -183,7 +202,7 @@ public:
     * Retrieve a filepath or the address for std::unordered_map of filepaths.
     --------------------------------------------------------------------------------------------------*/
 
-    std::string const getFilePath( std::string const & streamIDIn ) const;
+    std::string const getFilePath( std::string const & pathIDIn ) const;
     std::unordered_map<std::string, std::string> const & getAllFilePaths() const;
 
     /*--------------------------------------------------------------------------------------------------
@@ -223,15 +242,29 @@ public:
     * Functions to check for errors.
     --------------------------------------------------------------------------------------------------*/
 
-    bool const inputStreamExists(std::string const & streamIDIn) const;
-    bool const inputStreamIsValid(std::string const & streamIDIn) const;
+    /* Check if inputStream has been instantiated in FileIO. */
+    bool const inputStreamExists(std::string const & pathIDIn) const;
 
-    bool const outputStreamExists(std::string const & streamIDIn) const;
-    bool const outputStreamIsValid(std::string const & streamIDIn) const;
+    /* Check if inputStream has encountered any errors. Returns false if there are problems. */
+    bool const inputStreamIsValid(std::string const & pathIDIn) const;
 
+    /* Check if outputStream has been instantiated in FileIO. */
+    bool const outputStreamExists(std::string const & pathIDIn) const;
+
+    /* Check if outputStream has encountered any errors. Returns false if there are problems. */
+    bool const outputStreamIsValid(std::string const & pathIDIn) const;
+
+    /* Check if filepath has been instantiated in FileIO. */
     bool const filePathExists(std::string const & pathIDIn) const;
 
+    /* Check if filepath is a valid path in the system. */
+    bool const filePathIsValid(std::string const & pathIDIn) const;
+    
+    /* Check if directory path has been instantiated in FileIO. */
     bool const directoryPathExists(std::string const & pathIDIn) const;
+
+    /* Check if directory path is a valid path in the system. */
+    bool const directoryPathIsValid(std::string const & pathIDIn) const;
 
 private:
 
@@ -241,7 +274,7 @@ private:
     --------------------------------------------------------------------------------------------------*/
 
     std::unordered_map< std::string, std::unique_ptr<std::ifstream> >::const_iterator 
-        getInputStreamIterator(std::string const & streamIDIn) const;
+        getInputStreamIterator(std::string const & pathIDIn) const;
     
     bool const inputStreamExists(std::unordered_map< std::string, 
         std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const;
@@ -250,7 +283,7 @@ private:
         std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const;
 
     std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
-        getOutputStreamIterator(std::string const & streamIDIn) const;
+        getOutputStreamIterator(std::string const & pathIDIn) const;
     
     bool const outputStreamExists(std::unordered_map< std::string, 
         std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const;
@@ -271,7 +304,7 @@ private:
         std::string>::const_iterator & pathIteratorIn) const;
 
     /*--------------------------------------------------------------------------------------------------
-    * Internal functions to find working directory.
+    * Internal function to find initial working directory.
     --------------------------------------------------------------------------------------------------*/
 
     std::string const findBaseDirectory() const;
@@ -280,11 +313,12 @@ private:
     * Internal functions to give errors.
     --------------------------------------------------------------------------------------------------*/
 
-    void giveStreamAlreadyOpenError(std::string const & streamIDIn) const;
-    void giveStreamNotOpenError(std::string const & streamIDIn) const;
-    void giveStreamCouldNotOpenError(std::string const & streamIDIn) const;
+    void giveStreamAlreadyOpenError(std::string const & pathIDIn) const;
+    void giveStreamNotOpenError(std::string const & pathIDIn) const;
+    void giveStreamCouldNotOpenError(std::string const & pathIDIn) const;
 
-    void givePathNotFoundError(std::string const & streamIDIn) const;
+    void givePathNotFoundError(std::string const & pathIDIn) const;
+    void givePathNotValidError(std::string const & pathIDIn) const;
 
     std::unordered_map<std::string, std::string> directoryPaths;
     std::unordered_map<std::string, std::string> filePaths;
