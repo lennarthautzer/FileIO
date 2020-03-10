@@ -227,6 +227,97 @@ FileIO & FileIO::writeLine( std::string const & pathIDIn, std::string const & li
     return *this;
 }
 
+std::string const FileIO::readFileAsString(std::string const & pathIDIn)
+{
+    auto it = getInputStreamIterator(pathIDIn);
+    bool hasOpenedNewStream = false;
+
+    if( !inputStreamExists(it) )
+    { 
+        openInputStream(pathIDIn); 
+        it = getInputStreamIterator(pathIDIn);
+        hasOpenedNewStream = true;
+    }
+    else
+    { resetInputStreamToFileStart(pathIDIn); }
+
+    if( !inputStreamExists(it) || !inputStreamIsValid(it))
+    { giveStreamNotOpenError(pathIDIn); }
+
+    std::stringstream tmp;
+
+    tmp << it->second->rdbuf();
+
+    if(hasOpenedNewStream)
+    { closeInputStream(pathIDIn); }
+
+    return tmp.str();
+}
+
+std::vector<std::vector<std::string>> const FileIO::readCSV(std::string const & pathIDIn, 
+    std::string const & delimitingCharacters /* = "," */)
+{
+    auto it = getInputStreamIterator(pathIDIn);
+    bool hasOpenedNewStream = false;
+
+    if( !inputStreamExists(it) )
+    { 
+        openInputStream(pathIDIn); 
+        it = getInputStreamIterator(pathIDIn);
+        hasOpenedNewStream = true;
+    }
+    else
+    { resetInputStreamToFileStart(pathIDIn); }
+
+    if( !inputStreamExists(it) || !inputStreamIsValid(it))
+    { giveStreamNotOpenError(pathIDIn); }
+
+    char currentChar;
+    std::vector<char> stringToAdd;
+    std::vector<std::string> rowValues;
+    std::vector<std::vector<std::string>> returnValues;
+
+    while( it->second->good() ) 
+    {
+        it->second->get(currentChar);
+        
+        for(char delimiter : delimitingCharacters)
+        {
+            if(currentChar == delimiter)
+            { 
+                std::string const tmp( stringToAdd.begin(), stringToAdd.end() );
+                
+                if(tmp != "")
+                { rowValues.push_back( tmp ); }
+
+                stringToAdd.clear();
+            }
+            else if(currentChar == '\n' || currentChar == '\r')
+            {
+                std::string const tmp( stringToAdd.begin(), stringToAdd.end() );
+                
+                if(tmp != "")
+                { rowValues.push_back( tmp ); }
+
+                returnValues.push_back(rowValues);
+
+                stringToAdd.clear();
+                rowValues.clear();
+            }
+            else
+            { stringToAdd.push_back(currentChar); }
+        }
+    }
+
+    if(!it->second->eof() && it->second->fail())
+    { throw std::runtime_error("ERROR: Could not read file!"); }
+
+    if(hasOpenedNewStream)
+    { closeInputStream(pathIDIn); }
+
+    return returnValues;
+}
+
 FileIO & FileIO::setBaseDirectory( std::string const & baseDirectoryIn )
 {
     struct stat directoryCheck;
@@ -454,7 +545,7 @@ bool const FileIO::inputStreamIsValid(std::string const & pathIDIn) const
 { 
     auto it = getInputStreamIterator(pathIDIn);
 
-    return inputStreamExists(it) & it->second->good(); }
+    return inputStreamExists(it) & it->second->good() & it->second->is_open(); }
 
 bool const FileIO::outputStreamExists(std::string const & pathIDIn) const
 { return outputFileStreams.find( pathIDIn ) != outputFileStreams.end(); }
@@ -463,7 +554,7 @@ bool const FileIO::outputStreamIsValid(std::string const & pathIDIn) const
 { 
     auto it = getOutputStreamIterator(pathIDIn);
 
-    return outputStreamExists(it) & it->second->good(); 
+    return outputStreamExists(it) & it->second->good() & it->second->is_open(); 
 }
 
 bool const FileIO::filePathExists(std::string const & pathIDIn) const
@@ -506,7 +597,7 @@ bool const FileIO::inputStreamExists(std::unordered_map< std::string,
 
 bool const FileIO::inputStreamIsValid(std::unordered_map< std::string, 
     std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn->second->good(); }
+{ return streamIteratorIn->second->good() & streamIteratorIn->second->is_open(); }
 
 std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
     FileIO::getOutputStreamIterator(std::string const & pathIDIn) const
@@ -518,7 +609,7 @@ bool const FileIO::outputStreamExists(std::unordered_map< std::string,
 
 bool const FileIO::outputStreamIsValid(std::unordered_map< std::string, 
     std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn->second->good(); }
+{ return streamIteratorIn->second->good() & streamIteratorIn->second->is_open(); }
 
 std::unordered_map<std::string, std::string>::const_iterator 
         FileIO::getFilePathIterator(std::string const & pathIDIn) const

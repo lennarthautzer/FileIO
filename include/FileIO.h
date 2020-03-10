@@ -32,6 +32,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <memory>
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -164,13 +165,13 @@ public:
     FileIO & writeLine( std::string const & pathIDIn, std::string const & lineToWrite );
 
     /* Returns a string containing all lines from the filestream at the pathID provided. 
-    * Both the stream and pathID must exist. Will reset filestream to file start. */
+    * Both the stream and pathID must exist. Will reset filestream to file start before reading. */
     std::string const readFileAsString(std::string const & pathIDIn);
 
-    /* Returns a vector containing all lines from the filestream at the pathID provided. 
-    * Both the stream and pathID must exist. Will reset filestream to file start. */
-    std::vector<std::string> const readFileAsVector(std::string const & pathIDIn, 
-        std::string const & delimitingCharacters);
+    /* Returns a vector of vectors containing all lines from the filestream at the pathID provided. 
+    * Both the stream and pathID must exist. Will reset filestream to file start before reading. */
+    std::vector<std::vector<std::string>> const readCSV(std::string const & pathIDIn, 
+        std::string const & delimitingCharacters = ",");
 
     /*--------------------------------------------------------------------------------------------------
     * Used to associate user directories and files with specific filepaths.
