@@ -5,19 +5,17 @@ ifeq ($(OS), Windows_NT)
   RRM         =   CMD /C rmdir /Q /S
   BACKSLASH   :=  \$(strip)
   LFLAGS			=		-LC:\cygwin64\lib
-	LLIBS				=		-lboost_unit_test_framework -lstdc++fs
-	BOOST_DIR		=		C:\cygwin64\usr\include
+	LLIBS				=		-lstdc++fs
 else
   RM          =   rm -f
   RRM         =   rm -f -r
 	BACKSLASH   :=  /$(strip)
   LFLAGS			=   -L../lib -L/usr/lib/x86_64-linux-gnu/
-	LLIBS				=		-lboost_unit_test_framework -lstdc++fs
-	BOOST_DIR		=		 /usr/include/boost/
+	LLIBS				=		-lstdc++fs
 endif
 
 CXX 					= 	g++
-CXXFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR) -I$(BOOST_DIR) -std=c++17
+CXXFLAGS 			= 	-g -Wall -Werror -MD -MP -I$(INC_DIR) -std=c++17
 DIRS					=		binaries objects
 SRC_DIR				=		./source
 BIN_DIR 			=		./binaries

@@ -1,655 +1,795 @@
-/*--------------------------------------------------------------------
-* Lennart Hautzer
-* 03/03/2020
-* 10 100 5235
-*
-* Copyright (c) 2020 Lennart Hautzer
-*
-* Permission is hereby granted, free of charge, to any person obtaining a copy
-* of this software and associated documentation files (the "Software"), to deal
-* in the Software without restriction, including without limitation the rights
-* to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-* copies of the Software, and to permit persons to whom the Software is
-* furnished to do so, subject to the following conditions:
-*
-* The above copyright notice and this permission notice shall be included in all
-* copies or substantial portions of the Software.
-*
-* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-* IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-* FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-* AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-* LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-* OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-* SOFTWARE.
---------------------------------------------------------------------*/
+/*----------------------------------------------------------------------------------------------------------------------
+ * Lennart Hautzer
+ * 19/04/2020
+ * 10 100 5235
+ *
+ * Copyright (c) 2020 Lennart Hautzer
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+----------------------------------------------------------------------------------------------------------------------*/
 
 #include "FileIO.h"
 
-FileIO::FileIO()
+std::unique_ptr< FileIO > FileIO::_instance = std::unique_ptr< FileIO >( nullptr );
+
+FileIO & FileIO::getInstance()
 {
-    setBaseDirectory( findBaseDirectory() );
+  if ( ! _instance ) { _instance = std::unique_ptr< FileIO >( new FileIO() ); }
+
+  return *_instance;
 }
 
 FileIO::~FileIO()
 {
-    auto inputStreamIterator = inputFileStreams.begin();
-    auto outputStreamIterator = outputFileStreams.begin();
+  auto inputStreamIterator = inputFileStreams.begin();
+  auto outputStreamIterator = outputFileStreams.begin();
 
-    while( true )
+  while ( true )
+  {
+    if ( inputStreamIterator != inputFileStreams.end() )
     {
-        if( inputStreamIterator != inputFileStreams.end() )
-        {
-            inputStreamIterator->second->close();
-            ++inputStreamIterator;
-        }
-        if( outputStreamIterator != outputFileStreams.end() )
-        {
-            outputStreamIterator->second->close();
-            ++outputStreamIterator;
-        }
-        if( inputStreamIterator == inputFileStreams.end()
-            && outputStreamIterator == outputFileStreams.end() )
-        { break; }
+      inputStreamIterator->second->close();
+      ++inputStreamIterator;
     }
-}
-
-std::istream & FileIO::openInputStream( std::string const & pathIDIn )
-{
-    if( !filePathIsValid(pathIDIn) )
-    { givePathNotValidError(pathIDIn); }
-
-    auto it = getInputStreamIterator(pathIDIn);
-
-    if( inputStreamExists(it) )
-    { giveStreamAlreadyOpenError(pathIDIn); }
-
-    inputFileStreams[ pathIDIn ] = std::unique_ptr<std::ifstream>
-        ( new std::ifstream( getFilePath( pathIDIn ), std::ifstream::in ) );
-
-    it = getInputStreamIterator(pathIDIn);
-
-    if( !inputStreamExists(it) || !inputStreamIsValid(it) )
-    { giveStreamCouldNotOpenError(pathIDIn); }
-    
-    return *it->second;
-}
-
-std::istream & FileIO::openInputStream( char const * const & pathIDIn )
-{ return openInputStream( std::string( pathIDIn ) ); }
-
-std::istream & FileIO::openInputStream( std::string const & pathIDIn, std::string const & filePathIn )
-{
-    setFilePath( pathIDIn, filePathIn );
-    return openInputStream( pathIDIn );
-}
-
-std::istream & FileIO::openInputStream( std::string const & pathIDIn, char const * const & filePathIn )
-{
-    setFilePath( pathIDIn, std::string( filePathIn ) );
-    return openInputStream( pathIDIn );
-}
-
-std::istream & FileIO::openInputStream( char const * const & pathIDIn, std::string const & filePathIn )
-{
-    std::string const tmp = std::string( pathIDIn );
-
-    setFilePath( tmp, filePathIn );    
-    return openInputStream( tmp );
-}
-
-std::istream & FileIO::openInputStream( char const * const & pathIDIn, char const * const & filePathIn )
-{
-    std::string const tmp = std::string( pathIDIn );
-
-    setFilePath( tmp, std::string( filePathIn ) );
-    return openInputStream( tmp );
-}
-
-std::ostream & FileIO::openOutputStream( std::string const & pathIDIn )
-{
-    auto it = getOutputStreamIterator(pathIDIn);
-
-    if( outputStreamExists(it) )
-    { giveStreamAlreadyOpenError(pathIDIn); }
-
-    outputFileStreams[ pathIDIn ] = std::unique_ptr<std::ofstream>
-        ( new std::ofstream( getFilePath( pathIDIn ), std::ofstream::out ) );
-    
-    it = getOutputStreamIterator(pathIDIn);
-
-    if( !outputStreamExists(it) || !outputStreamIsValid(it) )
-    { giveStreamCouldNotOpenError(pathIDIn); }
-
-    return *it->second;
-}
-
-std::ostream & FileIO::openOutputStream( char const * const & pathIDIn )
-{ return openOutputStream( std::string( pathIDIn ) ); }
-
-std::ostream & FileIO::openOutputStream( std::string const & pathIDIn, std::string const & filePathIn )
-{
-    setFilePath( pathIDIn, filePathIn );
-    return openOutputStream( pathIDIn );
-}
-
-std::ostream & FileIO::openOutputStream( std::string const & pathIDIn, char const * const & filePathIn )
-{
-    setFilePath( pathIDIn, std::string(filePathIn) );
-    return openOutputStream( pathIDIn );
-}
-
-std::ostream & FileIO::openOutputStream( char const * const & pathIDIn, std::string const & filePathIn )
-{
-    std::string const tmp = std::string( pathIDIn );
-
-    setFilePath( tmp, filePathIn );
-    return openOutputStream( tmp );
-}
-
-std::ostream & FileIO::openOutputStream( char const * const & pathIDIn, char const * const & filePathIn )
-{
-    std::string const tmp = std::string( pathIDIn );
-
-    setFilePath( tmp, std::string( filePathIn ) );
-    return openOutputStream( tmp );
-}
-
-FileIO & FileIO::closeInputStream( std::string const & pathIDIn )
-{
-    auto it = getInputStreamIterator(pathIDIn);
-
-    if( !inputStreamExists(it) )
-    { giveStreamNotOpenError(pathIDIn); }
-
-    it->second->close();
-    inputFileStreams.erase( pathIDIn );
-
-    return *this;
-}
-
-FileIO & FileIO::closeOutputStream( std::string const & pathIDIn )
-{
-    auto it = getOutputStreamIterator(pathIDIn);
-
-    if( !outputStreamExists(it) )
-    { giveStreamNotOpenError(pathIDIn); }
-
-    it->second->close();
-    outputFileStreams.erase( pathIDIn );
-
-    return *this;
-}
-
-FileIO & FileIO::resetInputStreamToFileStart( std::string const & pathIDIn )
-{
-     auto it = getInputStreamIterator(pathIDIn);
-
-    if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    it->second->clear();
-    it->second->seekg( 0, std::ios::beg );
-
-    return *this;
-}
-
-FileIO & FileIO::readLine( std::string const & pathIDIn, std::string & lineToWriteTo )
-{
-    auto it = getInputStreamIterator(pathIDIn);
-
-    if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    getline( *(it->second ), lineToWriteTo );
-
-    return *this;
-}
-
-std::string const FileIO::readLine( std::string const & pathIDIn)
-{
-    std::string lineToReturn;
-
-    readLine(pathIDIn, lineToReturn);
-
-    return lineToReturn;
-}
-
-FileIO & FileIO::writeLine( std::string const & pathIDIn, std::string const & lineToWrite )
-{
-    auto it = getOutputStreamIterator(pathIDIn);
-
-    if( !outputStreamExists(it) || !outputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    *it->second << lineToWrite;
-
-    return *this;
-}
-
-std::string const FileIO::readFileAsString(std::string const & pathIDIn)
-{
-    auto it = getInputStreamIterator(pathIDIn);
-    bool hasOpenedNewStream = false;
-
-    if( !inputStreamExists(it) )
-    { 
-        openInputStream(pathIDIn); 
-        it = getInputStreamIterator(pathIDIn);
-        hasOpenedNewStream = true;
-    }
-    else
-    { resetInputStreamToFileStart(pathIDIn); }
-
-    if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    std::stringstream tmp;
-
-    tmp << it->second->rdbuf();
-
-    if(hasOpenedNewStream)
-    { closeInputStream(pathIDIn); }
-
-    return tmp.str();
-}
-
-std::vector<std::vector<std::string>> const FileIO::readCSV(std::string const & pathIDIn, 
-    std::string const & delimitingCharacters /* = "," */)
-{
-    auto it = getInputStreamIterator(pathIDIn);
-    bool hasOpenedNewStream = false;
-
-    if( !inputStreamExists(it) )
-    { 
-        openInputStream(pathIDIn); 
-        it = getInputStreamIterator(pathIDIn);
-        hasOpenedNewStream = true;
-    }
-    else
-    { resetInputStreamToFileStart(pathIDIn); }
-
-    if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    char currentChar;
-    std::vector<char> stringToAdd;
-    std::vector<std::string> rowValues;
-    std::vector<std::vector<std::string>> returnValues;
-
-    while( it->second->good() ) 
+    if ( outputStreamIterator != outputFileStreams.end() )
     {
-        it->second->get(currentChar);
-        
-        for(char delimiter : delimitingCharacters)
-        {
-            if(currentChar == delimiter)
-            { 
-                std::string const tmp( stringToAdd.begin(), stringToAdd.end() );
-                
-                if(tmp != "")
-                { rowValues.push_back( tmp ); }
+      outputStreamIterator->second->close();
+      ++outputStreamIterator;
+    }
+    if ( inputStreamIterator == inputFileStreams.end() && outputStreamIterator == outputFileStreams.end() ) { break; }
+  }
+}
 
-                stringToAdd.clear();
-            }
-            else if(currentChar == '\n' || currentChar == '\r')
-            {
-                std::string const tmp( stringToAdd.begin(), stringToAdd.end() );
-                
-                if(tmp != "")
-                { rowValues.push_back( tmp ); }
+FileIO & FileIO::reset()
+{
+  auto inputStreamIterator = inputFileStreams.begin();
+  auto outputStreamIterator = outputFileStreams.begin();
 
-                returnValues.push_back(rowValues);
+  while ( true )
+  {
+    if ( inputStreamIterator != inputFileStreams.end() )
+    {
+      inputStreamIterator->second->close();
+      ++inputStreamIterator;
+    }
+    if ( outputStreamIterator != outputFileStreams.end() )
+    {
+      outputStreamIterator->second->close();
+      ++outputStreamIterator;
+    }
+    if ( inputStreamIterator == inputFileStreams.end() && outputStreamIterator == outputFileStreams.end() ) { break; }
+  }
 
-                stringToAdd.clear();
-                rowValues.clear();
-            }
-            else
-            { stringToAdd.push_back(currentChar); }
-        }
+  directoryPaths.clear();
+  filePaths.clear();
+  inputFileStreams.clear();
+  outputFileStreams.clear();
+  setBaseDirectory( findBaseDirectory() );
+
+  return *this;
+}
+
+std::istream & FileIO::openInputStream( std::string const & pathID_In )
+{
+  if ( ! filePathIsValid( pathID_In ) ) { givePathNotValidError( __func__, pathID_In ); }
+
+  auto it = getInputStreamIterator( pathID_In );
+
+  if ( inputStreamExists( it ) ) { giveStreamAlreadyOpenError( __func__, pathID_In ); }
+
+  inputFileStreams[ pathID_In ] =
+    std::unique_ptr< std::ifstream >( new std::ifstream( getFilePath( pathID_In ), std::ifstream::in ) );
+
+  it = getInputStreamIterator( pathID_In );
+
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamCouldNotOpenError( __func__, pathID_In ); }
+
+  return *it->second;
+}
+
+std::istream & FileIO::openInputStream( char const * const & pathID_In )
+{
+  return openInputStream( std::string( pathID_In ) );
+}
+
+std::istream & FileIO::openInputStream( std::string const & pathID_In, std::string const & filePath_In )
+{
+  setFilePath( pathID_In, filePath_In );
+
+  return openInputStream( pathID_In );
+}
+
+std::istream & FileIO::openInputStream( std::string const & pathID_In, char const * const & filePath_In )
+{
+  setFilePath( pathID_In, std::string( filePath_In ) );
+
+  return openInputStream( pathID_In );
+}
+
+std::istream & FileIO::openInputStream( char const * const & pathID_In, std::string const & filePath_In )
+{
+  std::string const _temporaryValue = std::string( pathID_In );
+
+  setFilePath( _temporaryValue, filePath_In );
+
+  return openInputStream( _temporaryValue );
+}
+
+std::istream & FileIO::openInputStream( char const * const & pathID_In, char const * const & filePath_In )
+{
+  std::string const _temporaryValue = std::string( pathID_In );
+
+  setFilePath( _temporaryValue, std::string( filePath_In ) );
+
+  return openInputStream( _temporaryValue );
+}
+
+std::ostream & FileIO::openOutputStream( std::string const & pathID_In, bool const & appendToFile_In )
+{
+  auto it = getOutputStreamIterator( pathID_In );
+
+  if ( outputStreamExists( it ) ) { giveStreamAlreadyOpenError( __func__, pathID_In ); }
+
+  outputFileStreams[ pathID_In ] = std::unique_ptr< std::ofstream >(
+    new std::ofstream( getFilePath( pathID_In ), ( appendToFile_In ? std::ofstream::app : std::ofstream::out ) ) );
+
+  it = getOutputStreamIterator( pathID_In );
+
+  if ( ! outputStreamExists( it ) || ! outputStreamIsValid( it ) )
+  { giveStreamCouldNotOpenError( __func__, pathID_In ); }
+
+  return *it->second;
+}
+
+std::ostream & FileIO::openOutputStream( char const * const & pathID_In, bool const & appendToFile_In )
+{
+  return openOutputStream( std::string( pathID_In ), appendToFile_In );
+}
+
+std::ostream & FileIO::openOutputStream(
+  std::string const & pathID_In, std::string const & filePath_In, bool const & appendToFile_In )
+{
+  setFilePath( pathID_In, filePath_In );
+
+  return openOutputStream( pathID_In, appendToFile_In );
+}
+
+std::ostream & FileIO::openOutputStream(
+  std::string const & pathID_In, char const * const & filePath_In, bool const & appendToFile_In )
+{
+  setFilePath( pathID_In, std::string( filePath_In ) );
+
+  return openOutputStream( pathID_In, appendToFile_In );
+}
+
+std::ostream & FileIO::openOutputStream(
+  char const * const & pathID_In, std::string const & filePath_In, bool const & appendToFile_In )
+{
+  std::string const _temporaryValue = std::string( pathID_In );
+
+  setFilePath( _temporaryValue, filePath_In );
+
+  return openOutputStream( _temporaryValue, appendToFile_In );
+}
+
+std::ostream & FileIO::openOutputStream(
+  char const * const & pathID_In, char const * const & filePath_In, bool const & appendToFile_In )
+{
+  std::string const _temporaryValue = std::string( pathID_In );
+
+  setFilePath( _temporaryValue, std::string( filePath_In ) );
+
+  return openOutputStream( _temporaryValue, appendToFile_In );
+}
+
+FileIO & FileIO::closeInputStream( std::string const & pathID_In )
+{
+  auto it = getInputStreamIterator( pathID_In );
+
+  if ( ! inputStreamExists( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  it->second->close();
+  inputFileStreams.erase( pathID_In );
+
+  return *this;
+}
+
+FileIO & FileIO::closeOutputStream( std::string const & pathID_In )
+{
+  auto it = getOutputStreamIterator( pathID_In );
+
+  if ( ! outputStreamExists( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  it->second->close();
+  outputFileStreams.erase( pathID_In );
+
+  return *this;
+}
+
+FileIO & FileIO::resetInputStreamToFileStart( std::string const & pathID_In )
+{
+  auto it = getInputStreamIterator( pathID_In );
+
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  it->second->clear();
+  it->second->seekg( 0, std::ios::beg );
+
+  return *this;
+}
+
+FileIO & FileIO::readLine( std::string const & pathID_In, std::string & lineToWriteTo )
+{
+  auto it = getInputStreamIterator( pathID_In );
+
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  getline( *( it->second ), lineToWriteTo );
+
+  return *this;
+}
+
+std::string FileIO::readLine( std::string const & pathID_In )
+{
+  std::string lineToReturn;
+
+  readLine( pathID_In, lineToReturn );
+
+  return lineToReturn;
+}
+
+FileIO & FileIO::writeLine( std::string const & pathID_In, std::string const & lineToWrite_In )
+{
+  auto it = getOutputStreamIterator( pathID_In );
+
+  if ( ! outputStreamExists( it ) || ! outputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  *it->second << lineToWrite_In;
+
+  return *this;
+}
+
+std::string FileIO::readFileAsString( std::string const & pathID_In )
+{
+  auto it = getInputStreamIterator( pathID_In );
+  bool hasOpenedNewStream = false;
+
+  if ( ! inputStreamExists( it ) )
+  {
+    openInputStream( pathID_In );
+    it = getInputStreamIterator( pathID_In );
+    hasOpenedNewStream = true;
+  }
+  else
+  {
+    resetInputStreamToFileStart( pathID_In );
+  }
+
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  std::stringstream _temporaryValue;
+
+  _temporaryValue << it->second->rdbuf();
+
+  if ( hasOpenedNewStream ) { closeInputStream( pathID_In ); }
+
+  return _temporaryValue.str();
+}
+
+std::vector< std::string > FileIO::readFileAsVectorOfStrings(
+  std::string const & pathID_In, std::string const & delimitingCharacters_In /* = "\n\r" */ )
+{
+  auto it = getInputStreamIterator( pathID_In );
+  bool hasOpenedNewStream = false;
+
+  if ( ! inputStreamExists( it ) )
+  {
+    openInputStream( pathID_In );
+    it = getInputStreamIterator( pathID_In );
+    hasOpenedNewStream = true;
+  }
+  else
+  {
+    resetInputStreamToFileStart( pathID_In );
+  }
+
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  char currentChar;
+  bool jumpToNextChar;
+  std::vector< char > stringToAdd;
+  std::vector< std::string > returnValues;
+
+  while ( it->second->good() )
+  {
+    jumpToNextChar = false;
+
+    it->second->get( currentChar );
+
+    for ( char const delimiter : delimitingCharacters_In )
+    {
+      if ( ! jumpToNextChar && currentChar == delimiter )
+      {
+        std::string const _temporaryValue( stringToAdd.begin(), stringToAdd.end() );
+
+        if ( _temporaryValue != "" ) { returnValues.push_back( _temporaryValue ); }
+
+        stringToAdd.clear();
+        jumpToNextChar = true;
+      }
     }
 
-    if(!it->second->eof() && it->second->fail())
-    { throw std::runtime_error("ERROR: Could not read file!"); }
+    if ( ! jumpToNextChar ) { stringToAdd.push_back( currentChar ); }
+  }
 
-    if(hasOpenedNewStream)
-    { closeInputStream(pathIDIn); }
+  std::string const _temporaryValue( stringToAdd.begin(), stringToAdd.end() - 1 );
 
-    return returnValues;
+  if ( _temporaryValue != "" ) { returnValues.push_back( _temporaryValue ); }
+
+  if ( ! it->second->eof() && it->second->fail() ) { givePathNotReadableError( __func__, pathID_In ); }
+
+  if ( hasOpenedNewStream ) { closeInputStream( pathID_In ); }
+
+  return returnValues;
 }
 
-FileIO & FileIO::setBaseDirectory( std::string const & baseDirectoryIn )
+std::vector< std::vector< std::string > > FileIO::readFileAsVectorOfVectors( std::string const & pathID_In,
+  std::string const & horizontalDelimitingCharacters_In /* = "," */,
+  std::string const & verticalDelimitingCharacters_In /* = "\n\r" */ )
 {
-    struct stat directoryCheck;
+  auto it = getInputStreamIterator( pathID_In );
+  bool hasOpenedNewStream = false;
 
-    if( stat( baseDirectoryIn.c_str(), &directoryCheck ) == 0 && directoryCheck.st_mode & S_IFDIR )
-    { baseDirectory = baseDirectoryIn; }
-    else
-    { perror( "ERROR: " ); }
+  if ( ! inputStreamExists( it ) )
+  {
+    openInputStream( pathID_In );
+    it = getInputStreamIterator( pathID_In );
+    hasOpenedNewStream = true;
+  }
+  else
+  {
+    resetInputStreamToFileStart( pathID_In );
+  }
 
-    return *this;
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
+
+  char currentChar;
+  bool jumpToNextChar;
+  std::vector< char > stringToAdd;
+  std::vector< std::string > rowValues;
+  std::vector< std::vector< std::string > > returnValues;
+
+  while ( it->second->good() )
+  {
+    jumpToNextChar = false;
+
+    it->second->get( currentChar );
+
+    for ( char const delimiter : horizontalDelimitingCharacters_In )
+    {
+      if ( ! jumpToNextChar && currentChar == delimiter )
+      {
+        std::string const _temporaryValue( stringToAdd.begin(), stringToAdd.end() );
+
+        if ( _temporaryValue != "" ) { rowValues.push_back( _temporaryValue ); }
+
+        stringToAdd.clear();
+        jumpToNextChar = true;
+      }
+    }
+
+    for ( char const delimiter : verticalDelimitingCharacters_In )
+    {
+      if ( ! jumpToNextChar && currentChar == delimiter )
+      {
+        std::string const _temporaryValue( stringToAdd.begin(), stringToAdd.end() );
+
+        if ( _temporaryValue != "" ) { rowValues.push_back( _temporaryValue ); }
+
+        if ( rowValues.size() > 0 ) { returnValues.push_back( rowValues ); }
+
+        stringToAdd.clear();
+        rowValues.clear();
+        jumpToNextChar = true;
+      }
+    }
+
+    if ( ! jumpToNextChar ) { stringToAdd.push_back( currentChar ); }
+  }
+
+  std::string const _temporaryValue( stringToAdd.begin(), stringToAdd.end() - 1 );
+
+  if ( _temporaryValue != "" ) { rowValues.push_back( _temporaryValue ); }
+
+  if ( rowValues.size() > 0 ) { returnValues.push_back( rowValues ); }
+
+  if ( ! it->second->eof() && it->second->fail() ) { givePathNotReadableError( __func__, pathID_In ); }
+
+  if ( hasOpenedNewStream ) { closeInputStream( pathID_In ); }
+
+  return returnValues;
 }
 
-FileIO & FileIO::setFilePath( std::string const & pathIDIn, std::string const & filePathIn )
+FileIO & FileIO::setBaseDirectory( std::string const & baseDirectory_In )
 {
-    filePaths[ pathIDIn ] = filePathIn;
+  struct stat directoryCheck;
 
-    return *this;
+  if ( stat( baseDirectory_In.c_str(), &directoryCheck ) == 0 && directoryCheck.st_mode & S_IFDIR )
+  { baseDirectory = baseDirectory_In; }
+  else
+  {
+    perror( "ERROR: " );
+  }
+
+  return *this;
 }
 
-FileIO & FileIO::setDirectoryPath( std::string const & pathIDIn, std::string const & pathToSetIn )
+FileIO & FileIO::setFilePath( std::string const & pathID_In, std::string const & filePath_In )
 {
-    directoryPaths[ pathIDIn ] = pathToSetIn;
+  filePaths[ pathID_In ] = filePath_In;
 
-    return *this;
+  return *this;
 }
 
-std::istream & FileIO::getInputStream( std::string const & pathIDIn ) const
+FileIO & FileIO::setDirectoryPath( std::string const & pathID_In, std::string const & pathToSet_In )
 {
-    auto it = getInputStreamIterator(pathIDIn);
+  directoryPaths[ pathID_In ] = pathToSet_In;
 
-    if( !inputStreamExists(it) || !inputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
-
-    return *( static_cast<std::istream *>( &(*it->second) ) );
+  return *this;
 }
 
-std::ostream & FileIO::getOutputStream( std::string const & pathIDIn ) const
+std::istream & FileIO::getInputStream( std::string const & pathID_In ) const
 {
-    auto it = getOutputStreamIterator(pathIDIn);
+  auto it = getInputStreamIterator( pathID_In );
 
-    if( !outputStreamExists(it) || !outputStreamIsValid(it))
-    { giveStreamNotOpenError(pathIDIn); }
+  if ( ! inputStreamExists( it ) || ! inputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
 
-    return *( static_cast<std::ostream *>( &(*it->second) ) );
+  return *( static_cast< std::istream * >( &( *it->second ) ) );
 }
 
-std::string const FileIO::getBaseDirectory() const { return baseDirectory; }
-
-std::string const FileIO::getFilePath( std::string const & pathIDIn ) const
+std::ostream & FileIO::getOutputStream( std::string const & pathID_In ) const
 {
-    auto it = getFilePathIterator(pathIDIn);
+  auto it = getOutputStreamIterator( pathID_In );
 
-    if( !filePathExists(it) )
-    { givePathNotFoundError(pathIDIn); }
+  if ( ! outputStreamExists( it ) || ! outputStreamIsValid( it ) ) { giveStreamNotOpenError( __func__, pathID_In ); }
 
-    return it->second;
+  return *( static_cast< std::ostream * >( &( *it->second ) ) );
 }
 
-std::unordered_map<std::string, std::string> const & FileIO::getAllFilePaths() const
-{ return filePaths; }
+std::string const & FileIO::getBaseDirectory() const { return baseDirectory; }
 
-FileIO & FileIO::removeFilePath( std::string const & pathIDIn )
+std::string const & FileIO::getFilePath( std::string const & pathID_In ) const
 {
-    auto it = getFilePathIterator(pathIDIn);
+  auto it = getFilePathIterator( pathID_In );
 
-    if( !filePathExists(it) )
-    { givePathNotFoundError(pathIDIn); }
+  if ( ! filePathExists( it ) ) { givePathNotFoundError( __func__, pathID_In ); }
 
-    filePaths.erase( it );
-
-    return *this;
+  return it->second;
 }
 
-std::string const FileIO::getDirectoryPath( std::string const & pathIDIn ) const
+FileIO & FileIO::removeFilePath( std::string const & pathID_In )
 {
-    auto it = getDirectoryPathIterator(pathIDIn);
+  auto it = getFilePathIterator( pathID_In );
 
-    if( !directoryPathExists(it) )
-    { givePathNotFoundError(pathIDIn); }
-    
-    return it->second;
+  if ( ! filePathExists( it ) ) { givePathNotFoundError( __func__, pathID_In ); }
+
+  filePaths.erase( it );
+
+  return *this;
 }
 
-std::unordered_map<std::string, std::string> const & FileIO::getAllDirectoryPaths() const
-{ return directoryPaths; }
-
-FileIO & FileIO::removeDirectoryPath( std::string const & pathIDIn )
+std::string const & FileIO::getDirectoryPath( std::string const & pathID_In ) const
 {
-    auto it = getDirectoryPathIterator(pathIDIn);
+  auto it = getDirectoryPathIterator( pathID_In );
 
-    if( !directoryPathExists(it) )
-    { givePathNotFoundError(pathIDIn); }
+  if ( ! directoryPathExists( it ) ) { givePathNotFoundError( __func__, pathID_In ); }
 
-    directoryPaths.erase( it );
-
-    return *this;
+  return it->second;
 }
 
-std::vector<std::string> const FileIO::findAllFiles( std::string const & startingDirectory,
-    std::string const & fileExtension /* = ".*" */,
-    int const & recursiveSearch /*= false*/ ) const
+FileIO & FileIO::removeDirectoryPath( std::string const & pathID_In )
 {
-    std::vector<std::string> directoriesOfFiles;
+  auto it = getDirectoryPathIterator( pathID_In );
+
+  if ( ! directoryPathExists( it ) ) { givePathNotFoundError( __func__, pathID_In ); }
+
+  directoryPaths.erase( it );
+
+  return *this;
+}
+
+std::vector< std::string > FileIO::findAllFiles( std::string const & startingDirectory_In,
+  std::string const & fileExtension_In /* = ".*" */, int const & recursiveSearch_In /* = RecursiveSearchFalse */ ) const
+{
+  std::vector< std::string > directoriesOfFiles;
 
 #ifdef WINDOWS
 
-    std::string const pathToCheck = startingDirectory + "\\*.*";
+  std::string const pathToCheck = startingDirectory_In + "\\*.*";
 
-    WIN32_FIND_DATA windowsFindData;
+  WIN32_FIND_DATA windowsFindData;
 
-    HANDLE fileHandleInDirectory = ::FindFirstFile( pathToCheck.c_str(),
-        &windowsFindData );
+  HANDLE fileHandle_InDirectory = ::FindFirstFile( CA2W( pathToCheck.c_str() ), &windowsFindData );
 
-    if( fileHandleInDirectory != INVALID_HANDLE_VALUE )
+  if ( fileHandle_InDirectory != INVALID_HANDLE_VALUE )
+  {
+    while ( ::FindNextFile( fileHandle_InDirectory, &windowsFindData ) )
     {
-        while( ::FindNextFile( fileHandleInDirectory, &windowsFindData ) )
+      if ( ! ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+      {
+        std::string const filePath = CW2A( windowsFindData.cFileName );
+
+        if ( fileExtension_In != ".*" && filePath.length() > fileExtension_In.length()
+          && filePath.substr( filePath.length() - fileExtension_In.length() ) == fileExtension_In )
+        { directoriesOfFiles.push_back( startingDirectory_In + "\\" + filePath ); }
+
+        else if ( fileExtension_In == ".*" )
         {
-            if( !( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
-            {
-                std::string const filePath = std::string( windowsFindData.cFileName );
-
-                if( fileExtension != ".*"
-                    && filePath.length() > fileExtension.length()
-                    && filePath.substr( filePath.length() - fileExtension.length() ) == fileExtension )
-                { directoriesOfFiles.push_back( startingDirectory + "\\" + filePath ); }
-
-                else if( fileExtension == ".*" )
-                { directoriesOfFiles.push_back( startingDirectory + "\\" + filePath ); }
-            }
-            else if( ( recursiveSearch == recursiveSearchTrue )
-                && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
-                && ( std::string( windowsFindData.cFileName ) != ".." )
-                && ( std::string( windowsFindData.cFileName ) != "." ) )
-            {
-                std::vector<std::string> subDirectoryFiles =
-                    findAllFiles( ( startingDirectory + "\\" + std::string( windowsFindData.cFileName ) ),
-                        fileExtension, true );
-
-                for( auto & file : subDirectoryFiles )
-                {
-                    directoriesOfFiles.push_back( file );
-                }
-            }
+          directoriesOfFiles.push_back( startingDirectory_In + "\\" + filePath );
         }
-        ::FindClose( fileHandleInDirectory );
-    }
+      }
+      else if ( ( recursiveSearch_In == RecursiveSearchTrue )
+        && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+        && ( CW2A( windowsFindData.cFileName ) != ".." ) && ( CW2A( windowsFindData.cFileName ) != "." ) )
+      {
+        std::vector< std::string > subDirectoryFiles = findAllFiles(
+          ( startingDirectory_In + "\\" + std::string( CW2A( windowsFindData.cFileName ) ) ), fileExtension_In, true );
 
-    return directoriesOfFiles;
+        for ( auto & file : subDirectoryFiles ) { directoriesOfFiles.push_back( file ); }
+      }
+    }
+    ::FindClose( fileHandle_InDirectory );
+  }
+
+  return directoriesOfFiles;
 
 #else
 
-    struct dirent * fileInDirectory;
+  struct dirent * file_InDirectory;
 
-    DIR * currentDirectory = static_cast< DIR * > ( opendir( startingDirectory.c_str() ) );
+  DIR * currentDirectory = static_cast< DIR * >( opendir( startingDirectory_In.c_str() ) );
 
-    if( !currentDirectory )
-    { return std::vector<std::string>(); }
+  if ( ! currentDirectory ) { return std::vector< std::string >(); }
 
-    while( ( fileInDirectory = readdir( currentDirectory ) ) != NULL )
+  while ( ( file_InDirectory = readdir( currentDirectory ) ) != NULL )
+  {
+    struct stat directoryCheck;
+
+    if ( std::string( file_InDirectory->d_name ) == "." || std::string( file_InDirectory->d_name ) == ".." )
+    { continue; }
+
+    if ( stat( ( startingDirectory_In + "/" + file_InDirectory->d_name ).c_str(), &directoryCheck ) < 0 )
+    { throw std::runtime_error( "ERROR: _Invalid File." ); }
+
+    else if ( S_ISREG( directoryCheck.st_mode ) )
     {
-        struct stat directoryCheck;
+      std::string const filePath = std::string( file_InDirectory->d_name );
 
-        if( std::string( fileInDirectory->d_name ) == "." || std::string( fileInDirectory->d_name ) == ".." )
-        { continue; }
+      if ( fileExtension_In != ".*" && filePath.length() > fileExtension_In.length()
+        && filePath.substr( filePath.length() - fileExtension_In.length() ) == fileExtension_In )
+      { directoriesOfFiles.push_back( startingDirectory_In + "/" + filePath ); }
 
-        if( stat( ( startingDirectory + "/" + fileInDirectory->d_name ).c_str(), &directoryCheck ) < 0 )
-        { throw std::runtime_error("ERROR: Invalid File."); }
-
-        else if( S_ISREG( directoryCheck.st_mode ) )
-        {
-            std::string const filePath = std::string( fileInDirectory->d_name );
-
-            if( fileExtension != ".*"
-                && filePath.length() > fileExtension.length()
-                && filePath.substr( filePath.length() - fileExtension.length() )
-                == fileExtension )
-            { directoriesOfFiles.push_back( startingDirectory + "/" + filePath ); }
-
-            else if( fileExtension == ".*" )
-            { directoriesOfFiles.push_back( startingDirectory + "/" + filePath ); }
-        }
-        else if( recursiveSearch == true
-            && S_ISDIR( directoryCheck.st_mode ) )
-        {
-            std::vector<std::string> subDirectoryFiles = findAllFiles( ( startingDirectory + "/" + 
-                std::string( fileInDirectory->d_name ) ), fileExtension, true );
-
-            for( auto & file : subDirectoryFiles )
-            { directoriesOfFiles.push_back( file ); }
-        }
+      else if ( fileExtension_In == ".*" )
+      {
+        directoriesOfFiles.push_back( startingDirectory_In + "/" + filePath );
+      }
     }
+    else if ( recursiveSearch_In == true && S_ISDIR( directoryCheck.st_mode ) )
+    {
+      std::vector< std::string > subDirectoryFiles = findAllFiles(
+        ( startingDirectory_In + "/" + std::string( file_InDirectory->d_name ) ), fileExtension_In, true );
 
-    closedir( currentDirectory );
+      for ( auto & file : subDirectoryFiles ) { directoriesOfFiles.push_back( file ); }
+    }
+  }
 
-    return directoriesOfFiles;
+  closedir( currentDirectory );
+
+  return directoriesOfFiles;
 
 #endif
 }
 
-std::string const FileIO::getBaseFileName( std::string const & fileNameIn ) const
+std::string FileIO::getBaseFileName( std::string const & fileName_In ) const
 {
-#ifdef WINDOWS
+  std::size_t const windowsStyleDelimiterPosition = fileName_In.find_last_of( "\\" );
+  std::size_t const nixStyleDelimiterPosition = fileName_In.find_last_of( "/" );
+  bool const windowsStyleDelimiterFound = ( windowsStyleDelimiterPosition != std::string::npos );
+  bool const nixStyleDelimiterFound = ( windowsStyleDelimiterPosition != std::string::npos );
 
-    auto tmp = fileNameIn.substr( fileNameIn.find_last_of( "\\" ) + 1 );
+  std::string returnString;
+  std::size_t lastDelimiter = ( windowsStyleDelimiterFound && nixStyleDelimiterFound ?
+      std::max( windowsStyleDelimiterPosition, nixStyleDelimiterPosition ) :
+      ( windowsStyleDelimiterFound ? windowsStyleDelimiterPosition : nixStyleDelimiterPosition ) );
 
-    tmp = tmp.substr( 0, tmp.length() - ( tmp.length() - tmp.find_last_of( "." ) ) );
+  returnString = fileName_In.substr( lastDelimiter + 1 );
 
-    return tmp;
+  std::size_t const extensionDelimiter = returnString.find_last_of( "." );
+  bool const extensionDelimiterFound = ( extensionDelimiter != std::string::npos );
+  std::size_t const returnStringLength = returnString.length();
 
-#else
+  returnString = ( extensionDelimiterFound ?
+      returnString.substr( 0, ( returnStringLength - ( returnStringLength - extensionDelimiter ) ) ) :
+      returnString );
 
-    auto tmp = fileNameIn.substr( fileNameIn.find_last_of( "/" ) + 1 );
-
-    tmp = tmp.substr( 0, tmp.length() - ( tmp.length() - tmp.find_last_of( "." ) ) );
-
-    return tmp;
-
-#endif
+  return returnString;
 }
 
-bool const FileIO::inputStreamExists(std::string const & pathIDIn) const
-{ return inputFileStreams.find( pathIDIn ) != inputFileStreams.end(); }
-
-bool const FileIO::inputStreamIsValid(std::string const & pathIDIn) const
-{ 
-    auto it = getInputStreamIterator(pathIDIn);
-
-    return inputStreamExists(it) & it->second->good() & it->second->is_open(); }
-
-bool const FileIO::outputStreamExists(std::string const & pathIDIn) const
-{ return outputFileStreams.find( pathIDIn ) != outputFileStreams.end(); }
-
-bool const FileIO::outputStreamIsValid(std::string const & pathIDIn) const
-{ 
-    auto it = getOutputStreamIterator(pathIDIn);
-
-    return outputStreamExists(it) & it->second->good() & it->second->is_open(); 
-}
-
-bool const FileIO::filePathExists(std::string const & pathIDIn) const
-{ return filePaths.find( pathIDIn ) != filePaths.end(); }
-
-bool const FileIO::filePathIsValid(std::string const & pathIDIn) const
+bool FileIO::inputStreamExists( std::string const & pathID_In ) const
 {
-    struct stat fileCheck;
-
-    if( filePathExists(pathIDIn) 
-        && stat( getFilePath(pathIDIn).c_str(), &fileCheck ) == 0 
-        && fileCheck.st_mode & S_IFREG )
-    { return true; }
-
-    return false;
+  return inputFileStreams.find( pathID_In ) != inputFileStreams.end();
 }
 
-bool const FileIO::directoryPathExists(std::string const & pathIDIn) const
-{ return directoryPaths.find( pathIDIn ) != directoryPaths.end(); }
-
-bool const FileIO::directoryPathIsValid(std::string const & pathIDIn) const
+bool FileIO::inputStreamIsValid( std::string const & pathID_In ) const
 {
-    struct stat directoryCheck;
+  auto it = getInputStreamIterator( pathID_In );
 
-    if( directoryPathExists(pathIDIn) 
-        && stat( getDirectoryPath(pathIDIn).c_str(), &directoryCheck ) == 0 
-        && directoryCheck.st_mode & S_IFDIR )
-    { return true; }
-
-    return false;
+  return inputStreamExists( it ) & it->second->good() & it->second->is_open();
 }
 
-std::unordered_map< std::string, std::unique_ptr<std::ifstream> >::const_iterator 
-    FileIO::getInputStreamIterator(std::string const & pathIDIn) const
-{ return inputFileStreams.find( pathIDIn ); }
-
-bool const FileIO::inputStreamExists(std::unordered_map< std::string, 
-    std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn != inputFileStreams.end(); }
-
-bool const FileIO::inputStreamIsValid(std::unordered_map< std::string, 
-    std::unique_ptr<std::ifstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn->second->good() & streamIteratorIn->second->is_open(); }
-
-std::unordered_map< std::string, std::unique_ptr<std::ofstream> >::const_iterator 
-    FileIO::getOutputStreamIterator(std::string const & pathIDIn) const
-{ return outputFileStreams.find( pathIDIn ); }
-
-bool const FileIO::outputStreamExists(std::unordered_map< std::string, 
-    std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn != outputFileStreams.end(); }
-
-bool const FileIO::outputStreamIsValid(std::unordered_map< std::string, 
-    std::unique_ptr<std::ofstream> >::const_iterator & streamIteratorIn) const
-{ return streamIteratorIn->second->good() & streamIteratorIn->second->is_open(); }
-
-std::unordered_map<std::string, std::string>::const_iterator 
-        FileIO::getFilePathIterator(std::string const & pathIDIn) const
-{ return filePaths.find(pathIDIn); }
-    
-bool const FileIO::filePathExists(std::unordered_map< std::string, 
-    std::string>::const_iterator & pathIteratorIn) const
-{ return pathIteratorIn != filePaths.end(); }
-
-std::unordered_map<std::string, std::string>::const_iterator 
-    FileIO::getDirectoryPathIterator(std::string const & pathIDIn) const
-{ return directoryPaths.find(pathIDIn); }
-
-bool const FileIO::directoryPathExists(std::unordered_map< std::string, 
-    std::string>::const_iterator & pathIteratorIn) const
-    { return pathIteratorIn != directoryPaths.end(); }
-
-std::string const FileIO::findBaseDirectory() const
+bool FileIO::outputStreamExists( std::string const & pathID_In ) const
 {
-    char tmpBuffer[ FILENAME_MAX ];
-
-    getCurrentDirectory( tmpBuffer, FILENAME_MAX );
-
-    return std::string( tmpBuffer );
+  return outputFileStreams.find( pathID_In ) != outputFileStreams.end();
 }
 
-void FileIO::giveStreamAlreadyOpenError(std::string const & pathIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" is already open!"); }
+bool FileIO::outputStreamIsValid( std::string const & pathID_In ) const
+{
+  auto it = getOutputStreamIterator( pathID_In );
 
-void FileIO::giveStreamNotOpenError(std::string const & pathIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" is not open!"); }
+  return outputStreamExists( it ) & it->second->good() & it->second->is_open();
+}
 
-void FileIO::giveStreamCouldNotOpenError(std::string const & pathIDIn) const
-{ throw std::runtime_error("ERROR: Stream \"" + pathIDIn + "\" could not be opened!"); }
+bool FileIO::filePathExists( std::string const & pathID_In ) const
+{
+  return filePaths.find( pathID_In ) != filePaths.end();
+}
 
-void FileIO::givePathNotFoundError(std::string const & pathIDIn) const
-{ throw std::runtime_error("ERROR: Path \"" + pathIDIn + "\" could not be found!");}
+bool FileIO::filePathIsValid( std::string const & pathID_In ) const
+{
+  struct stat fileCheck;
 
-void FileIO::givePathNotValidError(std::string const & pathIDIn) const
-{ 
-    throw std::runtime_error("ERROR: Path \"" + pathIDIn + "\" (" + 
-        getFilePath(pathIDIn) + ") could be found but is an invalid format!");
+  if ( filePathExists( pathID_In ) && stat( getFilePath( pathID_In ).c_str(), &fileCheck ) == 0
+    && fileCheck.st_mode & S_IFREG )
+  { return true; }
+
+  return false;
+}
+
+bool FileIO::directoryPathExists( std::string const & pathID_In ) const
+{
+  return directoryPaths.find( pathID_In ) != directoryPaths.end();
+}
+
+bool FileIO::directoryPathIsValid( std::string const & pathID_In ) const
+{
+  struct stat directoryCheck;
+
+  if ( directoryPathExists( pathID_In ) && stat( getDirectoryPath( pathID_In ).c_str(), &directoryCheck ) == 0
+    && directoryCheck.st_mode & S_IFDIR )
+  { return true; }
+
+  return false;
+}
+
+FileIO::FileIO() { setBaseDirectory( findBaseDirectory() ); }
+
+std::unordered_map< std::string, std::unique_ptr< std::ifstream > >::const_iterator FileIO::getInputStreamIterator(
+  std::string const & pathID_In ) const
+{
+  return inputFileStreams.find( pathID_In );
+}
+
+bool FileIO::inputStreamExists(
+  std::unordered_map< std::string, std::unique_ptr< std::ifstream > >::const_iterator const & streamIterator_In ) const
+{
+  return streamIterator_In != inputFileStreams.end();
+}
+
+bool FileIO::inputStreamIsValid(
+  std::unordered_map< std::string, std::unique_ptr< std::ifstream > >::const_iterator const & streamIterator_In ) const
+{
+  return streamIterator_In->second->good() & streamIterator_In->second->is_open();
+}
+
+std::unordered_map< std::string, std::unique_ptr< std::ofstream > >::const_iterator FileIO::getOutputStreamIterator(
+  std::string const & pathID_In ) const
+{
+  return outputFileStreams.find( pathID_In );
+}
+
+bool FileIO::outputStreamExists(
+  std::unordered_map< std::string, std::unique_ptr< std::ofstream > >::const_iterator const & streamIterator_In ) const
+{
+  return streamIterator_In != outputFileStreams.end();
+}
+
+bool FileIO::outputStreamIsValid(
+  std::unordered_map< std::string, std::unique_ptr< std::ofstream > >::const_iterator const & streamIterator_In ) const
+{
+  return streamIterator_In->second->good() & streamIterator_In->second->is_open();
+}
+
+std::unordered_map< std::string, std::string >::const_iterator FileIO::getFilePathIterator(
+  std::string const & pathID_In ) const
+{
+  return filePaths.find( pathID_In );
+}
+
+bool FileIO::filePathExists(
+  std::unordered_map< std::string, std::string >::const_iterator const & pathIterator_In ) const
+{
+  return pathIterator_In != filePaths.end();
+}
+
+std::unordered_map< std::string, std::string >::const_iterator FileIO::getDirectoryPathIterator(
+  std::string const & pathID_In ) const
+{
+  return directoryPaths.find( pathID_In );
+}
+
+bool FileIO::directoryPathExists(
+  std::unordered_map< std::string, std::string >::const_iterator const & pathIterator_In ) const
+{
+  return pathIterator_In != directoryPaths.end();
+}
+
+std::string FileIO::findBaseDirectory() const
+{
+  char _temporaryValueBuffer[ FILENAME_MAX ];
+
+  getCurrentDirectory( _temporaryValueBuffer, FILENAME_MAX );
+
+  return std::string( _temporaryValueBuffer );
+}
+
+// File IO error checking
+void FileIO::giveStreamAlreadyOpenError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error(
+    "ERROR: FileIO::" + throwingFunction_In + " -  Stream \"" + pathID_In + "\" is already open!" );
+}
+
+void FileIO::giveStreamNotOpenError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error( "ERROR: FileIO::" + throwingFunction_In + " -  Stream \"" + pathID_In + "\" is not open!" );
+}
+
+void FileIO::giveStreamCouldNotOpenError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error(
+    "ERROR: FileIO::" + throwingFunction_In + " -  Stream \"" + pathID_In + "\" could not be opened!" );
+}
+
+void FileIO::givePathNotFoundError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error(
+    "ERROR: FileIO::" + throwingFunction_In + " -  Path \"" + pathID_In + "\" could not be found!" );
+}
+
+void FileIO::givePathNotValidError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error( "ERROR: FileIO::" + throwingFunction_In + " -  Path \"" + pathID_In + "\" ("
+    + getFilePath( pathID_In ) + ") could be found but is an invalid format!" );
+}
+
+void FileIO::givePathNotReadableError( std::string const & throwingFunction_In, std::string const & pathID_In ) const
+{
+  throw std::runtime_error( "ERROR: FileIO::" + throwingFunction_In + " -  Path \"" + pathID_In + "\" ("
+    + getFilePath( pathID_In ) + ") could be found but not read!" );
 }
