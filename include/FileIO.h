@@ -228,11 +228,23 @@ public:
   FileIO & setDirectoryPath( std::string const & pathID_In, std::string const & pathToSet_In );
 
   /*--------------------------------------------------------------------------------------------------------------------
-   * Retrieve addresses of raw input filesstreams / output filestreams.
+   * Get an input filestream or an output filestream.
   --------------------------------------------------------------------------------------------------------------------*/
 
   std::istream & getInputStream( std::string const & pathID_In ) const;
   std::ostream & getOutputStream( std::string const & pathID_In ) const;
+
+  /*--------------------------------------------------------------------------------------------------------------------
+   * Get a sorted list of open filestreams' pathIDs and the absolute filepaths they are tied to.
+  --------------------------------------------------------------------------------------------------------------------*/
+
+  /* Retrieves, sorts and returns all open input filestreams' pathIDs and the absolute filepaths they are tied to. The
+   * output format is "pathID | absolute filepath" */
+  std::vector< std::string > getAllOpenInputStreams() const;
+
+  /* Retrieves, sorts and returns all open output filestreams' pathIDs and the absolute filepaths they are tied to. The
+   * output format is "pathID | absolute filepath" */
+  std::vector< std::string > getAllOpenOutputStreams() const;
 
   /*--------------------------------------------------------------------------------------------------------------------
    * Retrieve path to working directory.
@@ -265,34 +277,38 @@ public:
   FileIO & removeDirectoryPath( std::string const & pathID_In );
 
   /*--------------------------------------------------------------------------------------------------------------------
-  Find files, optionally of a certain type, in a directory, and optionally in its sub-directories. OS-dependent.
+   * Find files, optionally of a certain type, in a directory, and optionally in its sub-directories. OS-dependent.
   --------------------------------------------------------------------------------------------------------------------*/
 
   std::vector< std::string > findAllFiles( std::string const & startingDirectory_In,
     std::string const & fileExtension_In = ".*", int const & recursiveSearch_In = RecursiveSearchFalse ) const;
 
   /*--------------------------------------------------------------------------------------------------------------------
-  Get the filename of a file, given its path on the filesystem.
+   * Get the filename of a file, given its path on the filesystem.
   --------------------------------------------------------------------------------------------------------------------*/
 
   std::string getBaseFileName( std::string const & fileName_In ) const;
 
   /*--------------------------------------------------------------------------------------------------------------------
-  Functions to check for errors.
+   * Functions to check for errors.
   --------------------------------------------------------------------------------------------------------------------*/
 
-  /* Check if inputStream has been instantiated in FileIO. */
+  /* Get the number of open input filestreams */
+  std::size_t getNumberOfOpenInputStreams() const;
+
+  /* Get the number of open output filestreams */
+  std::size_t getNumberOfOpenOutputStreams() const;
+
+  /* Check if input filestream has been instantiated in FileIO. */
   bool inputStreamExists( std::string const & pathID_In ) const;
 
-  /* Check if inputStream has encountered any errors. Returns false if there
-   are problems. */
+  /* Check if input filestream has encountered any errors. Returns false if there are problems. */
   bool inputStreamIsValid( std::string const & pathID_In ) const;
 
-  /* Check if outputStream has been instantiated in FileIO. */
+  /* Check if output filestream has been instantiated in FileIO. */
   bool outputStreamExists( std::string const & pathID_In ) const;
 
-  /* Check if outputStream has encountered any errors. Returns false if there
-   are problems. */
+  /* Check if output filestream has encountered any errors. Returns false if there are problems. */
   bool outputStreamIsValid( std::string const & pathID_In ) const;
 
   /* Check if filepath has been instantiated in FileIO. */
@@ -310,12 +326,12 @@ public:
 protected:
   explicit FileIO();
 
-  static std::unique_ptr< FileIO > _instance;
+  static std::unique_ptr< FileIO > singletonInstance;
 
 private:
   /*--------------------------------------------------------------------------------------------------------------------
-  _Internal functions to check for errors. These handle direct access to data structures for better efficiency than
-  public accessors.
+   * Internal functions to check for errors. These handle direct access to data structures for better efficiency than
+   * public accessors.
   --------------------------------------------------------------------------------------------------------------------*/
 
   std::unordered_map< std::string, std::unique_ptr< std::ifstream > >::const_iterator getInputStreamIterator(

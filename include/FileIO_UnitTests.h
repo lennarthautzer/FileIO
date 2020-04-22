@@ -22,6 +22,7 @@ public:
   FileIO_UnitTests & operator=( FileIO_UnitTests const & FileIO_UnitTestsToCopy ) = delete;
 
   void runAllUnitTests();
+  void runResetTest();
   void runDirectoriesTest();
   void runFileSearchTest();
   void runFileReadTest();
@@ -32,7 +33,7 @@ public:
 protected:
   explicit FileIO_UnitTests();
 
-  static std::unique_ptr< FileIO_UnitTests > _instance;
+  static std::unique_ptr< FileIO_UnitTests > singletonInstance;
 
 private:
   FileIO & fileIO;
