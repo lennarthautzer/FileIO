@@ -771,7 +771,7 @@ std::string FileIO::findBaseDirectory() const
 {
   char _temporaryValueBuffer[ FILENAME_MAX ];
 
-  getCurrentDirectory( _temporaryValueBuffer, FILENAME_MAX );
+  getcwd( _temporaryValueBuffer, FILENAME_MAX );
 
   return std::string( _temporaryValueBuffer );
 }

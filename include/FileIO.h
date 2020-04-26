@@ -53,20 +53,12 @@
 
 #endif
 
+#include <dirent.h>
+
 #ifdef WINDOWS
-
-  #include <direct.h>
   #include <windows.h>
-
-  #define getCurrentDirectory _getcwd
-
 #else
-
-  #include <dirent.h>
   #include <unistd.h>
-
-  #define getCurrentDirectory getcwd
-
 #endif
 
 bool const constexpr RecursiveSearchTrue = true;
