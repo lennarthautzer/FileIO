@@ -55,7 +55,6 @@
 
 #ifdef WINDOWS
 
-  #include <atlstr.h>
   #include <direct.h>
   #include <windows.h>
 
@@ -367,13 +366,13 @@ private:
     std::unordered_map< std::string, std::string >::const_iterator const & pathIterator_In ) const;
 
   /*--------------------------------------------------------------------------------------------------------------------
-  _Internal function to find initial working directory.
+   * Internal function to find initial working directory.
   --------------------------------------------------------------------------------------------------------------------*/
 
   std::string findBaseDirectory() const;
 
   /*--------------------------------------------------------------------------------------------------------------------
-  _Internal functions to give errors.
+   * Internal functions to give errors.
   --------------------------------------------------------------------------------------------------------------------*/
 
   void giveStreamAlreadyOpenError( std::string const & throwingFunction_In, std::string const & pathID_In ) const;
@@ -383,6 +382,13 @@ private:
   void givePathNotFoundError( std::string const & throwingFunction_In, std::string const & pathID_In ) const;
   void givePathNotValidError( std::string const & throwingFunction_In, std::string const & pathID_In ) const;
   void givePathNotReadableError( std::string const & throwingFunction_In, std::string const & pathID_In ) const;
+
+  /*--------------------------------------------------------------------------------------------------------------------
+   * Convert between wide strings and normal strings
+  --------------------------------------------------------------------------------------------------------------------*/
+
+  std::string wideStringToNormalString( std::wstring const & wideString_In ) const;
+  std::wstring normalStringToWideString( std::string const & normalString_In ) const;
 
   std::unordered_map< std::string, std::string > directoryPaths;
   std::unordered_map< std::string, std::string > filePaths;

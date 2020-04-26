@@ -539,31 +539,31 @@ std::vector< std::string > FileIO::findAllFiles( std::string const & startingDir
 
   WIN32_FIND_DATA windowsFindData;
 
-  HANDLE fileHandle_InDirectory = ::FindFirstFile( CA2W( pathToCheck.c_str() ), &windowsFindData );
+  HANDLE fileHandle_InDirectory = ::FindFirstFile( normalStringToWideString( pathToCheck ).c_str(), &windowsFindData );
 
   if ( fileHandle_InDirectory != INVALID_HANDLE_VALUE )
   {
     while ( ::FindNextFile( fileHandle_InDirectory, &windowsFindData ) )
     {
+      std::string const currentPath = wideStringToNormalString( std::wstring( windowsFindData.cFileName ) );
+
       if ( ! ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
       {
-        std::string const filePath = CW2A( windowsFindData.cFileName );
-
-        if ( fileExtension_In != ".*" && filePath.length() > fileExtension_In.length()
-          && filePath.substr( filePath.length() - fileExtension_In.length() ) == fileExtension_In )
-        { directoriesOfFiles.push_back( startingDirectory_In + "\\" + filePath ); }
+        if ( fileExtension_In != ".*" && currentPath.length() > fileExtension_In.length()
+          && currentPath.substr( currentPath.length() - fileExtension_In.length() ) == fileExtension_In )
+        { directoriesOfFiles.push_back( startingDirectory_In + "\\" + currentPath ); }
 
         else if ( fileExtension_In == ".*" )
         {
-          directoriesOfFiles.push_back( startingDirectory_In + "\\" + filePath );
+          directoriesOfFiles.push_back( startingDirectory_In + "\\" + currentPath );
         }
       }
       else if ( ( recursiveSearch_In == RecursiveSearchTrue )
-        && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
-        && ( CW2A( windowsFindData.cFileName ) != ".." ) && ( CW2A( windowsFindData.cFileName ) != "." ) )
+        && ( windowsFindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) && currentPath != ".."
+        && currentPath != "." )
       {
-        std::vector< std::string > subDirectoryFiles = findAllFiles(
-          ( startingDirectory_In + "\\" + std::string( CW2A( windowsFindData.cFileName ) ) ), fileExtension_In, true );
+        std::vector< std::string > subDirectoryFiles =
+          findAllFiles( ( startingDirectory_In + "\\" + currentPath ), fileExtension_In, true );
 
         for ( auto & file : subDirectoryFiles ) { directoriesOfFiles.push_back( file ); }
       }
@@ -589,7 +589,7 @@ std::vector< std::string > FileIO::findAllFiles( std::string const & startingDir
     { continue; }
 
     if ( stat( ( startingDirectory_In + "/" + file_InDirectory->d_name ).c_str(), &directoryCheck ) < 0 )
-    { throw std::runtime_error( "ERROR: _Invalid File." ); }
+    { throw std::runtime_error( "ERROR: Invalid File." ); }
 
     else if ( S_ISREG( directoryCheck.st_mode ) )
     {
@@ -810,4 +810,14 @@ void FileIO::givePathNotReadableError( std::string const & throwingFunction_In, 
 {
   throw std::runtime_error( "ERROR: FileIO::" + throwingFunction_In + " - Path \"" + pathID_In + "\" ("
     + getFilePath( pathID_In ) + ") could be found but not read!" );
+}
+
+std::string FileIO::wideStringToNormalString( std::wstring const & wideString_In ) const
+{
+  return std::string( wideString_In.begin(), wideString_In.end() );
+}
+
+std::wstring FileIO::normalStringToWideString( std::string const & normalString_In ) const
+{
+  return std::wstring( normalString_In.begin(), normalString_In.end() );
 }
