@@ -537,13 +537,13 @@ std::vector< std::string > FileIO::findAllFiles( std::string const & startingDir
 
   std::string const pathToCheck = startingDirectory_In + "\\*.*";
 
-  WIN32_FIND_DATA windowsFindData;
+  WIN32_FIND_DATAW windowsFindData;
 
-  HANDLE fileHandle_InDirectory = ::FindFirstFile( normalStringToWideString( pathToCheck ).c_str(), &windowsFindData );
+  HANDLE fileHandle_InDirectory = ::FindFirstFileW( normalStringToWideString( pathToCheck ).c_str(), &windowsFindData );
 
   if ( fileHandle_InDirectory != INVALID_HANDLE_VALUE )
   {
-    while ( ::FindNextFile( fileHandle_InDirectory, &windowsFindData ) )
+    while ( ::FindNextFileW( fileHandle_InDirectory, &windowsFindData ) )
     {
       std::string const currentPath = wideStringToNormalString( std::wstring( windowsFindData.cFileName ) );
 
@@ -771,7 +771,7 @@ std::string FileIO::findBaseDirectory() const
 {
   char _temporaryValueBuffer[ FILENAME_MAX ];
 
-  getcwd( _temporaryValueBuffer, FILENAME_MAX );
+  GET_CURRENT_DIRECTORY( _temporaryValueBuffer, FILENAME_MAX );
 
   return std::string( _temporaryValueBuffer );
 }

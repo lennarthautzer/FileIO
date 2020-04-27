@@ -53,12 +53,15 @@
 
 #endif
 
-#include <dirent.h>
-
 #ifdef WINDOWS
   #include <windows.h>
+
+  #define GET_CURRENT_DIRECTORY( x, y ) GetModuleFileName( NULL, x, y )
 #else
   #include <unistd.h>
+  #include <dirent.h>
+
+  #define GET_CURRENT_DIRECTORY( x, y ) getcwd( x, y )
 #endif
 
 bool const constexpr RecursiveSearchTrue = true;
