@@ -814,10 +814,14 @@ void FileIO::givePathNotReadableError( std::string const & throwingFunction_In, 
 
 std::string FileIO::wideStringToNormalString( std::wstring const & wideString_In ) const
 {
-  return std::string( wideString_In.begin(), wideString_In.end() );
+  std::string normalString_Out( wideString_In.length(), ' ' );
+  std::copy( wideString_In.begin(), wideString_In.end(), normalString_Out.begin() );
+  return normalString_Out;
 }
 
 std::wstring FileIO::normalStringToWideString( std::string const & normalString_In ) const
 {
-  return std::wstring( normalString_In.begin(), normalString_In.end() );
+  std::wstring wideString_Out( normalString_In.length(), L' ' );
+  std::copy( normalString_In.begin(), normalString_In.end(), wideString_Out.begin() );
+  return wideString_Out;
 }
