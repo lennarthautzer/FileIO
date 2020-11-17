@@ -177,37 +177,24 @@ namespace NSFIO
   std::vector< std::wstring > splitStringW(
     std::wstring const & source, std::wstring const & delim /* = L"\n\r" */ )
   {
-    std::vector< std::wstring > v;
-    std::wstring ws = source;
-    std::size_t minLen;
+    std::size_t i = 0;
+    std::wstring str = source;
+    std::vector< std::wstring > ret;
 
-    do
+    while ( ( i = str.find_first_of( delim ) ) != std::string::npos )
     {
-      minLen = ws.size();
-      std::wstring closestDelim = L"";
+      std::wstring substr = str.substr( 0, i );
 
-      for ( wchar_t const & wc : delim )
-      {
-        std::size_t lenToDelim =
-          std::wcslen( ws.substr( 0, ws.find( wc ) ).c_str() );
+      if ( substr.find_first_not_of( delim ) != std::string::npos )
+      { ret.push_back( substr ); }
 
-        if ( lenToDelim < minLen )
-        {
-          minLen = lenToDelim;
-          closestDelim = wc;
-        }
-      }
+      str.erase( 0, i + 1 );
+    }
 
-      std::wstring res = ws.substr( 0, minLen );
-      res.erase(
-        std::remove_if( res.begin(), res.end(), ::isspace ), res.end() );
+    if ( str.find_first_not_of( delim ) != std::string::npos )
+    { ret.push_back( str ); }
 
-      if ( res.size() > 0 ) { v.push_back( res ); }
-      ws = ws.substr( minLen + closestDelim.size() );
-
-    } while ( minLen > 0 );
-
-    return v;
+    return ret;
   }
 
   std::vector< std::wstring > splitStringW(
@@ -475,7 +462,7 @@ namespace NSFIO
    * Open an input stream.
   ----------------------------------------------------------------------------*/
 
-  std::wistream & FIO::openWIStream( std::wstring const & pathOrID )
+  std::wistream & FIO::openWI( std::wstring const & pathOrID )
   {
     std::wstring path = getPathW( pathOrID );
 
@@ -491,29 +478,31 @@ namespace NSFIO
     return validateWIFStream( path );
   }
 
-  std::wistream & FIO::openWIStream( std::string const & pathOrID )
+  std::wistream & FIO::openWI( std::string const & pathOrID )
   {
-    return openWIStream( multiByteToWide( pathOrID ) );
+    return openWI( multiByteToWide( pathOrID ) );
   }
 
-  std::wistream & FIO::openWIStream( wchar_t const * const & pathOrID )
+  std::wistream & FIO::openWI( wchar_t const * const & pathOrID )
   {
-    return openWIStream( std::wstring( pathOrID ) );
+    return openWI( std::wstring( pathOrID ) );
   }
 
-  std::wistream & FIO::openWIStream( char const * const & pathOrID )
+  std::wistream & FIO::openWI( char const * const & pathOrID )
   {
-    return openWIStream( std::string( pathOrID ) );
+    return openWI( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Open an output stream.
   ----------------------------------------------------------------------------*/
 
-  std::wostream & FIO::openWOStream( std::wstring const & pathOrID,
+  std::wostream & FIO::openWO( std::wstring const & pathOrID,
     bool const & appendToFile /* = OpenNewFile */ )
   {
-    std::wstring path = getPathW( pathOrID );
+    std::wstring path = pathOrID;
+
+    if ( PM.find( pathOrID ) != PM.end() ) { path = getPathW( pathOrID ); }
 
     if ( oFSM.find( path ) != oFSM.end() )
     {
@@ -528,29 +517,29 @@ namespace NSFIO
     return validateWOFStream( path );
   }
 
-  std::wostream & FIO::openWOStream( std::string const & pathOrID,
+  std::wostream & FIO::openWO( std::string const & pathOrID,
     bool const & appendToFile /* = OpenNewFile */ )
   {
-    return openWOStream( multiByteToWide( pathOrID ), appendToFile );
+    return openWO( multiByteToWide( pathOrID ), appendToFile );
   }
 
-  std::wostream & FIO::openWOStream( wchar_t const * const & pathOrID,
+  std::wostream & FIO::openWO( wchar_t const * const & pathOrID,
     bool const & appendToFile /* = OpenNewFile */ )
   {
-    return openWOStream( std::wstring( pathOrID ), appendToFile );
+    return openWO( std::wstring( pathOrID ), appendToFile );
   }
 
-  std::wostream & FIO::openWOStream( char const * const & pathOrID,
+  std::wostream & FIO::openWO( char const * const & pathOrID,
     bool const & appendToFile /* = OpenNewFile */ )
   {
-    return openWOStream( std::string( pathOrID ), appendToFile );
+    return openWO( std::string( pathOrID ), appendToFile );
   }
 
   /*----------------------------------------------------------------------------
    * Rewind an input stream.
   ----------------------------------------------------------------------------*/
 
-  std::wistream & FIO::rewindWIStream( std::wstring const & pathOrID )
+  std::wistream & FIO::rewindWI( std::wstring const & pathOrID )
   {
     std::wstring path = getPathW( pathOrID );
 
@@ -562,26 +551,26 @@ namespace NSFIO
     return stream;
   }
 
-  std::wistream & FIO::rewindWIStream( std::string const & pathOrID )
+  std::wistream & FIO::rewindWI( std::string const & pathOrID )
   {
-    return rewindWIStream( multiByteToWide( pathOrID ) );
+    return rewindWI( multiByteToWide( pathOrID ) );
   }
 
-  std::wistream & FIO::rewindWIStream( wchar_t const * const & pathOrID )
+  std::wistream & FIO::rewindWI( wchar_t const * const & pathOrID )
   {
-    return rewindWIStream( std::wstring( pathOrID ) );
+    return rewindWI( std::wstring( pathOrID ) );
   }
 
-  std::wistream & FIO::rewindWIStream( char const * const & pathOrID )
+  std::wistream & FIO::rewindWI( char const * const & pathOrID )
   {
-    return rewindWIStream( std::string( pathOrID ) );
+    return rewindWI( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Close an input stream.
   ----------------------------------------------------------------------------*/
 
-  FIO & FIO::closeWIStream( std::wstring const & pathOrID )
+  FIO & FIO::closeWI( std::wstring const & pathOrID )
   {
     std::wstring path = getPathW( pathOrID );
 
@@ -594,25 +583,25 @@ namespace NSFIO
     return *this;
   }
 
-  FIO & FIO::closeWIStream( std::string const & pathOrID )
+  FIO & FIO::closeWI( std::string const & pathOrID )
   {
-    return closeWIStream( multiByteToWide( pathOrID ) );
+    return closeWI( multiByteToWide( pathOrID ) );
   }
 
-  FIO & FIO::closeWIStream( wchar_t const * const & pathOrID )
+  FIO & FIO::closeWI( wchar_t const * const & pathOrID )
   {
-    return closeWIStream( std::wstring( pathOrID ) );
+    return closeWI( std::wstring( pathOrID ) );
   }
 
-  FIO & FIO::closeWIStream( char const * const & pathOrID )
+  FIO & FIO::closeWI( char const * const & pathOrID )
   {
-    return closeWIStream( std::string( pathOrID ) );
+    return closeWI( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Close an output stream.
   ----------------------------------------------------------------------------*/
-  FIO & FIO::closeWOStream( std::wstring const & pathOrID )
+  FIO & FIO::closeWO( std::wstring const & pathOrID )
   {
     std::wstring path = getPathW( pathOrID );
 
@@ -625,78 +614,78 @@ namespace NSFIO
     return *this;
   }
 
-  FIO & FIO::closeWOStream( std::string const & pathOrID )
+  FIO & FIO::closeWO( std::string const & pathOrID )
   {
-    return closeWOStream( multiByteToWide( pathOrID ) );
+    return closeWO( multiByteToWide( pathOrID ) );
   }
 
-  FIO & FIO::closeWOStream( wchar_t const * const & pathOrID )
+  FIO & FIO::closeWO( wchar_t const * const & pathOrID )
   {
-    return closeWOStream( std::wstring( pathOrID ) );
+    return closeWO( std::wstring( pathOrID ) );
   }
 
-  FIO & FIO::closeWOStream( char const * const & pathOrID )
+  FIO & FIO::closeWO( char const * const & pathOrID )
   {
-    return closeWOStream( std::string( pathOrID ) );
+    return closeWO( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Get an open input stream.
   ----------------------------------------------------------------------------*/
 
-  std::wistream & FIO::getWIStream( std::wstring const & pathOrID ) const
+  std::wistream & FIO::getWI( std::wstring const & pathOrID ) const
   {
     std::wstring path = getPathW( pathOrID );
 
     return validateWIFStream( path );
   }
 
-  std::wistream & FIO::getWIStream( std::string const & pathOrID ) const
+  std::wistream & FIO::getWI( std::string const & pathOrID ) const
   {
-    return getWIStream( multiByteToWide( pathOrID ) );
+    return getWI( multiByteToWide( pathOrID ) );
   }
 
-  std::wistream & FIO::getWIStream( wchar_t const * const & pathOrID ) const
+  std::wistream & FIO::getWI( wchar_t const * const & pathOrID ) const
   {
-    return getWIStream( std::wstring( pathOrID ) );
+    return getWI( std::wstring( pathOrID ) );
   }
 
-  std::wistream & FIO::getWIStream( char const * const & pathOrID ) const
+  std::wistream & FIO::getWI( char const * const & pathOrID ) const
   {
-    return getWIStream( std::string( pathOrID ) );
+    return getWI( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Get an open output stream.
   ----------------------------------------------------------------------------*/
 
-  std::wostream & FIO::getWOStream( std::wstring const & pathOrID ) const
+  std::wostream & FIO::getWO( std::wstring const & pathOrID ) const
   {
     std::wstring path = getPathW( pathOrID );
 
     return validateWOFStream( path );
   }
 
-  std::wostream & FIO::getWOStream( std::string const & pathOrID ) const
+  std::wostream & FIO::getWO( std::string const & pathOrID ) const
   {
-    return getWOStream( multiByteToWide( pathOrID ) );
+    return getWO( multiByteToWide( pathOrID ) );
   }
 
-  std::wostream & FIO::getWOStream( wchar_t const * const & pathOrID ) const
+  std::wostream & FIO::getWO( wchar_t const * const & pathOrID ) const
   {
-    return getWOStream( std::wstring( pathOrID ) );
+    return getWO( std::wstring( pathOrID ) );
   }
 
-  std::wostream & FIO::getWOStream( char const * const & pathOrID ) const
+  std::wostream & FIO::getWO( char const * const & pathOrID ) const
   {
-    return getWOStream( std::string( pathOrID ) );
+    return getWO( std::string( pathOrID ) );
   }
 
   /*----------------------------------------------------------------------------
    * Get a sorted listing of open input streams.
   ----------------------------------------------------------------------------*/
 
-  std::vector< std::wstring > FIO::listOpenWIStreamsW() const
+  std::vector< std::wstring > FIO::listOpenWIW() const
   {
     std::vector< std::wstring > streams;
 
@@ -708,9 +697,9 @@ namespace NSFIO
     return streams;
   }
 
-  std::vector< std::string > FIO::listOpenWIStreams() const
+  std::vector< std::string > FIO::listOpenWI() const
   {
-    std::vector< std::wstring > wstreams = listOpenWIStreamsW();
+    std::vector< std::wstring > wstreams = listOpenWIW();
     std::vector< std::string > streams;
 
     for ( auto & stream : wstreams )
@@ -723,7 +712,7 @@ namespace NSFIO
    * Get a sorted listing of open output streams.
   ----------------------------------------------------------------------------*/
 
-  std::vector< std::wstring > FIO::listOpenWOStreamsW() const
+  std::vector< std::wstring > FIO::listOpenWOW() const
   {
     std::vector< std::wstring > streams;
 
@@ -735,9 +724,9 @@ namespace NSFIO
     return streams;
   }
 
-  std::vector< std::string > FIO::listOpenWOStreams() const
+  std::vector< std::string > FIO::listOpenWO() const
   {
-    std::vector< std::wstring > wstreams = listOpenWOStreamsW();
+    std::vector< std::wstring > wstreams = listOpenWOW();
     std::vector< std::string > streams;
 
     for ( auto & stream : wstreams )
@@ -1437,7 +1426,7 @@ namespace NSFIO
 
   std::wstring FIO::readFileW( std::wstring const & pathOrID )
   {
-    bool openedNewStream = false;
+    bool openedNew = false;
     std::wstring path = getPathW( pathOrID );
 
     std::wstringstream wss;
@@ -1445,16 +1434,16 @@ namespace NSFIO
     try
     {
       validateWIFStream( path );
-      wss << rewindWIStream( path ).rdbuf();
+      wss << rewindWI( path ).rdbuf();
     }
     catch ( FIOExcept const & e )
     {
-      openWIStream( path );
-      openedNewStream = true;
+      openWI( path );
+      openedNew = true;
       wss << validateWIFStream( path ).rdbuf();
     }
 
-    if ( openedNewStream ) { closeWIStream( pathOrID ); }
+    if ( openedNew ) { closeWI( pathOrID ); }
 
     return wss.str();
   }
@@ -1712,17 +1701,18 @@ namespace NSFIO
     std::wstring const & pathOrID, std::wstring const & lineDelim /* = L"," */,
     std::wstring const & vertDelim /* = L"\n\r" */ )
   {
-    std::vector< std::vector< std::wstring > > v;
+    std::vector< std::vector< std::wstring > > ret;
     std::vector< std::wstring > lines =
       readFileToVectorW( pathOrID, vertDelim );
 
     for ( auto & line : lines )
     {
-      std::vector< std::wstring > vLine = splitStringW( line );
+      std::vector< std::wstring > vLine = splitStringW( line, lineDelim );
 
-      if ( vLine.size() > 0 ) { v.push_back( vLine ); }
+      if ( vLine.size() > 0 ) { ret.push_back( vLine ); }
     }
-    return v;
+
+    return ret;
   }
 
   std::vector< std::vector< std::wstring > > FIO::readFileToMatrixW(
@@ -2214,16 +2204,17 @@ namespace NSFIO
     std::wstring const & pathOrID, std::wstring const & lineDelim /* = L"," */,
     std::wstring const & vertDelim /* = L"\n\r" */ )
   {
-    std::vector< std::vector< std::string > > v;
-    std::vector< std::string > lines = readFileToVector( pathOrID, vertDelim );
+    auto wMatrix = readFileToMatrixW( pathOrID, lineDelim, vertDelim );
+    std::vector< std::vector< std::string > > ret;
 
-    for ( auto & line : lines )
+    for ( auto & line : wMatrix )
     {
-      std::vector< std::string > vLine = splitString( line );
-
-      if ( vLine.size() > 0 ) { v.push_back( vLine ); }
+      std::vector< std::string > vLine;
+      for ( auto & ws : line ) { vLine.push_back( wideToMultiByte( ws ) ); }
+      ret.push_back( vLine );
     }
-    return v;
+
+    return ret;
   }
 
   std::vector< std::vector< std::string > > FIO::readFileToMatrix(

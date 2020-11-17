@@ -174,20 +174,20 @@ namespace FIOTests
     fio.setFileID(
       "resetTest", fio.getPath( "data" ) + pathSep + "fileIOResetTest.txt" );
 
-    fio.openWIStream( "testData" );
-    fio.openWOStream( "resetTest" );
+    fio.openWI( "testData" );
+    fio.openWO( "resetTest" );
 
     // Try opening duplicate in stream. should fail.
     try
     {
-      fio.openWIStream( "testData" );
+      fio.openWI( "testData" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "Cannot open stream on data/fileIOTestData.txt as "
            "there is already a stream stored on that id." ) )
-        << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
              "Cannot open stream on data/fileIOTestData.txt as "
              "there is already a stream stored on that id."
              "\r\nRECEIVED: "
@@ -197,14 +197,14 @@ namespace FIOTests
     // Try opening duplicate in stream. should fail.
     try
     {
-      fio.openWIStream( L"testData" );
+      fio.openWI( L"testData" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "Cannot open stream on data/fileIOTestData.txt as "
            "there is already a stream stored on that id." ) )
-        << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
              "Cannot open stream on data/fileIOTestData.txt as "
              "there is already a stream stored on that id."
              "\r\nRECEIVED: "
@@ -214,14 +214,14 @@ namespace FIOTests
     // Try opening duplicate out stream. should fail.
     try
     {
-      fio.openWOStream( "resetTest" );
+      fio.openWO( "resetTest" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "Cannot open stream on data/fileIOResetTest.txt as "
            "there is already a stream stored on that id." ) )
-        << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
              "Cannot open stream on data/fileIOTestData.txt as "
              "there is already a stream stored on that id."
              "\r\nRECEIVED: "
@@ -231,14 +231,14 @@ namespace FIOTests
     // Try opening duplicate out stream. should fail.
     try
     {
-      fio.openWOStream( L"resetTest" );
+      fio.openWO( L"resetTest" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "Cannot open stream on data/fileIOResetTest.txt as "
            "there is already a stream stored on that id." ) )
-        << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
              "Cannot open stream on data/fileIOTestData.txt as "
              "there is already a stream stored on that id."
              "\r\nRECEIVED: "
@@ -248,14 +248,14 @@ namespace FIOTests
     // Try closing a closed out stream. should fail.
     try
     {
-      fio.closeWOStream( L"resetTest" );
-      fio.closeWOStream( L"resetTest" );
+      fio.closeWO( L"resetTest" );
+      fio.closeWO( L"resetTest" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "No output stream exists at data/fileIOResetTest.txt" ) )
-        << ( "\r\n\r\nERROR: closeWOStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: closeWO() - \r\nEXPECTED: "
              "No output stream exists at data/fileIOResetTest.txt"
              "\r\nRECEIVED: "
              + std::string( errorIn.what() ) );
@@ -264,14 +264,14 @@ namespace FIOTests
     // Try closing a closed in stream. should fail.
     try
     {
-      fio.closeWIStream( L"testData" );
-      fio.closeWIStream( L"testData" );
+      fio.closeWI( L"testData" );
+      fio.closeWI( L"testData" );
     }
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
         == "No output stream exists at data/fileIOTestData.txt" ) )
-        << ( "\r\n\r\nERROR: closeWIStream() - \r\nEXPECTED: "
+        << ( "\r\n\r\nERROR: closeWI() - \r\nEXPECTED: "
              "No output stream exists at data/fileIOTestData.txt"
              "\r\nRECEIVED: "
              + std::string( errorIn.what() ) );
@@ -348,7 +348,7 @@ namespace FIOTests
     std::string line;
     std::string line2;
     std::ifstream fs( fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
-    fio.openWIStream( fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
+    fio.openWI( fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
 
     fio.setFileID(
       "tmp", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
@@ -361,19 +361,17 @@ namespace FIOTests
     syntax.stripChar( line2, '\n' );
     syntax.stripChar( line2, '\r' );
 
-    dessert( ( line == line2 ) )
-      << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED:" + line
-           + "- \r\nRECEIVED: " + line2 );
+    dessert( ( line == line2 ) ) << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED:"
+      + line + "- \r\nRECEIVED: " + line2 );
 
-    fio.rewindWIStream( "tmp" );
+    fio.rewindWI( "tmp" );
 
     line2 = fio.readLine( "tmp" );
     syntax.stripChar( line2, '\n' );
     syntax.stripChar( line2, '\r' );
 
-    dessert( ( line == line2 ) )
-      << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED:" + line
-           + "- \r\nRECEIVED: " + line2 );
+    dessert( ( line == line2 ) ) << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED:"
+      + line + "- \r\nRECEIVED: " + line2 );
 
     fio.reset();
   }
@@ -392,10 +390,10 @@ namespace FIOTests
 
       fio.setFileID( "testWriteFile" + std::to_string( i ), fileToWriteTo );
 
-      auto & fileStream = fio.openWOStream( fileToWriteTo );
+      auto & file = fio.openWO( fileToWriteTo );
 
       for ( int j = 0; j < numberOfLinesToTest; ++j )
-      { fileStream << j << std::endl; }
+      { file << j << std::endl; }
     }
 
     for ( int i = numberOfFilesToTest / 2; i < numberOfFilesToTest; ++i )
@@ -403,7 +401,7 @@ namespace FIOTests
       std::string const fileToWriteTo = fio.getPath( "data" ) + pathSep
         + "fileIOTest" + std::to_string( i ) + ".txt";
 
-      fio.openWOStream( fileToWriteTo );
+      fio.openWO( fileToWriteTo );
 
       for ( int j = 0; j < numberOfLinesToTest; ++j )
       { fio.writeLine( fileToWriteTo, std::to_string( j ) + "\n\r" ); }
@@ -414,7 +412,7 @@ namespace FIOTests
       std::string const fileToReadFrom = fio.getPath( "data" ) + pathSep
         + "fileIOTest" + std::to_string( i ) + ".txt";
 
-      fio.openWIStream( fileToReadFrom );
+      fio.openWI( fileToReadFrom );
       std::string line = fio.readLine( fileToReadFrom );
 
       for ( int j = 0; line != ""; ++j, fio.readLine( fileToReadFrom, line ) )
@@ -423,8 +421,8 @@ namespace FIOTests
         syntax.stripChar( line, '\r' );
 
         dessert( ( line == std::to_string( j ) ) )
-          << ( "\r\n\r\nERROR: openWIStream() - \r\nEXPECTED:"
-               + std::to_string( j ) + " - \r\nRECEIVED: " + line );
+          << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED:" + std::to_string( j )
+               + " - \r\nRECEIVED: " + line );
       }
     }
 
@@ -445,78 +443,78 @@ namespace FIOTests
      std::string const testingFilePathString =
        fio.getDirectoryPath( "data" ) + pathSep + "ioTestData";
 
-     auto & fileStreamOut =
-       fio.openOutputStream( testingFileChar, testingFilePathChar );
+     auto & fileOut =
+       fio.openOutput( testingFileChar, testingFilePathChar );
 
-     fileStreamOut << "1" << std::endl;
+     fileOut << "1" << std::endl;
 
-     fio.closeOutputStream( "testFile" );
+     fio.closeOutput( "testFile" );
 
-     fio.openInputStream( testingFileChar, testingFilePathChar );
+     fio.openInput( testingFileChar, testingFilePathChar );
      auto line = fio.readLine( "testFile" );
 
      dessert( ( line == "1" ) )
-       << ( "\r\n\r\nERROR: openInputStream() - \r\nEXPECTED: 1 -
+       << ( "\r\n\r\nERROR: openInput() - \r\nEXPECTED: 1 -
      \r\nRECEIVED
             : "
               + line );
 
-     fio.closeInputStream( "testFile" );
+     fio.closeInput( "testFile" );
 
-     auto & fileStreamOut2 =
-       fio.openOutputStream( testingFileChar, testingFilePathString );
+     auto & fileOut2 =
+       fio.openOutput( testingFileChar, testingFilePathString );
 
-     fileStreamOut2 << "2" << std::endl;
+     fileOut2 << "2" << std::endl;
 
-     fio.closeOutputStream( "testFile" );
+     fio.closeOutput( "testFile" );
 
-     fio.openInputStream( testingFileChar, testingFilePathString );
+     fio.openInput( testingFileChar, testingFilePathString );
      line = fio.readLine( "testFile" );
 
      dessert( ( line == "2" ) )
-       << ( "\r\n\r\nERROR: openInputStream() - \r\nEXPECTED: 2 -
+       << ( "\r\n\r\nERROR: openInput() - \r\nEXPECTED: 2 -
      \r\nRECEIVED
             : "
               + line );
 
-     fio.closeInputStream( "testFile" );
+     fio.closeInput( "testFile" );
 
-     auto & fileStreamOut3 =
-       fio.openOutputStream( testingFileString, testingFilePathChar );
+     auto & fileOut3 =
+       fio.openOutput( testingFileString, testingFilePathChar );
 
-     fileStreamOut3 << "3" << std::endl;
+     fileOut3 << "3" << std::endl;
 
-     fio.closeOutputStream( "testFile" );
+     fio.closeOutput( "testFile" );
 
-     fio.openInputStream( testingFileString, testingFilePathChar );
+     fio.openInput( testingFileString, testingFilePathChar );
      line = fio.readLine( "testFile" );
 
      dessert( ( line == "3" ) )
-       << ( "\r\n\r\nERROR: openInputStream() - \r\nEXPECTED: 3 -
+       << ( "\r\n\r\nERROR: openInput() - \r\nEXPECTED: 3 -
      \r\nRECEIVED
             : "
               + line );
 
-     fio.closeInputStream( "testFile" );
+     fio.closeInput( "testFile" );
 
-     auto & fileStreamOut4 =
-       fio.openOutputStream( testingFileString, testingFilePathString );
+     auto & fileOut4 =
+       fio.openOutput( testingFileString, testingFilePathString );
 
-     fileStreamOut4 << "4" << std::endl;
+     fileOut4 << "4" << std::endl;
 
-     fio.closeOutputStream( "testFile" );
+     fio.closeOutput( "testFile" );
 
-     fio.openInputStream( testingFileString, testingFilePathString );
+     fio.openInput( testingFileString, testingFilePathString );
      line = fio.readLine( "testFile" );
 
      dessert( ( line == "4" ) )
-       << ( "\r\n\r\nERROR: openInputStream() - \r\nEXPECTED: 4 -
+       << ( "\r\n\r\nERROR: openInput() - \r\nEXPECTED: 4 -
      \r\nRECEIVED
             : "
               + line );
 
-     fio.closeInputStream( "testFile" );
-     fio.openInputStream(
+     fio.closeInput( "testFile" );
+     fio.openInput(
        "testFile", fio.getDirectoryPath( "data" ) + pathSep + "ioTestData.txt"
      );
 
@@ -531,7 +529,7 @@ namespace FIOTests
        << ( "\r\n\r\nERROR: readFileAsVectorOfStrings() - \r\nEXPECTED:\n" +
      \r\nEXPECTEDLine + "\n\r\nRECEIVED:\n" + line );
 
-     fio.resetInputStreamToFileStart( "testFile" );
+     fio.resetInputToFileStart( "testFile" );
 
      auto lines = fio.readFileAsVectorOfStrings( "testFile" );
 
@@ -562,7 +560,7 @@ namespace FIOTests
               + " - \r\nRECEIVED: " + lines[ c - 'a' + 3 ] );
      }
 
-     fio.resetInputStreamToFileStart( "testFile" );
+     fio.resetInputToFileStart( "testFile" );
 
      auto CSV = fio.readFileAsVectorOfVectors( "testFile" );
 
@@ -593,7 +591,7 @@ namespace FIOTests
               + " - \r\nRECEIVED: " + CSV[ c - 'a' + 3 ][ 0 ] );
      }
 
-     fio.resetInputStreamToFileStart( "testFile" );
+     fio.resetInputToFileStart( "testFile" );
 
      fio.reset();*/
   }
@@ -607,12 +605,12 @@ namespace FIOTests
     fio.setFileID(
       "testFile", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
 
-    auto & fs = fio.openWOStream( "testFile" );
+    auto & fs = fio.openWO( "testFile" );
 
     for ( int i = 0; i < numberOfLinesToTest; ++i )
     { fs << std::to_wstring( i ) << std::endl; }
 
-    fio.closeWOStream( "testFile" );
+    fio.closeWO( "testFile" );
 
     auto line = fio.readFile( "testFile" );
     syntax.stripChar( line, '\n' );
@@ -620,10 +618,10 @@ namespace FIOTests
 
     fio.setFileID(
       "testFile1", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
-    fio.openWIStream( "testFile1" );
+    fio.openWI( "testFile1" );
 
     auto line2 = fio.readFile( "testFile1" );
-    fio.closeWIStream( "testFile1" );
+    fio.closeWI( "testFile1" );
     syntax.stripChar( line2, '\n' );
     syntax.stripChar( line2, '\r' );
 
@@ -635,12 +633,12 @@ namespace FIOTests
     fio.setFileID(
       "testFile2", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
 
-    auto & ofs = fio.openWOStream( "testFile2" );
+    auto & ofs = fio.openWO( "testFile2" );
 
     for ( int i = 0; i < numberOfLinesToTest; ++i )
     { ofs << "a,b,c,d,e,f,g,h,i,j" << std::endl; }
 
-    fio.closeWOStream( "testFile2" );
+    fio.closeWO( "testFile2" );
 
     fio.reset();
   }
@@ -650,33 +648,32 @@ namespace FIOTests
   {
     fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
     fio.setFileID(
-      "testFile", fio.getPath( "data" ) + pathSep + "LevelPointerEscape.csv" );
+      "testFile", fio.getPath( "data" ) + pathSep + "csvTest.csv" );
+
+    std::cout << "File: " << std::endl << std::endl;
 
     std::cout << fio.readFile( "testFile" ) << std::endl << std::endl;
 
-    std::cout << "Vector:" << std::endl;
+    std::cout << "Vector:" << std::endl << std::endl;
 
     auto vec = fio.readFileToVector( "testFile" );
 
     for ( auto & s : vec )
     {
       std::cout << s << std::endl
-                << "======================================="
-                   "======================================="
-                   "======================================="
+                << "=======================================" << std::endl
                 << std::endl;
     }
 
-    auto mat = fio.readFileToMatrix( L"testFile" );
+    std::cout << "Matrix:" << std::endl;
+
+    auto mat = fio.readFileToMatrix( "testFile", ",", "\n\r" );
 
     for ( auto & r : mat )
     {
-      for ( auto & s : r ) { std::cout << s << L"|"; }
+      for ( auto & s : r ) { std::cout << s << "|"; }
       std::cout << std::endl
-                << "======================================="
-                   "======================================="
-                   "======================================="
-                << std::endl;
+                << "--------------------------------------" << std::endl;
     }
 
     fio.reset();

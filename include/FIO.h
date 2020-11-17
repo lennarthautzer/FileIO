@@ -748,7 +748,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wistream & openWIStream( std::wstring const & pathOrID );
+    std::wistream & openWI( std::wstring const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -758,7 +758,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wistream & openWIStream( std::string const & pathOrID );
+    std::wistream & openWI( std::string const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -768,7 +768,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wistream & openWIStream( wchar_t const * const & pathOrID );
+    std::wistream & openWI( wchar_t const * const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -778,7 +778,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wistream & openWIStream( char const * const & pathOrID );
+    std::wistream & openWI( char const * const & pathOrID );
 
     /*--------------------------------------------------------------------------
      * Open an output stream.
@@ -798,7 +798,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wostream & openWOStream(
+    std::wostream & openWO(
       std::wstring const & pathOrID, bool const & appendToFile = OpenNewFile );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
@@ -815,7 +815,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wostream & openWOStream(
+    std::wostream & openWO(
       std::string const & pathOrID, bool const & appendToFile = OpenNewFile );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
@@ -832,7 +832,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wostream & openWOStream( wchar_t const * const & pathOrID,
+    std::wostream & openWO( wchar_t const * const & pathOrID,
       bool const & appendToFile = OpenNewFile );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
@@ -849,7 +849,7 @@ namespace NSFIO
      * If pathOrID points to a regular file it will be opened, otherwise
      *    pathOrID will be treated as an identifier for an element
      *    in the pathmap, and the associated path will be opened. */
-    std::wostream & openWOStream(
+    std::wostream & openWO(
       char const * const & pathOrID, bool const & appendToFile = OpenNewFile );
 
     /*--------------------------------------------------------------------------
@@ -866,7 +866,7 @@ namespace NSFIO
      *    the stream, otherwise pathOrID will be treated as an
      *    identifier for an element in the pathmap, and the
      *    associated path will be used. */
-    std::wistream & rewindWIStream( std::wstring const & pathOrID );
+    std::wistream & rewindWI( std::wstring const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -878,7 +878,7 @@ namespace NSFIO
      *    the stream, otherwise pathOrID will be treated as an
      *    identifier for an element in the pathmap, and the
      *    associated path will be used. */
-    std::wistream & rewindWIStream( std::string const & pathOrID );
+    std::wistream & rewindWI( std::string const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -890,7 +890,7 @@ namespace NSFIO
      *    the stream, otherwise pathOrID will be treated as an
      *    identifier for an element in the pathmap, and the
      *    associated path will be used. */
-    std::wistream & rewindWIStream( wchar_t const * const & pathOrID );
+    std::wistream & rewindWI( wchar_t const * const & pathOrID );
 
     /* In: pathOrID -> an absolute filesystem path, or the identifier of a
      *        an absolute filesystem path stored in the FIO pathmap.
@@ -902,7 +902,7 @@ namespace NSFIO
      *    the stream, otherwise pathOrID will be treated as an
      *    identifier for an element in the pathmap, and the
      *    associated path will be used. */
-    std::wistream & rewindWIStream( char const * const & pathOrID );
+    std::wistream & rewindWI( char const * const & pathOrID );
 
     /*--------------------------------------------------------------------------
      * Close an input stream.
@@ -910,43 +910,43 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open input file stream stored in the
      *    input stream map at pathOrID. */
-    FIO & closeWIStream( std::wstring const & pathOrID );
+    FIO & closeWI( std::wstring const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open input file stream stored in the
      *    input stream map at pathOrID. */
-    FIO & closeWIStream( std::string const & pathOrID );
+    FIO & closeWI( std::string const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open input file stream stored in the
      *    input stream map at pathOrID. */
-    FIO & closeWIStream( wchar_t const * const & pathOrID );
+    FIO & closeWI( wchar_t const * const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open input file stream stored in the
      *    input stream map at pathOrID. */
-    FIO & closeWIStream( char const * const & pathOrID );
+    FIO & closeWI( char const * const & pathOrID );
 
     /*--------------------------------------------------------------------------
      * Close an output stream.
@@ -954,43 +954,43 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open output file stream stored in the
      *    output stream map at pathOrID. */
-    FIO & closeWOStream( std::wstring const & pathOrID );
+    FIO & closeWO( std::wstring const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open output file stream stored in the
      *    output stream map at pathOrID. */
-    FIO & closeWOStream( std::string const & pathOrID );
+    FIO & closeWO( std::string const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open output file stream stored in the
      *    output stream map at pathOrID. */
-    FIO & closeWOStream( wchar_t const * const & pathOrID );
+    FIO & closeWO( wchar_t const * const & pathOrID );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
      * Closes the open output file stream stored in the
      *    output stream map at pathOrID. */
-    FIO & closeWOStream( char const * const & pathOrID );
+    FIO & closeWO( char const * const & pathOrID );
 
     /*--------------------------------------------------------------------------
      * Get an open input stream.
@@ -998,43 +998,43 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The open input stream.
      *
      * Returns the open input file stream stored in the
      *    input stream map at pathOrID. */
-    std::wistream & getWIStream( std::wstring const & pathOrID ) const;
+    std::wistream & getWI( std::wstring const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The open input stream.
      *
      * Returns the open input file stream stored in the
      *    input stream map at pathOrID. */
-    std::wistream & getWIStream( std::string const & pathOrID ) const;
+    std::wistream & getWI( std::string const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The open input stream.
      *
      * Returns the open input file stream stored in the
      *    input stream map at pathOrID. */
-    std::wistream & getWIStream( wchar_t const * const & pathOrID ) const;
+    std::wistream & getWI( wchar_t const * const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The open input stream.
      *
      * Returns the open input file stream stored in the
      *    input stream map at pathOrID. */
-    std::wistream & getWIStream( char const * const & pathOrID ) const;
+    std::wistream & getWI( char const * const & pathOrID ) const;
 
     /*--------------------------------------------------------------------------
      * Get an open output stream.
@@ -1042,43 +1042,43 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: The open output stream.
      *
      * Returns the open output file stream stored in the
      *    output stream map at pathOrID. */
-    std::wostream & getWOStream( std::wstring const & pathOrID ) const;
+    std::wostream & getWO( std::wstring const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: The open output stream.
      *
      * Returns the open output file stream stored in the
      *    output stream map at pathOrID. */
-    std::wostream & getWOStream( std::string const & pathOrID ) const;
+    std::wostream & getWO( std::string const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: The open output stream.
      *
      * Returns the open output file stream stored in the
      *    output stream map at pathOrID. */
-    std::wostream & getWOStream( wchar_t const * const & pathOrID ) const;
+    std::wostream & getWO( wchar_t const * const & pathOrID ) const;
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: The open output stream.
      *
      * Returns the open output file stream stored in the
      *    output stream map at pathOrID. */
-    std::wostream & getWOStream( char const * const & pathOrID ) const;
+    std::wostream & getWO( char const * const & pathOrID ) const;
 
     /*--------------------------------------------------------------------------
      * Get a sorted listing of open input streams.
@@ -1091,7 +1091,7 @@ namespace NSFIO
      * Returns a lexicographically sorted collection of all the input
      *    streams currently open in the input stream map. The output
      *    format is "stream key : target filepath" */
-    std::vector< std::wstring > listOpenWIStreamsW() const;
+    std::vector< std::wstring > listOpenWIW() const;
 
     /* In: None.
      *
@@ -1100,7 +1100,7 @@ namespace NSFIO
      * Returns a lexicographically sorted collection of all the input
      *    streams currently open in the input stream map. The output
      *    format is "stream key : target filepath" */
-    std::vector< std::string > listOpenWIStreams() const;
+    std::vector< std::string > listOpenWI() const;
 
     /*--------------------------------------------------------------------------
      * Get a sorted listing of open output streams.
@@ -1113,7 +1113,7 @@ namespace NSFIO
      * Returns a lexicographically sorted collection of all the output
      *    streams currently open in the output stream map. The output
      *    format is "stream key : target filepath" */
-    std::vector< std::wstring > listOpenWOStreamsW() const;
+    std::vector< std::wstring > listOpenWOW() const;
 
     /* In: None.
      *
@@ -1122,7 +1122,7 @@ namespace NSFIO
      * Returns a lexicographically sorted collection of all the output
      *    streams currently open in the output stream map. The output
      *    format is "stream key : target filepath" */
-    std::vector< std::string > listOpenWOStreams() const;
+    std::vector< std::string > listOpenWO() const;
 
     /*--------------------------------------------------------------------------
      * Read from an input stream.
@@ -1130,7 +1130,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1142,7 +1142,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1154,7 +1154,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1166,7 +1166,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1178,7 +1178,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1190,7 +1190,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1202,7 +1202,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1214,7 +1214,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      *     dest -> the string to which the unaltered line should be written.
      *
@@ -1226,7 +1226,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1235,7 +1235,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1244,7 +1244,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1253,7 +1253,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1262,7 +1262,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1271,7 +1271,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1280,7 +1280,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1289,7 +1289,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWIStream().
+     *        passed in the initial call to openWI().
      *
      * Out: The next line in the file stream, unaltered.
      *
@@ -1302,7 +1302,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1314,7 +1314,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1326,7 +1326,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1338,7 +1338,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1350,7 +1350,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1362,7 +1362,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1374,7 +1374,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1386,7 +1386,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1398,7 +1398,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1410,7 +1410,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1422,7 +1422,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1434,7 +1434,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1446,7 +1446,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1458,7 +1458,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1470,7 +1470,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1482,7 +1482,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1494,7 +1494,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1506,7 +1506,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1518,7 +1518,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1530,7 +1530,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1542,7 +1542,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1554,7 +1554,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1565,7 +1565,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1577,7 +1577,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1589,7 +1589,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1601,7 +1601,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1613,7 +1613,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1625,7 +1625,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1637,7 +1637,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1649,7 +1649,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1661,7 +1661,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1673,7 +1673,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *     source -> the string to which should be written, unaltered.
      *
@@ -1702,7 +1702,8 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
       std::wstring const & fileExtension = L".*",
       std::wstring const & pathOrID = L"root",
@@ -1723,10 +1724,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::wstring const & fileExtension = L".*",
-      std::string const & pathOrID = "root",
+      std::wstring const & fileExtension /* = L".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1744,10 +1746,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::wstring const & fileExtension = L".*",
-      wchar_t const * const & pathOrID = L"root",
+      std::wstring const & fileExtension /* = L".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1765,10 +1768,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::wstring const & fileExtension = L".*",
-      char const * const & pathOrID = "root",
+      std::wstring const & fileExtension /* = L".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1786,9 +1790,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::string const & fileExtension = ".*",
+      std::string const & fileExtension /* = ".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -1807,10 +1812,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::string const & fileExtension = ".*",
-      std::string const & pathOrID = "root",
+      std::string const & fileExtension /* = ".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1828,10 +1834,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::string const & fileExtension = ".*",
-      wchar_t const * const & pathOrID = L"root",
+      std::string const & fileExtension /* = ".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1849,10 +1856,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      std::string const & fileExtension = ".*",
-      char const * const & pathOrID = "root",
+      std::string const & fileExtension /* = ".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1870,9 +1878,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      wchar_t const * const & fileExtension = L".*",
+      wchar_t const * const & fileExtension /* = L".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -1891,10 +1900,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      wchar_t const * const & fileExtension = L".*",
-      std::string const & pathOrID = "root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1912,10 +1922,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      wchar_t const * const & fileExtension = L".*",
-      wchar_t const * const & pathOrID = L"root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1933,10 +1944,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      wchar_t const * const & fileExtension = L".*",
-      char const * const & pathOrID = "root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1954,9 +1966,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      char const * const & fileExtension = ".*",
+      char const * const & fileExtension /* = ".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -1975,10 +1988,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      char const * const & fileExtension = ".*",
-      std::string const & pathOrID = "root",
+      char const * const & fileExtension /* = ".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -1996,10 +2010,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      char const * const & fileExtension = ".*",
-      wchar_t const * const & pathOrID = L"root",
+      char const * const & fileExtension /* = ".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2017,10 +2032,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::wstring > findFilesW(
-      char const * const & fileExtension = ".*",
-      char const * const & pathOrID = "root",
+      char const * const & fileExtension /* = ".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2038,7 +2054,8 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
       std::wstring const & fileExtension = L".*",
       std::wstring const & pathOrID = L"root",
@@ -2059,10 +2076,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::wstring const & fileExtension = L".*",
-      std::string const & pathOrID = "root",
+      std::wstring const & fileExtension /* = L".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2080,10 +2098,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::wstring const & fileExtension = L".*",
-      wchar_t const * const & pathOrID = L"root",
+      std::wstring const & fileExtension /* = L".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2101,10 +2120,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::wstring const & fileExtension = L".*",
-      char const * const & pathOrID = "root",
+      std::wstring const & fileExtension /* = L".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2122,9 +2142,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::string const & fileExtension = ".*",
+      std::string const & fileExtension /* = ".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -2143,10 +2164,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::string const & fileExtension = ".*",
-      std::string const & pathOrID = "root",
+      std::string const & fileExtension /* = ".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2164,10 +2186,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::string const & fileExtension = ".*",
-      wchar_t const * const & pathOrID = L"root",
+      std::string const & fileExtension /* = ".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2185,10 +2208,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      std::string const & fileExtension = ".*",
-      char const * const & pathOrID = "root",
+      std::string const & fileExtension /* = ".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2206,9 +2230,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      wchar_t const * const & fileExtension = L".*",
+      wchar_t const * const & fileExtension /* = L".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -2227,10 +2252,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      wchar_t const * const & fileExtension = L".*",
-      std::string const & pathOrID = "root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2248,10 +2274,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      wchar_t const * const & fileExtension = L".*",
-      wchar_t const * const & pathOrID = L"root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2269,10 +2296,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      wchar_t const * const & fileExtension = L".*",
-      char const * const & pathOrID = "root",
+      wchar_t const * const & fileExtension /* = L".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2290,9 +2318,10 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      char const * const & fileExtension = ".*",
+      char const * const & fileExtension /* = ".*" */,
       std::wstring const & pathOrID = L"root",
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
@@ -2311,10 +2340,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      char const * const & fileExtension = ".*",
-      std::string const & pathOrID = "root",
+      char const * const & fileExtension /* = ".*" */,
+      std::string const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2332,10 +2362,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      char const * const & fileExtension = ".*",
-      wchar_t const * const & pathOrID = L"root",
+      char const * const & fileExtension /* = ".*" */,
+      wchar_t const * const & pathOrID /* = L"root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /* In:  ( Optional ) fileExtension -> limits the type of files
@@ -2353,10 +2384,11 @@ namespace NSFIO
      * Out: A collection of absolute filepaths
      *    matching the search parameters.
      *
-     * Searches for all files in a directory matching a given pattern. */
+     * Searches for all files in a directory matching a given pattern.
+     */
     std::vector< std::string > findFiles(
-      char const * const & fileExtension = ".*",
-      char const * const & pathOrID = "root",
+      char const * const & fileExtension /* = ".*" */,
+      char const * const & pathOrID /* = "root" */,
       bool const & recursiveSearch = RecursiveSearchTrue ) const;
 
     /*--------------------------------------------------------------------------
@@ -2365,7 +2397,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2378,7 +2410,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2391,7 +2423,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2404,7 +2436,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2417,7 +2449,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2430,7 +2462,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2443,7 +2475,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2456,7 +2488,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: the whole contents of a file system path or
      *    stored path identifier.
@@ -2473,7 +2505,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2490,7 +2522,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2507,7 +2539,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2525,7 +2557,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2543,7 +2575,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2560,7 +2592,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2577,7 +2609,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2594,7 +2626,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2611,7 +2643,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2628,7 +2660,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2646,7 +2678,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2664,7 +2696,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2682,7 +2714,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2699,7 +2731,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2716,7 +2748,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2734,7 +2766,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2752,7 +2784,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2769,7 +2801,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2786,7 +2818,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2803,7 +2835,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2820,7 +2852,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2837,7 +2869,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2854,7 +2886,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2871,7 +2903,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2888,7 +2920,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2905,7 +2937,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2923,7 +2955,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2941,7 +2973,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2959,7 +2991,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2976,7 +3008,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -2993,7 +3025,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -3010,7 +3042,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      *    delim -> the delimiting characters used to split a file
      *        vertically
@@ -3030,16 +3062,15 @@ namespace NSFIO
     --------------------------------------------------------------------------*/
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3051,16 +3082,15 @@ namespace NSFIO
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3068,20 +3098,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3089,20 +3118,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3110,21 +3138,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3132,20 +3158,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = "," */,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3153,20 +3178,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3174,20 +3198,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3195,20 +3218,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3217,20 +3239,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3239,20 +3260,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3261,20 +3281,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3283,20 +3302,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3304,20 +3322,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = "," */,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3325,20 +3342,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3346,20 +3362,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3367,21 +3382,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::wstring const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3389,20 +3402,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3410,20 +3422,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3431,20 +3442,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3452,20 +3462,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3473,20 +3482,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3494,20 +3502,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3515,20 +3522,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3536,20 +3542,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3558,20 +3563,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3580,20 +3584,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3602,20 +3605,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3624,20 +3626,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3645,20 +3646,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3666,20 +3666,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3687,20 +3686,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3708,20 +3706,39 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      std::string const & pathOrID, char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      wchar_t const * const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3730,42 +3747,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3774,20 +3768,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3796,20 +3789,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3817,21 +3809,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3839,21 +3829,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L","*/,
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3861,21 +3849,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L","*/,
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3883,21 +3869,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3906,20 +3890,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3928,20 +3911,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3950,20 +3932,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3972,20 +3953,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -3994,20 +3974,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4016,20 +3995,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L","*/,
+      char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4038,20 +4016,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L","*/,
+      char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4060,20 +4037,179 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      std::string const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::string const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4082,20 +4218,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       char const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4103,41 +4238,20 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      char const * const & pathOrID,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::wstring const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4146,20 +4260,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
       char const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4167,20 +4280,20 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      char const * const & pathOrID,
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4188,20 +4301,39 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::string const & lineDelim /* = L","*/,
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::wstring > > readFileToMatrixW(
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4209,20 +4341,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::string const & lineDelim /* = L","*/,
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4230,193 +4361,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
-      std::string const & vertDelim /* = "\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, char const * const & lineDelim /* = L","*/,
-      std::string const & vertDelim /* = "\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID, char const * const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::wstring > > readFileToMatrixW(
-      char const * const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4428,16 +4385,15 @@ namespace NSFIO
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4445,20 +4401,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4466,20 +4421,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4487,21 +4441,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4509,20 +4461,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = "," */,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4530,20 +4481,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4551,20 +4501,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4572,20 +4521,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4594,20 +4542,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4616,20 +4563,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4638,20 +4584,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4660,20 +4605,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::wstring const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4681,20 +4625,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = "," */,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4702,20 +4645,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4723,20 +4665,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4744,21 +4685,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::wstring const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4766,20 +4705,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4787,20 +4725,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4808,20 +4745,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4829,20 +4765,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4850,20 +4785,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4871,20 +4805,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4892,20 +4825,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::string const & lineDelim /* = L","*/,
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4913,20 +4845,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4935,20 +4866,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4957,20 +4887,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -4979,20 +4908,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5001,20 +4929,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       std::string const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5022,20 +4949,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5043,20 +4969,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5064,20 +4989,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, char const * const & lineDelim /* = L","*/,
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5085,20 +5009,39 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      std::string const & pathOrID, char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::string const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      wchar_t const * const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5107,42 +5050,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5151,20 +5071,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L","*/,
+      std::wstring const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5173,20 +5092,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5194,21 +5112,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5216,21 +5132,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L","*/,
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5238,21 +5152,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L","*/,
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5260,21 +5172,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      wchar_t const * const & pathOrID,
-      std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5283,20 +5193,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5305,20 +5214,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5327,20 +5235,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
+      wchar_t const * const & lineDelim /*= L","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5349,20 +5256,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5371,20 +5277,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5393,20 +5298,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L","*/,
+      char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5415,20 +5319,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L","*/,
+      char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5437,20 +5340,179 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       wchar_t const * const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::wstring const & lineDelim = L",",
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      std::string const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::wstring const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      std::string const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, std::string const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5459,20 +5521,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       char const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      std::wstring const & vertDelim = L"\n\r" );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5480,41 +5541,20 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::wstring const & lineDelim /* = L","*/,
+      char const * const & pathOrID,
+      wchar_t const * const & lineDelim /*= L","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::wstring const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5523,20 +5563,19 @@ namespace NSFIO
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
       char const * const & pathOrID,
-      std::wstring const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      wchar_t const * const & lineDelim /*= L","*/,
+      wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5544,20 +5583,20 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::string const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
+      char const * const & pathOrID,
+      wchar_t const * const & lineDelim /*= L","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5565,20 +5604,39 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::string const & lineDelim /* = L","*/,
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
+      std::wstring const & vertDelim = L"\n\r" );
+
+    /* In: pathOrID -> the identifier of an absolute filesystem path stored
+     *        in the FIO pathmap.
+     *
+     *     lineDelim -> the delimiting characters used to split a file
+     *        horizonally
+     *
+     *     vertDelim -> the delimiting characters used to split a file
+     *        vertically
+     *
+     * Out: A vector with pathOrID's contents split on all delimiters.
+     *
+     * Returns the contents of a file system path or
+     *    stored path identifier, split on all delimiters.
+     *    There doesn't need to be an open stream on the path.
+     *    Will reset an open file stream to its file start
+     *    before reading */
+    std::vector< std::vector< std::string > > readFileToMatrix(
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
       std::string const & vertDelim /* = "\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5586,20 +5644,19 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::string const & lineDelim /* = L","*/,
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
       wchar_t const * const & vertDelim /* = L"\n\r" */ );
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        in the FIO pathmap.
      *
-     *    lineDelim -> the delimiting characters used to split a file
+     *     lineDelim -> the delimiting characters used to split a file
      *        horizonally
      *
-     *    vertDelim -> the delimiting characters used to split a file
+     *     vertDelim -> the delimiting characters used to split a file
      *        vertically
      *
-     * Out: A vector of wide strings split on all delimiters.
+     * Out: A vector with pathOrID's contents split on all delimiters.
      *
      * Returns the contents of a file system path or
      *    stored path identifier, split on all delimiters.
@@ -5607,181 +5664,8 @@ namespace NSFIO
      *    Will reset an open file stream to its file start
      *    before reading */
     std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, std::string const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
-      std::string const & vertDelim /* = "\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID,
-      wchar_t const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, char const * const & lineDelim /* = "," */,
-      std::wstring const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, char const * const & lineDelim /* = L","*/,
-      std::string const & vertDelim /* = "\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID, char const * const & lineDelim /* = L","*/,
-      wchar_t const * const & vertDelim /* = L"\n\r" */ );
-
-    /* In: pathOrID -> the identifier of an absolute filesystem path stored
-     *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
-     *
-     *    lineDelim -> the delimiting characters used to split a file
-     *        horizonally
-     *
-     *    vertDelim -> the delimiting characters used to split a file
-     *        vertically
-     *
-     * Out: A vector of wide strings split on all delimiters.
-     *
-     * Returns the contents of a file system path or
-     *    stored path identifier, split on all delimiters.
-     *    There doesn't need to be an open stream on the path.
-     *    Will reset an open file stream to its file start
-     *    before reading */
-    std::vector< std::vector< std::string > > readFileToMatrix(
-      char const * const & pathOrID,
-      char const * const & lineDelim /* = L"," */,
-      char const * const & vertDelim /* = L"\n\r" */ );
+      char const * const & pathOrID, char const * const & lineDelim /*= ","*/,
+      char const * const & vertDelim /* = "\n\r" */ );
 
     /*--------------------------------------------------------------------------
      * Change the FIO root directory.
@@ -5789,7 +5673,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
@@ -5799,7 +5683,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
@@ -5809,7 +5693,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
@@ -5819,7 +5703,7 @@ namespace NSFIO
 
     /* In: pathOrID -> the identifier of an absolute filesystem path stored
      *        in the FIO pathmap. This value ought to be whatever was
-     *        passed in the initial call to openWOStream().
+     *        passed in the initial call to openWO().
      *
      * Out: A reference to the FIO Singleton.
      *
@@ -6413,10 +6297,10 @@ namespace NSFIO
     /* The Path Map in which paths to files and directories are stored */
     std::unordered_map< std::wstring, std::wstring > PM;
 
-    /* The input File Stream Map in which input File Streams are stored */
+    /* The input File  Map in which input File s are stored */
     std::unordered_map< std::wstring, std::unique_ptr< std::wifstream > > iFSM;
 
-    /* The output File Stream Map in which output File Streams are stored */
+    /* The output File  Map in which output File s are stored */
     std::unordered_map< std::wstring, std::unique_ptr< std::wofstream > > oFSM;
   };
 } // namespace NSFIO
