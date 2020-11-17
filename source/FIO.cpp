@@ -130,7 +130,7 @@ namespace NSFIO
     std::wstring ws;
     std::size_t delim = path.find_last_of( L"/\\" );
 
-    ws = ws.substr( 0, ++delim );
+    ws = path.substr( 0, ++delim );
 
     return ws;
   }
@@ -1121,7 +1121,6 @@ namespace NSFIO
              wideToMultiByte( rootDir + pathSepW + fileName ).c_str(), &info )
         < 0 )
       { perror( strerror( errno ) ); }
-
       else if ( S_ISREG( info.st_mode ) )
       {
         if ( fileExtension != L".*"
@@ -2742,9 +2741,20 @@ namespace NSFIO
 
   FIO & FIO::setFileID( std::wstring const & id, std::wstring const & path )
   {
+    errno = 0;
+
+#ifdef WINDOWS
+    struct _stat info;
+
+    if ( _wstat( path.c_str(), &info ) == 0 )
+
+#else
     struct stat info;
 
     if ( stat( wideToMultiByte( path ).c_str(), &info ) == 0 )
+
+#endif
+
     {
       if ( info.st_mode & S_IFREG ) { PM[ id ] = path; }
       else
@@ -2757,6 +2767,7 @@ namespace NSFIO
     {
       perror( strerror( errno ) );
     }
+
     return *this;
   }
 
@@ -2842,9 +2853,21 @@ namespace NSFIO
 
   FIO & FIO::setDirID( std::wstring const & id, std::wstring const & path )
   {
+    errno = 0;
+
+#ifdef WINDOWS
+
+    struct _stat info;
+
+    if ( _wstat( path.c_str(), &info ) == 0 )
+
+#else
     struct stat info;
 
     if ( stat( wideToMultiByte( path ).c_str(), &info ) == 0 )
+
+#endif
+
     {
       if ( info.st_mode & S_IFDIR ) { PM[ id ] = path; }
       else
@@ -2857,6 +2880,7 @@ namespace NSFIO
     {
       perror( strerror( errno ) );
     }
+
     return *this;
   }
 
@@ -2950,11 +2974,23 @@ namespace NSFIO
 
   std::wstring FIO::getPathW( std::wstring const & pathOrID ) const
   {
+#ifdef WINDOWS
+
+    struct _stat info;
+
+    if ( _wstat( pathOrID.c_str(), &info ) == 0
+
+#else
     struct stat info;
 
     if ( stat( wideToMultiByte( pathOrID ).c_str(), &info ) == 0
+
+#endif
+
       && ( info.st_mode & S_IFREG || info.st_mode & S_IFDIR ) )
-    { return pathOrID; }
+    {
+      return pathOrID;
+    }
 
     auto it = PM.find( pathOrID );
 
@@ -3066,11 +3102,11 @@ namespace NSFIO
   {
 #ifdef WINDOWS
 
-    wchar_t * buffer;
+    wchar_t buffer[ FILENAME_MAX ];
 
     GetModuleFileNameW( NULL, buffer, FILENAME_MAX );
 
-    return std::wstring( buffer );
+    return parentDirW( buffer );
 #else
 
     char buffer[ FILENAME_MAX ];
