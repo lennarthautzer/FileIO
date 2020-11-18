@@ -196,7 +196,11 @@ namespace NSFIO
     auto v = splitStringW( source, del );
     std::vector< std::string > ret;
 
-    for ( auto & ws : v ) { ret.push_back( FIOString( ws ) ); }
+    for ( auto & ws : v )
+    {
+      std::string s = FIOString( ws );
+      ret.push_back( s );
+    }
 
     return ret;
   }
@@ -396,7 +400,10 @@ namespace NSFIO
     std::vector< std::string > streams;
 
     for ( auto & stream : wstreams )
-    { streams.push_back( FIOString( stream ) ); }
+    {
+      std::string s = FIOString( stream );
+      streams.push_back( s );
+    }
 
     return streams;
   }
@@ -423,7 +430,10 @@ namespace NSFIO
     std::vector< std::string > streams;
 
     for ( auto & stream : wstreams )
-    { streams.push_back( FIOString( stream ) ); }
+    {
+      std::string s = FIOString( stream );
+      streams.push_back( s );
+    }
 
     return streams;
   }
@@ -581,7 +591,11 @@ namespace NSFIO
 
     std::vector< std::string > files;
 
-    for ( auto & ws : foundFiles ) { files.push_back( FIOString( ws ) ); }
+    for ( auto & ws : foundFiles )
+    {
+      std::string s = FIOString( ws );
+      files.push_back( s );
+    }
 
     return files;
   }
@@ -667,7 +681,11 @@ namespace NSFIO
     for ( auto & line : wMatrix )
     {
       std::vector< std::string > vLine;
-      for ( auto & ws : line ) { vLine.push_back( FIOString( ws ) ); }
+      for ( auto & ws : line )
+      {
+        std::string s = FIOString( ws );
+        vLine.push_back( s );
+      }
       ret.push_back( vLine );
     }
 
