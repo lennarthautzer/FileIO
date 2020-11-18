@@ -32,17 +32,16 @@ namespace FIOTests
     std::string s = "A normal string.";
     std::wstring ws = L"おはよう";
 
-    std::string s2WS = wideToMultiByte( multiByteToWide( s ) );
+    std::string s2WS = FIOString( s );
     dessert( ( s2WS == s ) )
       << ( "ERROR - " + std::string( "NSFIO::multiByteToWide()" )
            + " \r\nEXPECTED: " + s + " ACTUAL: " + s2WS );
 
-    std::string inter = wideToMultiByte( ws );
-    std::wstring ws2S = multiByteToWide( wideToMultiByte( ws ) );
+    std::wstring ws2S = FIOString( ws );
 
-    dessert( ( ws2S == ws ) ) << wideToMultiByte( L"ERROR - "
-      + std::wstring( L"NSFIO::wideToMultiByte()" ) + L" \r\nEXPECTED: " + ws
-      + L" ACTUAL: " + ws2S );
+    dessert( ( ws2S == ws ) ) << std::string(
+      FIOString( L"ERROR - " + std::wstring( L"NSFIO::wideToMultiByte()" )
+        + L" \r\nEXPECTED: " + ws + L" ACTUAL: " + ws2S ) );
   }
 
   void FIO_UnitTests::runPathTest()
@@ -415,7 +414,7 @@ namespace FIOTests
       fio.openWI( fileToReadFrom );
       std::string line = fio.readLine( fileToReadFrom );
 
-      for ( int j = 0; line != ""; ++j, fio.readLine( fileToReadFrom, line ) )
+      for ( int j = 0; line != ""; ++j, line = fio.readLine( fileToReadFrom ) )
       {
         syntax.stripChar( line, '\n' );
         syntax.stripChar( line, '\r' );
@@ -650,30 +649,68 @@ namespace FIOTests
     fio.setFileID(
       "testFile", fio.getPath( "data" ) + pathSep + "csvTest.csv" );
 
-    std::cout << "File: " << std::endl << std::endl;
+    std::vector< std::string > xVec = { "0,1,2,3,4,5,6,7,8,9",
+      "1  ,2  ,3  ,4  ,5  ,6  ,7  ,8  ,9  ,0  ",
+      "2,  3,  4,  5,  6,  7,  8,  9,  0,  1",
 
-    std::cout << fio.readFile( "testFile" ) << std::endl << std::endl;
+      " 3 , 4 , 5 , 6 , 7 , 8 , 9 , 0 , 1 , 2",
 
-    std::cout << "Vector:" << std::endl << std::endl;
+      "4,,,5,,,6,,,7,,,8,,,9,,,0,,,1,,,2,,,3  " };
 
     auto vec = fio.readFileToVector( "testFile" );
 
-    for ( auto & s : vec )
+    auto it = vec.begin();
+    auto it2 = xVec.begin();
+
+    dessert( ( vec.size() == xVec.size() ) )
+      << ( "\r\n\r\nERROR: readFileToVector() - vector has incorrect size!" );
+
+    while ( it != vec.end() && it2 != xVec.end() )
     {
-      std::cout << s << std::endl
-                << "=======================================" << std::endl
-                << std::endl;
+      dessert( ( *it == *it2 ) )
+        << ( "\r\n\r\nERROR: readFileToVector() - \r\nEXPECTED:" + *it2
+             + " - \r\nRECEIVED: " + *it );
+
+      ++it;
+      ++it2;
     }
 
-    std::cout << "Matrix:" << std::endl;
+    std::vector< std::vector< std::string > > xMat = {
+      { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9" },
+      { "1", "2", "3", "4", "5", "6", "7", "8", "9", "0" },
+      { "2", "3", "4", "5", "6", "7", "8", "9", "0", "1" },
+      { "3", "4", "5", "6", "7", "8", "9", "0", "1", "2" },
+      { "4", "5", "6", "7", "8", "9", "0", "1", "2", "3" }
+    };
 
-    auto mat = fio.readFileToMatrix( "testFile", ",", "\n\r" );
+    auto mat = fio.readFileToMatrix( "testFile", ", ", "\n\r" );
 
-    for ( auto & r : mat )
+    auto it3 = mat.begin();
+    auto it4 = xMat.begin();
+
+    dessert( ( mat.size() == xMat.size() ) )
+      << ( "\r\n\r\nERROR: readFileToMatrix() - matrix has incorrect size!" );
+
+    while ( it3 != mat.end() && it4 != xMat.end() )
     {
-      for ( auto & s : r ) { std::cout << s << "|"; }
-      std::cout << std::endl
-                << "--------------------------------------" << std::endl;
+      auto it5 = it3->begin();
+      auto it6 = it4->begin();
+
+      dessert( ( it3->size() == it4->size() ) )
+        << ( "\r\n\r\nERROR: readFileToMatrix() - subvector has incorrect size!" );
+
+      while ( it5 != it3->end() && it6 != it4->end() )
+      {
+        dessert( ( *it5 == *it6 ) )
+          << ( "\r\n\r\nERROR: readFileToMatrix() - \r\nEXPECTED:" + *it6
+               + " - \r\nRECEIVED: " + *it5 );
+
+        ++it5;
+        ++it6;
+      }
+
+      ++it3;
+      ++it4;
     }
 
     fio.reset();

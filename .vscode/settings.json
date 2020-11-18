@@ -69,5 +69,9 @@
     "numeric": "cpp",
     "optional": "cpp",
     "random": "cpp"
+  },
+  "workbench.colorCustomizations": {
+    "editorIndentGuide.activeBackground": "#ffffff",
+    "editorRuler.foreground": "#ffffff77"
   }
 }
