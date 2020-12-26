@@ -8,6 +8,7 @@
 #include <algorithm>
 #include <chrono>
 #include <filesystem>
+#include <string>
 #include <iostream>
 
 static int const constexpr numberOfFilesToTest = 10;

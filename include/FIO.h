@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
  * Lennart Hautzer
- * 16/11/2020
+ * 26/12/2020
  *
  * Copyright (c) 2020 Lennart Hautzer
  *
@@ -28,6 +28,7 @@
 
 #include <algorithm>
 #include <cstring>
+#include <cwchar>
 #include <fstream>
 #include <iostream>
 #include <memory>
@@ -38,7 +39,6 @@
 #include <sys/types.h>
 #include <unordered_map>
 #include <vector>
-#include <cwchar>
 
 #if defined WIN32 || defined _WIN32 || defined __WIN32 && ! defined __CYGWIN__
 
@@ -318,7 +318,7 @@ namespace NSFIO
     virtual char const * what() const throw();
 
   private:
-    std::string _output;
+    std::string output;
   };
 
   /*----------------------------------------------------------------------------
@@ -899,6 +899,875 @@ namespace NSFIO
     /* The output File  Map in which output File s are stored */
     std::unordered_map< std::wstring, std::unique_ptr< std::wofstream > > oFSM;
   };
+
+  /*----------------------------------------------------------------------------
+   * Wide String and Narrow String conversion wrapper.
+  ----------------------------------------------------------------------------*/
+
+  inline FIOString::FIOString( FIOString const & fs ) : str( fs.str ), strW( fs.strW )
+  {
+  }
+
+  inline FIOString & FIOString::operator=( FIOString const & fs )
+  {
+    str = fs.str;
+    strW = fs.strW;
+    return *this;
+  }
+
+  inline FIOString::FIOString( std::string const & s ) : str( s ), strW( mB2w( s ) ) {}
+
+  inline FIOString & FIOString::operator=( std::string const & s )
+  {
+    str = s;
+    strW = mB2w( s );
+    return *this;
+  }
+
+  inline FIOString::FIOString( char const * const & c ) : FIOString( std::string( c ) )
+  {
+  }
+
+  inline FIOString & FIOString::operator=( char const * const & c )
+  {
+    return operator=( std::string( c ) );
+  }
+
+  inline FIOString::FIOString( std::wstring const & ws ) :
+    str( w2mB( ws ) ), strW( ws )
+  {
+  }
+
+  inline FIOString & FIOString::operator=( std::wstring const & ws )
+  {
+    str = w2mB( ws );
+    strW = ws;
+    return *this;
+  }
+
+  inline FIOString::FIOString( wchar_t const * const & wc ) :
+    FIOString( std::wstring( wc ) )
+  {
+  }
+
+  inline FIOString & FIOString::operator=( wchar_t const * const & wc )
+  {
+    return operator=( std::wstring( wc ) );
+  }
+
+  inline FIOString::operator std::string() const { return str; }
+
+  inline FIOString::operator std::wstring() const { return strW; }
+
+  inline FIOString::operator std::string &() { return str; }
+
+  inline FIOString::operator std::wstring &() { return strW; }
+
+  inline std::string FIOString::w2mB( std::wstring const & ws ) const
+  {
+    std::string mb;
+    std::string buff( MB_CUR_MAX, '\0' );
+
+    for ( wchar_t const & wc : ws )
+    {
+      int mbCharLen = std::wctomb( &buff[ 0 ], wc );
+
+      if ( mbCharLen < 1 ) { break; }
+
+      for ( int i = 0; i < mbCharLen; ++i ) { mb += buff[ i ]; }
+    }
+
+    return mb;
+  }
+
+  inline std::wstring FIOString::mB2w( std::string const & mb ) const
+  {
+    std::wstring ws( mb.size(), L' ' );
+    ws.resize( std::mbstowcs( &ws[ 0 ], mb.c_str(), mb.size() ) );
+
+    return ws;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Ancillary Static Functions.
+  ----------------------------------------------------------------------------*/
+
+  /*----------------------------------------------------------------------------
+   * Filepath manipulation.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring baseFileW( FIOString const & pathToFile,
+    bool const & stripExtension /* = StripExtensionTrue */ )
+  {
+    std::wstring pathToFileW = pathToFile;
+    std::wstring ws = pathToFileW.substr( parentDirW( pathToFile ).size() );
+
+    if ( stripExtension == StripExtensionTrue )
+    {
+      std::size_t const delim = ws.find_last_of( L"." );
+
+      ws = delim != std::string::npos ? ws.substr( 0, delim ) : ws;
+    }
+
+    return ws;
+  }
+
+  inline std::string baseFile( FIOString const & pathToFile,
+    bool const & stripExtension /* = StripExtensionTrue */ )
+  {
+    return FIOString( baseFileW( pathToFile, stripExtension ) );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Get the parent directory of a filepath.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring parentDirW( FIOString const & path )
+  {
+    std::wstring ws = path;
+    std::size_t delim = ws.find_last_of( L"/\\" );
+
+    return ws.substr( 0, delim );
+  }
+
+  inline std::string parentDir( FIOString const & path )
+  {
+    return FIOString( parentDirW( path ) );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Split strings. (CSV)
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::wstring > splitStringW(
+    FIOString const & source, FIOString const & delim /* = L"\n\r" */ )
+  {
+    std::size_t i = 0;
+    std::wstring str = source;
+    std::wstring del = delim;
+    std::vector< std::wstring > ret;
+
+    while ( ( i = str.find_first_of( del ) ) != std::string::npos )
+    {
+      std::wstring substr = str.substr( 0, i );
+
+      if ( substr.find_first_not_of( del ) != std::string::npos )
+      { ret.push_back( substr ); }
+
+      str.erase( 0, i + 1 );
+    }
+
+    if ( str.find_first_not_of( del ) != std::string::npos )
+    { ret.push_back( str ); }
+
+    return ret;
+  }
+
+  inline std::vector< std::string > splitString(
+    FIOString const & source, FIOString const & del /* = L"\n\r" */ )
+  {
+    auto v = splitStringW( source, del );
+    std::vector< std::string > ret;
+
+    for ( auto & ws : v )
+    {
+      ret.push_back( FIOString( ws ) );
+    }
+
+    return ret;
+  }
+
+  /*----------------------------------------------------------------------------
+   * FIO exception class.
+  ----------------------------------------------------------------------------*/
+
+  inline FIOExcept::FIOExcept( FIOString const & output )
+  {
+    this->output = output;
+  };
+
+  inline FIOExcept::~FIOExcept() throw() {};
+
+  inline char const * FIOExcept::what() const throw() { return output.c_str(); };
+
+  /*----------------------------------------------------------------------------
+   * FIO.
+  ----------------------------------------------------------------------------*/
+
+  inline std::unique_ptr< FIO > FIO::instance = std::unique_ptr< FIO >( nullptr );
+
+  /*----------------------------------------------------------------------------
+   * Construct FIO Singleton.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::getInstance( FIOString const & loc /* = L"en_US.UTF-8" */ )
+  {
+    if ( ! instance ) { instance = std::unique_ptr< FIO >( new FIO( loc ) ); }
+
+    return *instance;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Destructor.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO::~FIO() { reset(); }
+
+  /*----------------------------------------------------------------------------
+   * Return FIO to its initial state.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::reset()
+  {
+    for ( auto it = iFSM.begin(); it != iFSM.end(); ++it )
+    { it->second->close(); }
+    for ( auto it = oFSM.begin(); it != oFSM.end(); ++it )
+    { it->second->close(); }
+
+    PM.clear();
+    iFSM.clear();
+    oFSM.clear();
+
+    setRoot( findRoot() );
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Open an input stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wistream & FIO::openWI( FIOString const & pathOrID )
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    if ( iFSM.find( path ) != iFSM.end() )
+    {
+      throw( FIOExcept( L"Cannot open stream on " + path
+        + L" as there is already a stream stored on that id." ) );
+    }
+
+    iFSM[ path ] = std::unique_ptr< std::wifstream >(
+      new std::wifstream( getPath( path ), std::wifstream::in ) );
+
+    return validateWIFStream( path );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Open an output stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wostream & FIO::openWO(
+    FIOString const & pathOrID, bool const & appendToFile /* = OpenNewFile */ )
+  {
+    std::wstring pathOrIDW = pathOrID;
+    std::wstring path = pathOrID;
+
+    if ( PM.find( pathOrIDW ) != PM.end() ) { path = getPathW( pathOrID ); }
+
+    if ( oFSM.find( path ) != oFSM.end() )
+    {
+      throw( FIOExcept( L"Cannot open stream on " + path
+        + L" as there is already a stream stored on that id." ) );
+    }
+
+    oFSM[ path ] =
+      std::unique_ptr< std::wofstream >( new std::wofstream( getPath( path ),
+        ( appendToFile ? std::wofstream::app : std::wofstream::out ) ) );
+
+    return validateWOFStream( path );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Rewind an input stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wistream & FIO::rewindWI( FIOString const & pathOrID )
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    auto & stream = validateWIFStream( path );
+
+    stream.clear();
+    stream.seekg( 0, std::ios::beg );
+
+    return stream;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Close an input stream.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::closeWI( FIOString const & pathOrID )
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    auto it = iFSM.find( path );
+    validateWIFStream( path );
+
+    it->second->close();
+    iFSM.erase( path );
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Close an output stream.
+  ----------------------------------------------------------------------------*/
+  inline FIO & FIO::closeWO( FIOString const & pathOrID )
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    auto it = oFSM.find( path );
+    validateWOFStream( path );
+
+    it->second->close();
+    oFSM.erase( path );
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Get an open input stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wistream & FIO::getWI( FIOString const & pathOrID ) const
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    return validateWIFStream( path );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Get an open output stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wostream & FIO::getWO( FIOString const & pathOrID ) const
+  {
+    std::wstring path = getPathW( pathOrID );
+
+    return validateWOFStream( path );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Get a sorted listing of open input streams.
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::wstring > FIO::listOpenWIW() const
+  {
+    std::vector< std::wstring > streams;
+
+    for ( auto & stream : iFSM )
+    { streams.push_back( stream.first + L" | " + getPathW( stream.first ) ); }
+
+    std::sort( streams.begin(), streams.end() );
+
+    return streams;
+  }
+
+  inline std::vector< std::string > FIO::listOpenWI() const
+  {
+    std::vector< std::wstring > wstreams = listOpenWIW();
+    std::vector< std::string > streams;
+
+    for ( auto & stream : wstreams )
+    {
+      std::string s = FIOString( stream );
+      streams.push_back( s );
+    }
+
+    return streams;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Get a sorted listing of open output streams.
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::wstring > FIO::listOpenWOW() const
+  {
+    std::vector< std::wstring > streams;
+
+    for ( auto & stream : oFSM )
+    { streams.push_back( stream.first + L" | " + getPathW( stream.first ) ); }
+
+    std::sort( streams.begin(), streams.end() );
+
+    return streams;
+  }
+
+  inline std::vector< std::string > FIO::listOpenWO() const
+  {
+    std::vector< std::wstring > wstreams = listOpenWOW();
+    std::vector< std::string > streams;
+
+    for ( auto & stream : wstreams )
+    {
+      std::string s = FIOString( stream );
+      streams.push_back( s );
+    }
+
+    return streams;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Read from an input stream.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring FIO::readLineW( FIOString const & pathOrID )
+  {
+    std::wstring path = getPathW( pathOrID );
+    std::wstring ws;
+
+    std::getline( validateWIFStream( path ), ws );
+
+    return ws;
+  }
+
+  inline std::string FIO::readLine( FIOString const & pathOrID )
+  {
+    return FIOString( readLineW( pathOrID ) );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Write to an output stream.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::writeLineW( FIOString const & pathOrID, FIOString const & source )
+  {
+    std::wstring path = getPathW( pathOrID );
+    std::wstring src = source;
+
+    validateWOFStream( path ) << src;
+
+    return *this;
+  }
+
+  inline FIO & FIO::writeLine( FIOString const & pathOrID, FIOString const & source )
+  {
+    return writeLineW( pathOrID, source );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Search for files within a directory.
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::wstring > FIO::findFilesW(
+    FIOString const & fileExtension /* = L".*" */,
+    FIOString const & pathOrID /* = L"root" */,
+    bool const & recursiveSearch /* = RecursiveSearchTrue */ ) const
+  {
+    std::vector< std::wstring > dirs;
+    std::wstring const rootDir = getPathW( pathOrID );
+    std::wstring fExt = fileExtension;
+
+#ifdef WINDOWS
+
+    std::wstring const path = rootDir + pathSepW + L"*.*";
+
+    WIN32_FIND_DATAW info;
+
+    HANDLE dirhandle = ::FindFirstFileW( path.c_str(), &info );
+
+    if ( dirhandle != INVALID_HANDLE_VALUE )
+    {
+      while ( ::FindNextFileW( dirhandle, &info ) )
+      {
+        std::wstring const fileName = std::wstring( info.cFileName );
+
+        if ( ! ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
+        {
+          if ( fExt != L".*" && fileName.length() > fExt.length()
+            && fileName.substr( fileName.length() - fExt.length() ) == fExt )
+          { dirs.push_back( rootDir + pathSepW + fileName ); }
+
+          else if ( fExt == L".*" )
+          {
+            dirs.push_back( rootDir + pathSepW + fileName );
+          }
+        }
+        else if ( ( recursiveSearch == RecursiveSearchTrue )
+          && ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
+          && fileName != L".." && fileName != L"." )
+        {
+          std::vector< std::wstring > subDirs =
+            findFilesW( fExt, rootDir + pathSepW + fileName );
+
+          for ( auto & file : subDirs ) { dirs.push_back( file ); }
+        }
+      }
+      ::FindClose( dirhandle );
+    }
+    else
+    {
+      throw FIOExcept( "Invalid directory handle encountered." );
+    }
+
+    return dirs;
+
+#else
+    struct dirent * dirInfo;
+
+    std::string rootDirS = FIOString( rootDir );
+
+    DIR * dirhandle = static_cast< DIR * >( opendir( rootDirS.c_str() ) );
+
+    if ( ! dirhandle ) { return std::vector< std::wstring >(); }
+
+    while ( ( dirInfo = readdir( dirhandle ) ) != NULL )
+    {
+      struct stat info;
+
+      std::wstring fileName = FIOString( std::string( dirInfo->d_name ) );
+
+      if ( fileName == L"." || fileName == L".." ) { continue; }
+
+      std::string fileToCheck = FIOString( rootDir + pathSepW + fileName );
+
+      errno = 0;
+      
+      if ( stat( fileToCheck.c_str(), &info ) < 0 )
+      { perror( strerror( errno ) ); }
+      else if ( S_ISREG( info.st_mode ) )
+      {
+        if ( fExt != L".*" && fileName.length() > fExt.length()
+          && fileName.substr( fileName.length() - fExt.length() ) == fExt )
+        { dirs.push_back( rootDir + pathSepW + fileName ); }
+        else if ( fExt == L".*" )
+        {
+          dirs.push_back( rootDir + pathSepW + fileName );
+        }
+      }
+      else if ( recursiveSearch == RecursiveSearchTrue
+        && S_ISDIR( info.st_mode ) )
+      {
+        std::vector< std::wstring > subDirContents =
+          findFilesW( fExt, rootDir + pathSepW + fileName );
+
+        for ( auto & file : subDirContents ) { dirs.push_back( file ); }
+      }
+    }
+
+    closedir( dirhandle );
+
+    return dirs;
+
+#endif
+  }
+
+  inline std::vector< std::string > FIO::findFiles(
+    FIOString const & fileExtension /* = L".*" */,
+    FIOString const & pathOrID /* = L"root" */,
+    bool const & recursiveSearch /* = RecursiveSearchTrue */ ) const
+  {
+    auto foundFiles = findFilesW( fileExtension, pathOrID, recursiveSearch );
+
+    std::vector< std::string > files;
+
+    for ( auto & ws : foundFiles )
+    {
+      std::string s = FIOString( ws );
+      files.push_back( s );
+    }
+
+    return files;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Read files.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring FIO::readFileW( FIOString const & pathOrID )
+  {
+    bool openedNew = false;
+    std::wstring path = getPathW( pathOrID );
+
+    std::wstringstream wss;
+
+    try
+    {
+      validateWIFStream( path );
+      wss << rewindWI( path ).rdbuf();
+    }
+    catch ( FIOExcept const & e )
+    {
+      openWI( path );
+      openedNew = true;
+      wss << validateWIFStream( path ).rdbuf();
+    }
+
+    if ( openedNew ) { closeWI( pathOrID ); }
+
+    return wss.str();
+  }
+
+  inline std::string FIO::readFile( FIOString const & pathOrID )
+  {
+    return FIOString( readFileW( pathOrID ) );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Read files into vectors.
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::wstring > FIO::readFileToVectorW(
+    FIOString const & pathOrID, FIOString const & delim /* = L"\n\r" */ )
+  {
+    return splitStringW( readFileW( pathOrID ), delim );
+  }
+
+  inline std::vector< std::string > FIO::readFileToVector(
+    FIOString const & pathOrID, FIOString const & delim /* = L"\n\r" */ )
+  {
+    return splitString( readFile( pathOrID ), delim );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Read files into vectors of vectors.
+  ----------------------------------------------------------------------------*/
+
+  inline std::vector< std::vector< std::wstring > > FIO::readFileToMatrixW(
+    FIOString const & pathOrID, FIOString const & lineDelim /* = L"," */,
+    FIOString const & vertDelim /* = L"\n\r" */ )
+  {
+    std::vector< std::vector< std::wstring > > ret;
+    std::vector< std::wstring > lines =
+      readFileToVectorW( pathOrID, vertDelim );
+
+    for ( auto & line : lines )
+    {
+      std::vector< std::wstring > vLine = splitStringW( line, lineDelim );
+
+      if ( vLine.size() > 0 ) { ret.push_back( vLine ); }
+    }
+
+    return ret;
+  }
+
+  inline std::vector< std::vector< std::string > > FIO::readFileToMatrix(
+    FIOString const & pathOrID, FIOString const & lineDelim /* = L"," */,
+    FIOString const & vertDelim /* = L"\n\r" */ )
+  {
+    auto wMatrix = readFileToMatrixW( pathOrID, lineDelim, vertDelim );
+    std::vector< std::vector< std::string > > ret;
+
+    for ( auto & line : wMatrix )
+    {
+      std::vector< std::string > vLine;
+      for ( auto & ws : line )
+      {
+        std::string s = FIOString( ws );
+        vLine.push_back( s );
+      }
+      ret.push_back( vLine );
+    }
+
+    return ret;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Change the FIO root directory.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::setRoot( FIOString const & pathOrID )
+  {
+    return setDirID( L"root", pathOrID );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Store a file path in the FIO path map.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::setFileID( FIOString const & id, FIOString const & path )
+  {
+    std::wstring idW = id;
+    std::wstring pathW = path;
+    std::string pathS = path;
+
+    errno = 0;
+
+    struct stat info;
+
+    if ( stat( pathS.c_str(), &info ) == 0 )
+    {
+      if ( info.st_mode & S_IFREG ) { PM[ idW ] = pathW; }
+      else
+      {
+        throw( FIOExcept( L"Cannot set id " + idW + L", as " + pathW
+          + L" does not point to a regular file." ) );
+      }
+    }
+    else
+    {
+      perror( pathS.c_str() );
+    }
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Store a directory path in the FIO path map.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::setDirID( FIOString const & id, FIOString const & path )
+  {
+    std::wstring idW = id;
+    std::wstring pathW = path;
+    std::string pathS = path;
+
+    errno = 0;
+
+    struct stat info;
+
+    if ( stat( pathS.c_str(), &info ) == 0 )
+    {
+      if ( info.st_mode & S_IFDIR ) { PM[ idW ] = pathW; }
+      else
+      {
+        throw( FIOExcept( L"Cannot set id " + idW + L", as " + pathW
+          + L" does not point to a directory." ) );
+      }
+    }
+    else
+    {
+      perror( pathS.c_str() );
+    }
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Retrieve path to the root directory.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring FIO::getRootW() const { return getPathW( L"root" ); }
+
+  inline std::string FIO::getRoot() const { return getPath( L"root" ); }
+
+  /*----------------------------------------------------------------------------
+   * Retrieve a file system path.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring FIO::getPathW( FIOString const & pathOrID ) const
+  {
+    std::wstring pathOrIDW = pathOrID;
+    std::string pathOrIDS = pathOrID;
+
+    errno = 0;
+
+    struct stat info;
+
+    if ( stat( pathOrIDS.c_str(), &info ) == 0
+      && ( info.st_mode & S_IFREG 
+        || info.st_mode & S_IFDIR ) )
+    {
+      return pathOrID;
+    }
+
+    auto it = PM.find( pathOrIDW );
+
+    if ( it == PM.end() )
+    {
+      throw( FIOExcept( L"Path cannot be retrieved as " + pathOrIDW
+        + L" is neither a path to a file or directory, "
+        + L"nor points to a path stored in the FIO path map." ) );
+    }
+
+    return it->second;
+  }
+
+  inline std::string FIO::getPath( FIOString const & pathOrID ) const
+  {
+    return FIOString( getPathW( pathOrID ) );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Delete a filepath from filepaths.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO & FIO::removePath( FIOString const & id )
+  {
+    std::wstring idW = id;
+    
+    if ( PM.find( idW ) != PM.end() ) { PM.erase( idW ); }
+    else
+    {
+      throw( FIOExcept( L"Path cannot be removed as " + idW
+        + L" does not point to a path stored in the FIO pathmap." ) );
+    }
+
+    return *this;
+  }
+
+  /*----------------------------------------------------------------------------
+   * Construct FIO.
+  ----------------------------------------------------------------------------*/
+
+  inline FIO::FIO( FIOString const & loc /* = "en_US.UTF-8" */ )
+  {
+    std::string locS = loc;
+
+    setlocale( LC_ALL, locS.c_str() );
+    setRoot( findRoot() );
+  }
+
+  /*----------------------------------------------------------------------------
+   * Find root dir.
+  ----------------------------------------------------------------------------*/
+
+  inline std::wstring FIO::findRoot() const
+  {
+#ifdef WINDOWS
+
+    wchar_t buffer[ FILENAME_MAX ];
+
+    GetModuleFileNameW( NULL, buffer, FILENAME_MAX );
+
+    return parentDirW( buffer );
+#else
+
+    char buffer[ FILENAME_MAX ];
+
+    getcwd( buffer, FILENAME_MAX );
+
+    return FIOString( buffer );
+#endif
+  }
+
+  inline std::wistream & FIO::validateWIFStream( FIOString const & id ) const
+  {
+    std::wstring idW = id;
+
+    auto it = iFSM.find( idW );
+
+    if ( it == iFSM.end() )
+    { throw( FIOExcept( L"No output stream exists at " + idW ) ); }
+
+    if ( it->second->good() & it->second->is_open() )
+    { return *( static_cast< std::wistream * >( &( *it->second ) ) ); }
+    else
+    {
+      throw( FIOExcept(
+        L"Output stream exists at " + idW + L", but cannot be read!" ) );
+    }
+  }
+
+  inline std::wostream & FIO::validateWOFStream( FIOString const & id ) const
+  {
+    std::wstring idW = id;
+
+    auto it = oFSM.find( idW );
+
+    if ( it == oFSM.end() )
+    { throw( FIOExcept( L"No output stream exists at " + idW ) ); }
+
+    if ( it->second->good() & it->second->is_open() )
+    { return *( static_cast< std::wostream * >( &( *it->second ) ) ); }
+    else
+    {
+      throw( FIOExcept(
+        L"Output stream exists at " + idW + L", but cannot be read!" ) );
+    }
+  }
 } // namespace NSFIO
 
 #endif

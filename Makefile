@@ -4,8 +4,8 @@ ifeq ($(OS), Windows_NT)
   RM          =   CMD /C del /Q /F
   RRM         =   CMD /C rmdir /Q /S
   BACKSLASH   :=  \$(strip)
-  LFLAGS			=		-LC:\cygwin64\lib
-	LLIBS				=		-lstdc++fs
+  LFLAGS			=		-LC:\MinGW\lib
+	LLIBS				=		
 else
   RM          =   rm -f
   RRM         =   rm -f -r

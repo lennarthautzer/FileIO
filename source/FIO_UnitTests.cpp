@@ -46,7 +46,7 @@ namespace FIOTests
 
   void FIO_UnitTests::runPathTest()
   {
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
     fio.setFileID(
       "testData", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
 
@@ -167,7 +167,7 @@ namespace FIOTests
 
   void FIO_UnitTests::runStreamTest()
   {
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
     fio.setFileID(
       "testData", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
     fio.setFileID(
@@ -184,12 +184,12 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "Cannot open stream on data/fileIOTestData.txt as "
+        == std::string( "Cannot open stream on data" ) + pathSep + "fileIOTestData.txt as "
            "there is already a stream stored on that id." ) )
         << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
-             "Cannot open stream on data/fileIOTestData.txt as "
+             "Cannot open stream on data" + pathSep + std::string( "fileIOTestData.txt as "
              "there is already a stream stored on that id."
-             "\r\nRECEIVED: "
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
 
@@ -201,12 +201,12 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "Cannot open stream on data/fileIOTestData.txt as "
+        == std::string( "Cannot open stream on data" ) + pathSep + "fileIOTestData.txt as "
            "there is already a stream stored on that id." ) )
         << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
-             "Cannot open stream on data/fileIOTestData.txt as "
+             "Cannot open stream on data" + pathSep + std::string( "fileIOTestData.txt as "
              "there is already a stream stored on that id."
-             "\r\nRECEIVED: "
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
 
@@ -218,12 +218,12 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "Cannot open stream on data/fileIOResetTest.txt as "
+        == std::string( "Cannot open stream on data" ) + pathSep + "fileIOResetTest.txt as "
            "there is already a stream stored on that id." ) )
         << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
-             "Cannot open stream on data/fileIOTestData.txt as "
+             "Cannot open stream on data" + pathSep + std::string( "fileIOTestData.txt as "
              "there is already a stream stored on that id."
-             "\r\nRECEIVED: "
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
 
@@ -235,12 +235,12 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "Cannot open stream on data/fileIOResetTest.txt as "
+        == std::string( "Cannot open stream on data" ) + pathSep + "fileIOResetTest.txt as "
            "there is already a stream stored on that id." ) )
         << ( "\r\n\r\nERROR: openWI() - \r\nEXPECTED: "
-             "Cannot open stream on data/fileIOTestData.txt as "
+             "Cannot open stream on data" + pathSep + std::string( "fileIOTestData.txt as "
              "there is already a stream stored on that id."
-             "\r\nRECEIVED: "
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
 
@@ -253,10 +253,10 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "No output stream exists at data/fileIOResetTest.txt" ) )
+        == std::string( "No output stream exists at data" ) + pathSep + "fileIOResetTest.txt" ) )
         << ( "\r\n\r\nERROR: closeWO() - \r\nEXPECTED: "
-             "No output stream exists at data/fileIOResetTest.txt"
-             "\r\nRECEIVED: "
+             "No output stream exists at data" + pathSep + std::string( "fileIOResetTest.txt"
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
 
@@ -269,10 +269,10 @@ namespace FIOTests
     catch ( FIOExcept const & errorIn )
     {
       dessert( ( std::string( errorIn.what() )
-        == "No output stream exists at data/fileIOTestData.txt" ) )
+        == std::string( "No output stream exists at data" ) + pathSep + "fileIOTestData.txt" ) )
         << ( "\r\n\r\nERROR: closeWI() - \r\nEXPECTED: "
-             "No output stream exists at data/fileIOTestData.txt"
-             "\r\nRECEIVED: "
+             "No output stream exists at data" + pathSep + std::string( "fileIOTestData.txt"
+             "\r\nRECEIVED: " )
              + std::string( errorIn.what() ) );
     }
   }
@@ -280,10 +280,10 @@ namespace FIOTests
   void FIO_UnitTests::runResetTest()
   {
     std::string rt = fio.getRoot();
-    fio.setRoot( rt + pathSep + "data" );
+    fio.setRoot( parentDir( rt ) + pathSep + "data" );
 
-    dessert( ( fio.getRoot() == rt + pathSep + "data" ) )
-      << ( "\r\n\r\nERROR: setRoot() - \r\nEXPECTED: " + rt + pathSep + "data"
+    dessert( ( fio.getRoot() == parentDir( rt ) + pathSep + "data" ) )
+      << ( "\r\n\r\nERROR: setRoot() - \r\nEXPECTED: " + parentDir( rt ) + pathSep + "data"
            + "\r\nRECEIVED: " + fio.getRoot() );
 
     fio.reset();
@@ -296,7 +296,7 @@ namespace FIOTests
   // Check FIO can find files recursively
   void FIO_UnitTests::runFileSearchTest()
   {
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
 
     auto filePaths = fio.findFiles( ".txt", fio.getPath( "data" ) );
 
@@ -308,26 +308,26 @@ namespace FIOTests
 
     dessert( ( std::find( filePaths.begin(), filePaths.end(),
                  fio.getPath( "data" ) + pathSep
-                   + "testSubFolder/fileIOSubTestData.txt" )
+                   + "testSubFolder" + pathSep + "fileIOSubTestData.txt" )
       != filePaths.end() ) )
       << ( "\r\n\r\nERROR: findFiles() - \r\nEXPECTED: " + fio.getPath( "data" )
-           + pathSep + "testSubFolder/fileIOSubTestData.txt" );
+           + pathSep + "testSubFolder" + pathSep + "fileIOSubTestData.txt" );
 
     dessert( ( std::find( filePaths.begin(), filePaths.end(),
                  fio.getPath( "data" ) + pathSep + ""
-                   + "anotherTestSubFolder/fileIOAnotherSubTestData.txt" )
+                   + "anotherTestSubFolder" + pathSep + "fileIOAnotherSubTestData.txt" )
       != filePaths.end() ) )
       << ( "\r\n\r\nERROR: findFiles() - \r\nEXPECTED: " + fio.getPath( "data" )
-           + pathSep + "anotherTestSubFolder/fileIOAnotherSubTestData.txt" );
+           + pathSep + "anotherTestSubFolder" + pathSep + "fileIOAnotherSubTestData.txt" );
 
     dessert( (
       std::find( filePaths.begin(), filePaths.end(),
         fio.getPath( "data" ) + pathSep + ""
-          + "testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt" )
+          + "testSubFolder" + pathSep + "yetAnotherTestSubFolder" + pathSep + "fileIOYetAnotherSubTestData.txt" )
       != filePaths.end() ) )
       << ( "\r\n\r\nERROR: findFiles() - \r\nEXPECTED: " + fio.getPath( "data" )
            + pathSep + ""
-           + "testSubFolder/yetAnotherTestSubFolder/fileIOYetAnotherSubTestData.txt" );
+           + "testSubFolder" + pathSep + "yetAnotherTestSubFolder" + pathSep + "fileIOYetAnotherSubTestData.txt" );
 
     fio.reset();
   }
@@ -337,7 +337,7 @@ namespace FIOTests
   {
     SyntaxHandler syntax;
 
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
 
     auto filePaths = fio.findFiles( ".txt", fio.getPath( "data" ) );
 
@@ -380,7 +380,7 @@ namespace FIOTests
   {
     SyntaxHandler syntax;
 
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
 
     for ( int i = 0; i < numberOfFilesToTest / 2; ++i )
     {
@@ -600,14 +600,14 @@ namespace FIOTests
   {
     SyntaxHandler syntax;
 
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
     fio.setFileID(
       "testFile", fio.getPath( "data" ) + pathSep + "fileIOTestData.txt" );
 
     auto & fs = fio.openWO( "testFile" );
 
     for ( int i = 0; i < numberOfLinesToTest; ++i )
-    { fs << std::to_wstring( i ) << std::endl; }
+    { fs << i << std::endl; }
 
     fio.closeWO( "testFile" );
 
@@ -645,7 +645,7 @@ namespace FIOTests
   // Check FIO can read a csv file in
   void FIO_UnitTests::runCSVTest()
   {
-    fio.setDirID( "data", fio.getRoot() + pathSep + "data" );
+    fio.setDirID( "data", parentDir( fio.getRoot() ) + pathSep + "data" );
     fio.setFileID(
       "testFile", fio.getPath( "data" ) + pathSep + "csvTest.csv" );
 

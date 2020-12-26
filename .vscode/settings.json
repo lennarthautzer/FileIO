@@ -68,7 +68,9 @@
     "memory_resource": "cpp",
     "numeric": "cpp",
     "optional": "cpp",
-    "random": "cpp"
+    "random": "cpp",
+    "compare": "cpp",
+    "concepts": "cpp"
   },
   "workbench.colorCustomizations": {
     "editorIndentGuide.activeBackground": "#ffffff",
