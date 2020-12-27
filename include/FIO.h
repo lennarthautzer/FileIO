@@ -1,6 +1,6 @@
 /*------------------------------------------------------------------------------
  * Lennart Hautzer
- * 26/12/2020
+ * 27/12/2020
  *
  * Copyright (c) 2020 Lennart Hautzer
  *
@@ -26,18 +26,14 @@
 #ifndef FILE_IO_H_
 #define FILE_IO_H_
 
-#include <algorithm>
-#include <cstring>
-#include <cwchar>
-#include <fstream>
-#include <iostream>
-#include <memory>
-#include <sstream>
-#include <stdexcept>
-#include <string>
-#include <sys/stat.h>
-#include <sys/types.h>
-#include <unordered_map>
+#include <algorithm> 
+#include <fstream> 
+#include <memory> 
+#include <sstream> 
+#include <stdexcept> 
+#include <string> 
+#include <sys/stat.h> 
+#include <unordered_map> 
 #include <vector>
 
 #if defined WIN32 || defined _WIN32 || defined __WIN32 && ! defined __CYGWIN__
@@ -66,7 +62,7 @@
 namespace NSFIO
 {
   /*----------------------------------------------------------------------------
-   * Wide String and Narrow String conversion wrapper.
+   * Convertible wide <-> multi-byte String Wrapper
   ----------------------------------------------------------------------------*/
 
   /* Wrapper class which converts between strings and wide strings.
@@ -88,14 +84,14 @@ namespace NSFIO
      * Construct a populated FIOString. */
     FIOString & operator=( FIOString const & fs );
 
-    /* In: s -> a narrow string.
+    /* In: s -> a multi-byte string.
      *
      * Out: An FIOString populated with s.
      *
      * Construct a populated FIOString. */
     FIOString( std::string const & s );
 
-    /* In: s -> a narrow string.
+    /* In: s -> a multi-byte string.
      *
      * Out: An FIOString populated with s.
      *
@@ -146,9 +142,9 @@ namespace NSFIO
 
     /* In: None.
      *
-     * Out: A multi-byte narrow string.
+     * Out: A multi-byte string.
      *
-     * Construct a narrow string with the FIOString's contents. */
+     * Construct a multi-byte string with the FIOString's contents. */
     operator std::string() const;
 
     /* In: None.
@@ -160,17 +156,31 @@ namespace NSFIO
 
     /* In: None.
      *
-     * Out: A wide string.
+     * Out: A reference to a multi-byte string.
      *
      * Return the FIOString's contents as a string. */
     operator std::string &();
 
     /* In: None.
      *
-     * Out: A wide string.
+     * Out: A reference to a wide string.
      *
      * Return the FIOString's contents as a wide string. */
     operator std::wstring &();
+
+    /* In: None.
+     *
+     * Out: A multi-byte string.
+     *
+     * Return the FIOString's contents as a string. */
+    std::string str();
+
+    /* In: None.
+     *
+     * Out: A wide string.
+     *
+     * Return the FIOString's contents as a wide string. */
+    std::wstring wstr();
 
   private:
     /* In: ws -> the wstring to be converted into a multibyte normal
@@ -191,8 +201,8 @@ namespace NSFIO
 
     /* Keep both wide and multibyte versions of the data to support
      *    reference operators. */
-    std::string str;
-    std::wstring strW;
+    std::string mbStr;
+    std::wstring wStr;
   };
 
   /*----------------------------------------------------------------------------
@@ -901,26 +911,26 @@ namespace NSFIO
   };
 
   /*----------------------------------------------------------------------------
-   * Wide String and Narrow String conversion wrapper.
+   * Convertible wide <-> multi-byte String Wrapper
   ----------------------------------------------------------------------------*/
 
-  inline FIOString::FIOString( FIOString const & fs ) : str( fs.str ), strW( fs.strW )
+  inline FIOString::FIOString( FIOString const & fs ) : mbStr( fs.mbStr ), wStr( fs.wStr )
   {
   }
 
   inline FIOString & FIOString::operator=( FIOString const & fs )
   {
-    str = fs.str;
-    strW = fs.strW;
+    mbStr = fs.mbStr;
+    wStr = fs.wStr;
     return *this;
   }
 
-  inline FIOString::FIOString( std::string const & s ) : str( s ), strW( mB2w( s ) ) {}
+  inline FIOString::FIOString( std::string const & s ) : mbStr( s ), wStr( mB2w( s ) ) {}
 
   inline FIOString & FIOString::operator=( std::string const & s )
   {
-    str = s;
-    strW = mB2w( s );
+    mbStr = s;
+    wStr = mB2w( s );
     return *this;
   }
 
@@ -934,14 +944,14 @@ namespace NSFIO
   }
 
   inline FIOString::FIOString( std::wstring const & ws ) :
-    str( w2mB( ws ) ), strW( ws )
+    mbStr( w2mB( ws ) ), wStr( ws )
   {
   }
 
   inline FIOString & FIOString::operator=( std::wstring const & ws )
   {
-    str = w2mB( ws );
-    strW = ws;
+    mbStr = w2mB( ws );
+    wStr = ws;
     return *this;
   }
 
@@ -955,13 +965,17 @@ namespace NSFIO
     return operator=( std::wstring( wc ) );
   }
 
-  inline FIOString::operator std::string() const { return str; }
+  inline FIOString::operator std::string() const { return mbStr; }
 
-  inline FIOString::operator std::wstring() const { return strW; }
+  inline FIOString::operator std::wstring() const { return wStr; }
 
-  inline FIOString::operator std::string &() { return str; }
+  inline FIOString::operator std::string &() { return mbStr; }
 
-  inline FIOString::operator std::wstring &() { return strW; }
+  inline FIOString::operator std::wstring &() { return wStr; }
+
+  inline std::string FIOString::str() { return operator std::string(); }
+
+  inline std::wstring FIOString::wstr() { return operator std::wstring(); }
 
   inline std::string FIOString::w2mB( std::wstring const & ws ) const
   {
