@@ -528,12 +528,12 @@ namespace FileIO
     public:
     FIOExcept( hst::hstring const & output ) : output( output ) {};
 
-    virtual ~FIOExcept() throw() = default;
+    virtual ~FIOExcept() noexcept = default;
 
-    virtual char const * what() const throw() { return output.str().c_str(); }
+    virtual char const * what() const noexcept { return output.str().c_str(); }
 
     private:
-    hst::hstring output;
+    hst::hstring const output;
   };
 
   inline hst::hstring parentDir( hst::hstring const & path )
