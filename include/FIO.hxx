@@ -143,9 +143,13 @@ namespace hst
 
     std::wstring wstr() const { return operator std::wstring(); }
 
+    wchar_t const * wc_str() const { return wideString.c_str(); }
+
     operator std::string() const { return multiByteString; }
 
     std::string str() const { return operator std::string(); }
+
+    char const * mb_str() const { return multiByteString.c_str(); }
 
     private:
     std::string multiByteString;
@@ -202,9 +206,6 @@ namespace hst
 
 namespace FileIO
 {
-  // FIO Exception wrapper class.
-  class FIOExcept;
-
   /*
     Given a complete filepath, retrieve the path to the directory immediately
     above the location it points to. Passing a malformed filepath results in
@@ -522,20 +523,6 @@ namespace FileIO
       outputFSM;
   };
 
-  // FIO Exception wrapper
-  class FIOExcept : public std::exception
-  {
-    public:
-    FIOExcept( hst::hstring const & output ) : output( output ) {};
-
-    virtual ~FIOExcept() noexcept = default;
-
-    virtual char const * what() const noexcept { return output.str().c_str(); }
-
-    private:
-    hst::hstring const output;
-  };
-
   inline hst::hstring parentDir( hst::hstring const & path )
   {
     auto str = path.wstr();
@@ -598,19 +585,23 @@ namespace FileIO
   {
     try
     {
-      std::remove( pathToFile.str().c_str() );
+      std::remove( pathToFile.mb_str() );
     }
     catch ( std::exception & e )
     {
-      throw FIOExcept( e.what() );
+      throw std::runtime_error( ( "Could not remove file: \"" + pathToFile +
+                                  "\"." + "Error Message: \"" + e.what() +
+                                  "\"" )
+                                  .mb_str() );
     }
   }
 
   inline FIO::FIO( hst::hstring const & loc /* = "" */ )
   {
-    if ( ! setlocale( LC_ALL, loc.str().c_str() ) )
+    if ( ! setlocale( LC_ALL, loc.mb_str() ) )
     {
-      throw FIOExcept( "Could not set locale to: \"" + loc + "\"!" );
+      throw std::runtime_error(
+        ( "Could not set locale to: \"" + loc + "\"!" ).mb_str() );
     }
     setRootDir( findRootDir() );
   }
@@ -738,7 +729,7 @@ namespace FileIO
     auto const path = rootDir + PATH_SEP + hst::hstring( "*.*" );
 
     WIN32_FIND_DATAW info;
-    HANDLE dirHandle = ::FindFirstFileW( path.wstr().c_str(), &info );
+    HANDLE dirHandle = ::FindFirstFileW( path.wc_str(), &info );
 
     if ( dirHandle != INVALID_HANDLE_VALUE )
     {
@@ -774,7 +765,7 @@ namespace FileIO
     }
     else
     {
-      throw FIOExcept( "Invalid directory handle encountered." );
+      throw std::runtime_error( "Invalid directory handle encountered." );
     }
 
     return foundFiles;
@@ -918,10 +909,12 @@ namespace FileIO
 
     if ( it == inputFSM.end() )
     {
-      throw( FIOExcept( L"Could not validate input stream \"" + ID +
-                        L"\". No such input stream exists. " +
-                        L"Hint: Did you provide the correct ID?" +
-                        L" Did you mean to check for an output stream?" ) );
+      throw std::runtime_error(
+        ( L"Could not validate input stream \"" + ID +
+          L"\". No such input stream exists. " +
+          L"Hint: Did you provide the correct ID?" +
+          L" Did you mean to check for an output stream?" )
+          .mb_str() );
     }
     if ( it->second->good() && it->second->is_open() )
     {
@@ -929,8 +922,9 @@ namespace FileIO
     }
     else
     {
-      throw( FIOExcept( L"Input stream \"" + ID +
-                        L"\" was found, but it could not be read." ) );
+      throw std::runtime_error(
+        ( L"Input stream \"" + ID + L"\" was found, but it could not be read." )
+          .mb_str() );
     }
   }
 
@@ -941,10 +935,12 @@ namespace FileIO
 
     if ( it == outputFSM.end() )
     {
-      throw( FIOExcept( L"Could not validate output stream \"" + ID +
-                        L"\". No such output stream exists. " +
-                        L"Hint: Did you provide the correct ID?" +
-                        L" Did you mean to check for an input stream?" ) );
+      throw std::runtime_error(
+        ( L"Could not validate output stream \"" + ID +
+          L"\". No such output stream exists. " +
+          L"Hint: Did you provide the correct ID?" +
+          L" Did you mean to check for an input stream?" )
+          .mb_str() );
     }
 
     if ( it->second->good() && it->second->is_open() )
@@ -953,8 +949,9 @@ namespace FileIO
     }
     else
     {
-      throw( FIOExcept( L"Output stream \"" + ID +
-                        L"\" was found, but it could not be read." ) );
+      throw std::runtime_error( ( L"Output stream \"" + ID +
+                                  L"\" was found, but it could not be read." )
+                                  .mb_str() );
     }
   }
 } // namespace FileIO

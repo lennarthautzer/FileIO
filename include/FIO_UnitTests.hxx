@@ -345,7 +345,7 @@ namespace FIOTests
       {
         FIO fio2( "notALocale" );
       }
-      catch ( FIOExcept const & e )
+      catch ( std::runtime_error const & e )
       {
         illegalLocaleThrowsError = true;
       }
@@ -444,7 +444,7 @@ namespace FIOTests
       {
         fio.openInputStream( "testFile" );
       }
-      catch ( FIOExcept & e )
+      catch ( std::runtime_error & e )
       {
         deletedFileThrowsError = true;
       }
