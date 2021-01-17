@@ -51,6 +51,7 @@ namespace hst
     return multiByteString;
   }
 
+  // Turn a multi-byte string into a wide string.
   inline static std::wstring multiByteToWide( std::string const & str )
   {
     std::wstring wideString( str.size(), L' ' );
@@ -69,60 +70,60 @@ namespace hst
 
     ~hstring() = default;
 
-    hstring( hstring const & str ) :
-      multiByteString( str.multiByteString ), wideString( str.wideString )
+    hstring( hstring const & hstr ) :
+      multiByteString( hstr.multiByteString ), wideString( hstr.wideString )
     {
     }
 
-    hstring( hstring && str ) noexcept :
-      multiByteString( std::move( str.multiByteString ) ),
-      wideString( std::move( str.wideString ) )
+    hstring( hstring && hstr ) noexcept :
+      multiByteString( std::move( hstr.multiByteString ) ),
+      wideString( std::move( hstr.wideString ) )
     {
     }
 
-    hstring( std::wstring const & str ) :
-      multiByteString( wideToMultiByte( str ) ), wideString( str )
+    hstring( std::wstring const & wstr ) :
+      multiByteString( wideToMultiByte( wstr ) ), wideString( wstr )
     {
     }
 
-    hstring( wchar_t const * const & str ) : hstring( std::wstring( str ) ) {}
+    hstring( wchar_t const * const & wstr ) : hstring( std::wstring( wstr ) ) {}
 
-    hstring( wchar_t const & str ) : hstring( std::wstring( 1, str ) ) {}
+    hstring( wchar_t const & wc ) : hstring( std::wstring( 1, wc ) ) {}
 
-    hstring( std::string const & str ) :
-      multiByteString( str ), wideString( multiByteToWide( str ) )
+    hstring( std::string const & mbstr ) :
+      multiByteString( mbstr ), wideString( multiByteToWide( mbstr ) )
     {
     }
 
-    hstring( char const * const & str ) : hstring( std::string( str ) ) {}
+    hstring( char const * const & mbstr ) : hstring( std::string( mbstr ) ) {}
 
-    hstring( char const & str ) : hstring( std::string( 1, str ) ) {}
+    hstring( char const & mbc ) : hstring( std::string( 1, mbc ) ) {}
 
-    hstring & operator=( hstring const & str )
+    hstring & operator=( hstring const & hstr )
     {
-      multiByteString = str.multiByteString;
-      wideString = str.wideString;
+      multiByteString = hstr.multiByteString;
+      wideString = hstr.wideString;
       return *this;
     }
 
-    hstring & operator=( hstring && str ) noexcept
+    hstring & operator=( hstring && hstr ) noexcept
     {
-      if ( this != &str )
+      if ( this != &hstr )
       {
-        multiByteString = std::move( str.multiByteString );
-        wideString = std::move( str.wideString );
+        multiByteString = std::move( hstr.multiByteString );
+        wideString = std::move( hstr.wideString );
       }
       return *this;
     }
 
-    hstring & operator+=( hstring const & str )
+    hstring & operator+=( hstring const & hstr )
     {
-      wideString += str.wideString;
-      multiByteString += str.multiByteString;
+      wideString += hstr.wideString;
+      multiByteString += hstr.multiByteString;
       return *this;
     }
 
-    friend hstring & operator+( hstring lhs, hstring const & rhs )
+    friend hstring operator+( hstring lhs, hstring const & rhs )
     {
       return lhs += rhs;
     }
@@ -135,7 +136,7 @@ namespace hst
 
     friend bool operator!=( hstring const & lhs, hstring const & rhs )
     {
-      return ! operator==( lhs, rhs );
+      return ! ( lhs == rhs );
     }
 
     operator std::wstring() const { return wideString; }
@@ -147,7 +148,6 @@ namespace hst
     std::string str() const { return operator std::string(); }
 
     private:
-    // Keep both wide and multibyte data formats.
     std::string multiByteString;
     std::wstring wideString;
   };
@@ -635,7 +635,7 @@ namespace FileIO
     if ( inputFSM.find( path ) == inputFSM.end() )
     {
       inputFSM[ path ] = std::make_unique< std::wifstream >(
-        getPath( path ), std::wifstream::in );
+        getPath( path ).str(), std::wifstream::in );
     }
     return validateInputStream( path );
   }
@@ -649,7 +649,7 @@ namespace FileIO
     if ( outputFSM.find( path ) == outputFSM.end() )
     {
       outputFSM[ path ] = std::make_unique< std::wofstream >(
-        getPath( path ),
+        getPath( path ).str(),
         ( appendToFile ? std::wofstream::app : std::wofstream::out ) );
     }
     return validateOutputStream( path );
