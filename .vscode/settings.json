@@ -70,7 +70,9 @@
     "optional": "cpp",
     "random": "cpp",
     "compare": "cpp",
-    "concepts": "cpp"
+    "concepts": "cpp",
+    "mutex": "cpp",
+    "thread": "cpp"
   },
   "workbench.colorCustomizations": {
     "editorIndentGuide.activeBackground": "#ffffff",

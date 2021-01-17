@@ -25,8 +25,8 @@ MKF_PTH 			:= 	$(abspath $(lastword $(MAKEFILE_LIST)))
 CUR_DIR				:=	$(strip $(subst Makefile,, $(MKF_PTH)))
 RUN_DIR				:= 	$(addprefix $(CUR_DIR), $(strip $(subst .\,, $(BIN_DIR))))
 CUR_DIR_NAME	:= 	$(notdir $(patsubst %/,%,$(dir $(MKF_PTH))))
-SRCS 					=		$(wildcard $(SRC_DIR)/*.cpp)
-OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cpp=.o))
+SRCS 					=		$(wildcard $(SRC_DIR)/*.cxx)
+OBJS 					=		$(subst $(SRC_DIR),$(OBJ_DIR),$(SRCS:.cxx=.o))
 
 .PHONY: all
 .PHONY: clean
@@ -47,7 +47,7 @@ valgrind: directories $(BIN_DIR)/$(TARGET) memoryCheck
 $(BIN_DIR)/$(TARGET): $(OBJS)
 	$(CXX) $(LFLAGS) $^ $(LLIBS) -o $@
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cxx
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 directories: $(DIRS)
