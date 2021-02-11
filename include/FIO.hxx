@@ -737,6 +737,8 @@ namespace FileIO
       {
         auto const fileName = hst::hstring( info.cFileName );
 
+        if ( fileName == L"." || fileName == L".." ) { continue; }
+
         if ( ! ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
         {
           if ( fileExtension == L".*" ||
@@ -749,8 +751,7 @@ namespace FileIO
           }
         }
         else if ( ( recursiveSearch == RecursiveSearchTrue ) &&
-                  ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) &&
-                  fileName != L".." && fileName != L"." )
+                  ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
         {
           auto const subDirFiles =
             findFiles( fileExtension, rootDir + PATH_SEP + fileName );
@@ -763,64 +764,56 @@ namespace FileIO
       }
       ::FindClose( dirHandle );
     }
-    else
-    {
-      throw std::runtime_error( "Invalid directory handle encountered." );
-    }
-
-    return foundFiles;
 #else
     struct dirent * dirInfo;
 
-    std::string rootDirS = rootDir;
+    DIR * dirhandle = static_cast< DIR * >( opendir( rootDir.mb_str() ) );
 
-    DIR * dirhandle = static_cast< DIR * >( opendir( rootDirS.c_str() ) );
-
-    if ( ! dirhandle ) { return std::vector< std::wstring >(); }
-
-    while ( ( dirInfo = readdir( dirhandle ) ) != NULL )
+    if ( dirhandle )
     {
-      struct stat info;
-
-      std::wstring fileName = hst::hstring( std::string( dirInfo->d_name ) );
-
-      if ( fileName == L"." || fileName == L".." ) { continue; }
-
-      std::string fileToCheck = hst::hstring( rootDir + pathSepW + fileName );
-
-      errno = 0;
-
-      if ( stat( fileToCheck.c_str(), &info ) < 0 )
+      while ( ( dirInfo = readdir( dirhandle ) ) != NULL )
       {
-        perror( strerror( errno ) );
-      }
-      else if ( S_ISREG( info.st_mode ) )
-      {
-        if ( fileExtensionW != L".*" &&
-             fileName.length() > fileExtensionW.length() &&
-             fileName.substr( fileName.length() - fileExtensionW.length() ) ==
-               fileExtensionW )
+        auto const fileName = hst::hstring( dirInfo->d_name );
+
+        if ( fileName == "." || fileName == ".." ) { continue; }
+
+        auto const fileToCheck = rootDir + PATH_SEP + fileName;
+
+        struct stat info;
+        errno = 0;
+
+        if ( stat( fileToCheck.mb_str(), &info ) < 0 )
         {
-          dirs.push_back( rootDir + pathSepW + fileName );
+          perror( "Invalid File encountered." );
         }
-        else if ( fileExtensionW == L".*" )
+        else if ( S_ISREG( info.st_mode ) )
         {
-          dirs.push_back( rootDir + pathSepW + fileName );
+          if ( fileExtension == ".*" ||
+               ( fileName.str().length() > fileExtension.str().length() &&
+                 fileName.str().substr( fileName.str().length() -
+                                        fileExtension.str().length() ) ==
+                   fileExtension ) )
+          {
+            foundFiles.push_back( rootDir + PATH_SEP + fileName );
+          }
         }
-      }
-      else if ( recursiveSearch == RecursiveSearchTrue &&
-                S_ISDIR( info.st_mode ) )
-      {
-        std::vector< std::wstring > subDirContents =
-          findFilesW( fileExtensionW, rootDir + pathSepW + fileName );
+        else if ( ( recursiveSearch == RecursiveSearchTrue ) &&
+                  S_ISDIR( info.st_mode ) )
+        {
+          auto const subDirFiles =
+            findFiles( fileExtension, rootDir + PATH_SEP + fileName );
 
-        for ( auto & file : subDirContents ) { dirs.push_back( file ); }
+          for ( auto const & file : subDirFiles )
+          {
+            foundFiles.push_back( file );
+          }
+        }
+        closedir( dirhandle );
       }
     }
-    closedir( dirhandle );
-
-    return dirs;
 #endif
+
+    return foundFiles;
   }
 
   inline hst::hstring FIO::readFile( hst::hstring const & pathOrID )
