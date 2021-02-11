@@ -726,10 +726,10 @@ namespace FileIO
     auto const rootDir = getPath( pathOrID );
 
 #ifdef WINDOWS
-    auto const path = rootDir + PATH_SEP + hst::hstring( "*.*" );
+    auto const searchPath = rootDir + PATH_SEP + hst::hstring( "*.*" );
 
     WIN32_FIND_DATAW info;
-    HANDLE dirHandle = ::FindFirstFileW( path.wc_str(), &info );
+    HANDLE dirHandle = ::FindFirstFileW( searchPath.wc_str(), &info );
 
     if ( dirHandle != INVALID_HANDLE_VALUE )
     {
@@ -739,6 +739,8 @@ namespace FileIO
 
         if ( fileName == L"." || fileName == L".." ) { continue; }
 
+        auto const filePath = rootDir + PATH_SEP + fileName;
+
         if ( ! ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
         {
           if ( fileExtension == L".*" ||
@@ -747,19 +749,15 @@ namespace FileIO
                                          fileExtension.wstr().length() ) ==
                    fileExtension ) )
           {
-            foundFiles.push_back( rootDir + PATH_SEP + fileName );
+            foundFiles.push_back( filePath );
           }
         }
         else if ( ( recursiveSearch == RecursiveSearchTrue ) &&
                   ( info.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY ) )
         {
-          auto const subDirFiles =
-            findFiles( fileExtension, rootDir + PATH_SEP + fileName );
+          auto const subDirFiles = findFiles( fileExtension, filePath );
 
-          for ( auto const & file : subDirFiles )
-          {
-            foundFiles.push_back( file );
-          }
+          for ( auto const & it : subDirFiles ) { foundFiles.push_back( it ); }
         }
       }
       ::FindClose( dirHandle );
@@ -777,12 +775,12 @@ namespace FileIO
 
         if ( fileName == "." || fileName == ".." ) { continue; }
 
-        auto const fileToCheck = rootDir + PATH_SEP + fileName;
+        auto const filePath = rootDir + PATH_SEP + fileName;
 
         struct stat info;
         errno = 0;
 
-        if ( stat( fileToCheck.mb_str(), &info ) < 0 )
+        if ( stat( filePath.mb_str(), &info ) < 0 )
         {
           perror( "Invalid File encountered." );
         }
@@ -794,22 +792,18 @@ namespace FileIO
                                         fileExtension.str().length() ) ==
                    fileExtension ) )
           {
-            foundFiles.push_back( rootDir + PATH_SEP + fileName );
+            foundFiles.push_back( filePath );
           }
         }
         else if ( ( recursiveSearch == RecursiveSearchTrue ) &&
                   S_ISDIR( info.st_mode ) )
         {
-          auto const subDirFiles =
-            findFiles( fileExtension, rootDir + PATH_SEP + fileName );
+          auto const subDirFiles = findFiles( fileExtension, filePath );
 
-          for ( auto const & file : subDirFiles )
-          {
-            foundFiles.push_back( file );
-          }
+          for ( auto const & it : subDirFiles ) { foundFiles.push_back( it ); }
         }
-        closedir( dirhandle );
       }
+      closedir( dirhandle );
     }
 #endif
 
@@ -844,9 +838,9 @@ namespace FileIO
     auto const lines = readFileToVector( pathOrID, vertDelim );
     std::vector< std::vector< hst::hstring > > matrix;
 
-    for ( auto const & line : lines )
+    for ( auto const & it : lines )
     {
-      auto const splitLine = splitString( line, lineDelim );
+      auto const splitLine = splitString( it, lineDelim );
 
       if ( splitLine.size() > 0 ) { matrix.push_back( splitLine ); }
     }
@@ -915,8 +909,11 @@ namespace FileIO
     }
     else
     {
-      throw std::runtime_error(
-        ( L"Input stream \"" + ID + L"\" was found, but it could not be read." )
+      throw std::system_error(
+        errno,
+        std::system_category(),
+        ( L"Input stream \"" + ID +
+          L"\" was found, but it could not be read. System Error Message" )
           .mb_str() );
     }
   }
@@ -942,9 +939,12 @@ namespace FileIO
     }
     else
     {
-      throw std::runtime_error( ( L"Output stream \"" + ID +
-                                  L"\" was found, but it could not be read." )
-                                  .mb_str() );
+      throw std::system_error(
+        errno,
+        std::system_category(),
+        ( L"Output stream \"" + ID +
+          L"\" was found, but it could not be written to. System Error Message" )
+          .mb_str() );
     }
   }
 } // namespace FileIO

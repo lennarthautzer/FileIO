@@ -7,10 +7,27 @@
 
 #include <algorithm>
 #include <chrono>
-#include <filesystem>
 #include <string>
 #include <iostream>
 #include <tuple>
+
+#if defined WIN32 || defined _WIN32 || defined __WIN32 && ! defined __CYGWIN__
+
+  #ifndef WINDOWS
+    #define WINDOWS
+  #endif
+
+  #ifndef NOMINMAX
+    #define NOMINMAX
+  #endif
+
+#endif
+
+#ifdef WINDOWS
+  #include <filesystem>
+#else
+  #include <experimental/filesystem>
+#endif
 
 static int const constexpr numberOfFilesToTest = 10;
 static int const constexpr numberOfLinesToTest = 10;
@@ -29,8 +46,13 @@ namespace FIOTests
     void initFIOTesting()
     {
       fio.clear();
+
+#ifdef WINDOWS
       fio.storePathAtID(
         "data", fio.getRootDir() + PATH_SEP + ".." + PATH_SEP + "data" );
+#else
+      fio.storePathAtID( "data", fio.getRootDir() + PATH_SEP + "data" );
+#endif
     }
 
     void runStringConstructionTests()
@@ -159,12 +181,21 @@ namespace FIOTests
 
     void runPathManipulationTest()
     {
+#ifdef WINDOWS
       char const c( '\\' );
       wchar_t const wc( L'\\' );
       char const * const sc( "\\" );
       wchar_t const * const swc( L"\\" );
       std::string s( "\\" );
       std::wstring ws( L"\\" );
+#else
+      char const c( '/' );
+      wchar_t const wc( L'/' );
+      char const * const sc( "/" );
+      wchar_t const * const swc( L"/" );
+      std::string s( "/" );
+      std::wstring ws( L"/" );
+#endif
 
       dessert( ( PATH_SEP == c ) ) << hstring( "Path Separator Equivalence." );
       dessert( ( PATH_SEP == wc ) ) << hstring( "Path Separator Equivalence." );
