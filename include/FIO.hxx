@@ -855,7 +855,11 @@ namespace FileIO
     return parentDir( buffer );
 #else
     char buffer[ FILENAME_MAX ];
-    getcwd( buffer, FILENAME_MAX );
+    if ( getcwd( buffer, FILENAME_MAX ) == NULL )
+    {
+      throw std::runtime_error(
+        "Could not determine the application's root directory." );
+    }
     return buffer;
 #endif
   }
