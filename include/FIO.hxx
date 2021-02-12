@@ -625,8 +625,8 @@ namespace FileIO
 
     if ( inputFSM.find( path ) == inputFSM.end() )
     {
-      inputFSM[ path ] = std::make_unique< std::wifstream >(
-        getPath( path ).str(), std::wifstream::in );
+      inputFSM[ path ] =
+        std::make_unique< std::wifstream >( path.str(), std::wifstream::in );
     }
     return validateInputStream( path );
   }
@@ -640,7 +640,7 @@ namespace FileIO
     if ( outputFSM.find( path ) == outputFSM.end() )
     {
       outputFSM[ path ] = std::make_unique< std::wofstream >(
-        getPath( path ).str(),
+        path.str(),
         ( appendToFile ? std::wofstream::app : std::wofstream::out ) );
     }
     return validateOutputStream( path );
